@@ -1,43 +1,72 @@
+<!-- Used AI to generate login.html code -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TuneVault - Login</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TuneVault - Login</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <div class="page-wrapper">
-    <h2 class="section-title">Login Page</h2>
+<div class="page-wrapper">
 
-    <div class="login-card">
-      <div class="top-bar">TuneVault — Login</div>
+<h2 class="section-title">Login Page</h2>
 
-      <div class="content">
-        <h1>Welcome Back 🎵</h1>
-        <p class="subtitle">Sign in to your music library</p>
+<div class="login-card">
 
-        <form>
-          <label for="user">Username or Email</label>
-          <input id="user" type="text" placeholder="">
+<div class="top-bar">
+TuneVault — Login
+</div>
 
-          <label for="password">Password</label>
-          <div class="password-row">
-            <input id="password" type="password" placeholder="">
-            <span class="eye">👁</span>
-          </div>
+<div class="row welcome">
+Welcome Back 🎵
+</div>
 
-          <button type="submit" class="login-button">[ LOGIN ]</button>
-        </form>
+<div class="row subtitle">
+Sign in to your music library
+</div>
 
-        <p class="register-link">
-          Don't have an account?
-          <a href="register.html">Register here</a>
-        </p>
-      </div>
-    </div>
-  </div>
+<div class="row label-row">Username or Email</div>
+
+<div class="row input-row">
+<span class="bracket">[</span>
+<input type="text">
+<span class="bracket">]</span>
+</div>
+
+<div class="row label-row">Password</div>
+
+<div class="row input-row password-row">
+<span class="bracket">[</span>
+<input type="password" id="loginPassword">
+<span class="bracket">]</span>
+<span class="eye" onclick="toggleLoginPassword()">👁</span>
+</div>
+
+<button class="login-button">[ LOGIN ]</button>
+
+<div class="row register-link">
+Don't have an account?
+<a href="register.html">Register here</a>
+</div>
+
+</div>
+
+</div>
+
+<script>
+function toggleLoginPassword() {
+const password = document.getElementById("loginPassword");
+
+if (password.type === "password") {
+password.type = "text";
+} else {
+password.type = "password";
+}
+}
+</script>
 
 </body>
 </html>

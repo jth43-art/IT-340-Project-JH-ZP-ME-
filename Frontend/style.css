@@ -1,0 +1,117 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    color: #333;
+  }
+  
+  .page-wrapper {
+    width: 90%;
+    max-width: 760px;
+    margin: 16px auto;
+  }
+  
+  .section-title {
+    color: #1f5f99;
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  
+  .login-card {
+    border: 1px solid #9fc3df;
+    background-color: #f7f7f7;
+  }
+  
+  .top-bar {
+    background-color: #1f5a8f;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 6px 0;
+    border-bottom: 1px solid #9fc3df;
+  }
+  
+  .content {
+    text-align: center;
+  }
+  
+  .content h1 {
+    margin: 0;
+    padding: 8px 0 4px;
+    color: #1f4f7f;
+    font-size: 18px;
+    border-bottom: 1px solid #c2dced;
+  }
+  
+  .subtitle {
+    margin: 0;
+    padding: 4px 0 8px;
+    font-style: italic;
+    color: #777;
+    border-bottom: 1px solid #c2dced;
+  }
+  
+  form {
+    margin: 0;
+  }
+  
+  label {
+    display: block;
+    padding: 6px 0;
+    border-bottom: 1px solid #c2dced;
+    font-size: 14px;
+  }
+  
+  input {
+    width: 42%;
+    padding: 4px;
+    border: none;
+    border-bottom: 2px solid #b8b8b8;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    text-align: center;
+    margin: 10px 0;
+  }
+  
+  .password-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid #c2dced;
+  }
+  
+  .eye {
+    font-size: 12px;
+    color: #888;
+  }
+  
+  .login-button {
+    width: 100%;
+    background-color: #2f78b7;
+    color: white;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 0;
+    cursor: pointer;
+  }
+  
+  .login-button:hover {
+    background-color: #27689f;
+  }
+  
+  .register-link {
+    margin: 0;
+    padding: 6px 0 2px;
+    font-style: italic;
+    color: #777;
+    font-size: 14px;
+  }
+  
+  .register-link a {
+    color: #777;
+    text-decoration: underline;
+  }

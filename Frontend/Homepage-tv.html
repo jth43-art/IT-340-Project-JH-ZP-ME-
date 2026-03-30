@@ -1,79 +1,64 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TuneVault</title>
+    <title>TuneVault - Home</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-    <body>
-        <div class="tunevault-container">
-            <!-- NAVBAR -->
-            <nav class="tunevault-navbar">
-                <div class="links">
-                    <a> Home </a>
-                    <a> Library </a>
-                    <a> Playlists </a>
-                    <a> Upload </a>
-                    <a> Settings </a>
-                </div>
 
-                <div class="user">
-                    <span class="user-icon">#</span>
-                    <span>Username</span>
-                    <button class="logout-button">Logout</button>
-                </div>
-            </nav>
+<body>
+    <div class="page-wrapper">
 
-            <!-- PLAYING NOW -->
-            <section class="tunevault-playing-now">
-                <h3>Playing Now</h3>
-                <div class="song-info">
-                    <span class="song-title">Song Title</span>
-                    <span class="song-artist">Artist Name</span>
-                </div>
-                <div class="playback-controls">
-                    <button class="prev-button">Prev</button>
-                    <button class="play-pause-button">Play/Pause</button>
-                    <button class="next-button">Next</button>
-                </div>
-                <div class="progress-bar">
-                    <span class="current-time">0:00</span>
-                    <span type="range" class="progress-slider" min="0" max="100" value="0">
-                    <span class="total-time">3:30</span>
-                </div>
-            </section>
-
-            <!-- SEARCH -->
-            <section class="tunevault-search">
-                <input type="text" class="search-input" placeholder="Search for songs, artists, albums...">
-                <button class="search-button">Search</button>
-            </section>
-
-            <!-- MAIN CONTENT -->
-            <section class="tunevault-main-content">
-                <div class="recent">
-                    <h3>Recently Played</h3>
-                    <div class="song-row">
-                        <div class="song-card"></div>
-                        <div class="song-card"></div>
-                        <div class="song-card"></div>
-                    </div>
-                </div>
-
-                <div class="playlists">
-                    <h3>Your Playlists</h3>
-                    <div class="playlist-row">
-                        <div class="playlist-card"></div>
-                        <div class="playlist-card"></div>
-                        <div class="playlist-card"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FOOTER -->
-            <footer class="tunevault-footer">
-                TuneVault @ 2026 -- Self-Hosted
-            </footer>
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            TuneVault - Home
         </div>
-    </body>
-</div>
+
+        <!-- NAVIGATION -->
+        <div class="row">
+            <strong>Home | Library | Playlists | Upload</strong>
+        </div>
+
+        <!-- USER INFO -->
+        <div class="row">
+            Username &nbsp; | &nbsp; Logout
+        </div>
+
+        <!-- NOW PLAYING -->
+        <div class="row welcome">
+            Now Playing: Song Title – Artist Name
+        </div>
+
+        <div class="row">
+            ▶ &nbsp;&nbsp;&nbsp; 2:34 / 4:12
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="row">
+            <input 
+                type="text" 
+                placeholder="Search songs, artists, albums..."
+                style="width: 70%; border-bottom: 2px solid #b7b7b7; background: transparent; text-align:center;"
+            >
+        </div>
+
+        <!-- RECENT + PLAYLISTS HEADER -->
+        <div class="row label-row">
+            Recently Added &nbsp; | &nbsp; My Playlists
+        </div>
+
+        <!-- SONG + PLAYLIST CARDS -->
+        <div class="row">
+            [ Song ] &nbsp; [ Song ] &nbsp; [ Song ] &nbsp;
+            [ Playlist 1 ] &nbsp; [ Playlist 2 ]
+        </div>
+
+        <!-- FOOTER -->
+        <div class="row subtitle">
+            TuneVault © 2026 — Self-Hosted
+        </div>
+
+    </div>
+</body>
+</html>

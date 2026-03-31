@@ -116,3 +116,14 @@ body {
   color: #3d7fbc;
   text-decoration: underline;
 }
+
+/* Logout link styling */
+.row a {
+  color: #2f5d8c;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.row a:hover {
+  text-decoration: underline;
+}

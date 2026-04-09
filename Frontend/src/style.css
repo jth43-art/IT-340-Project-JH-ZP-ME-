@@ -1,0 +1,118 @@
+/* Used AI to generate style.css file for frontend */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-wrapper {
+  width: 90%;
+  max-width: 760px;
+}
+
+.section-title {
+  text-align: center;
+  color: #2f5d8c;
+  font-size: 18px;
+  margin: 0 0 12px 0;
+  font-weight: bold;
+}
+
+.login-card {
+  border: 1px solid #9fc3df;
+  background: #f7f7f7;
+}
+
+.top-bar {
+  background: #2f5d8c;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 6px 0;
+}
+
+.row {
+  text-align: center;
+  border-top: 1px solid #c2dced;
+  padding: 4px 0;
+}
+
+.welcome {
+  font-weight: bold;
+  color: #2f5d8c;
+  font-size: 18px;
+}
+
+.subtitle {
+  font-style: italic;
+  color: #777;
+  font-size: 12px;
+}
+
+.label-row {
+  font-size: 14px;
+}
+
+.input-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+}
+
+.input-row input {
+  width: 38%;
+  border: none;
+  border-bottom: 2px solid #b7b7b7;
+  background: transparent;
+  outline: none;
+  text-align: center;
+  padding: 2px 0;
+  font-size: 14px;
+}
+
+.bracket {
+  color: #777;
+  font-size: 16px;
+}
+
+.eye {
+  font-size: 12px;
+  color: #777;
+  margin-left: 2px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.eye:hover {
+  opacity: 0.6;
+}
+
+.login-button {
+  width: 100%;
+  background: #3d7fbc;
+  color: white;
+  border: none;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 8px 0;
+  cursor: pointer;
+  display: block;
+}
+
+.register-link {
+  font-style: italic;
+  color: #777;
+  font-size: 12px;
+}
+
+.register-link a {
+  color: #3d7fbc;
+  text-decoration: underline;
+}

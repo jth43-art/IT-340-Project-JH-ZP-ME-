@@ -1,0 +1,83 @@
+# backend.py
+# TuneVault Backend – Flask API
+# Provides basic functionality for the TuneVault homepage
+
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# -----------------------------
+# Mock Data (replace with DB later)
+# -----------------------------
+NOW_PLAYING = {
+    "title": "Song Title",
+    "artist": "Artist Name",
+    "current_time": "2:34",
+    "duration": "4:12"
+}
+
+RECENT_SONGS = [
+    {"name": "Song A", "artist": "Artist 1"},
+    {"name": "Song B", "artist": "Artist 2"},
+    {"name": "Song C", "artist": "Artist 3"}
+]
+
+PLAYLISTS = [
+    {"name": "Playlist 1", "count": 12},
+    {"name": "Playlist 2", "count": 8}
+]
+
+LIBRARY = [
+    "Song A", "Song B", "Song C", "Alpha", "Beta", "Gamma"
+]
+
+
+# -----------------------------
+# API ROUTES
+# -----------------------------
+
+@app.get("/now-playing")
+def get_now_playing():
+    return jsonify(NOW_PLAYING)
+
+
+@app.get("/recent")
+def get_recent():
+    return jsonify({"recent": RECENT_SONGS})
+
+
+@app.get("/playlists")
+def get_playlists():
+    return jsonify({"playlists": PLAYLISTS})
+
+
+@app.get("/search")
+def search_library():
+    query = request.args.get("q", "").lower()
+
+    results = [song for song in LIBRARY if query in song.lower()]
+
+    return jsonify({
+        "query": query,
+        "results": results
+    })
+
+
+@app.get("/")
+def home():
+    return jsonify({
+        "message": "TuneVault Backend Running",
+        "routes": [
+            "/now-playing",
+            "/recent",
+            "/playlists",
+            "/search?q=your_query"
+        ]
+    })
+
+
+# -----------------------------
+# Run Server
+# -----------------------------
+if __name__ == "__main__":
+    app.run(debug=True)

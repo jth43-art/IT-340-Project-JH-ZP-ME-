@@ -1,25 +1,46 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
-const path = require('path');
 
-const PORT = 5000;
+const port = 3000;
 
-// Serve static files (your HTML, CSS, JS)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
+app.use(express.json());
 
-// API routes (for your Angular service later if needed)
+// ROUTES
 app.get('/now-playing', (req, res) => {
-  res.json({ song: "Song Title", artist: "Artist Name" });
+    res.json({
+        title: "Song Title",
+        artist: "Artist Name",
+        currentTime: "2:34",
+        duration: "4:12"
+    });
 });
 
-app.get('/recent', (req, res) => {
-  res.json(["Song 1", "Song 2"]);
+app.get('/songs/recent', (req, res) => {
+    res.json([
+        { title: "Song A", artist: "Artist 1" },
+        { title: "Song B", artist: "Artist 2" },
+        { title: "Song C", artist: "Artist 3" }
+    ]);
 });
 
 app.get('/playlists', (req, res) => {
-  res.json(["Playlist 1", "Playlist 2"]);
+    res.json([
+        { name: "Playlist 1", count: 12 },
+        { name: "Playlist 2", count: 8 }
+    ]);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.get('/search', (req, res) => {
+    const query = req.query.q;
+    res.json({
+        results: [
+            { title: "Matching Song", artist: "Artist X" }
+        ]
+    });
+});
+
+app.listen(port, () => {
+    console.log(`TuneVault backend running on port ${port}`);
 });

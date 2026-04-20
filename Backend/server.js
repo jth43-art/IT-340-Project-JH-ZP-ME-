@@ -1,13 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+
+const mongoose = require("mongoose");
 const loginRoute = require("./routes/login");
+const registerRoute = require("./routes/register");
+mongoose.connect("mongodb://127.0.0.1:27017/tunevault", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log("MongoDB connected"))
+.catch(err => console.error("MongoDB connection error:", err));
 
 const port = 3000;
 
 app.use(cors());
 app.use(express.json());
 app.use("/login", loginRoute);
+app.use("/register", registerRoute);
 
 // ROUTES
 app.get('/now-playing', (req, res) => {

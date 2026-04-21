@@ -16,6 +16,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/tunevault", {
 .catch(err => console.error("MongoDB connection error:", err));
 
 const port = 3000;
+const mongoSanitize = require("express-mongo-sanitize");
+app.use(mongoSanitize());
 
 app.use(cors());
 app.use(express.json());

@@ -11,49 +11,41 @@
 <body>
 
 <div class="page-wrapper">
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-card">
+    <div class="top-bar">LOGIN</div>
+   
+    <div class="row">
+      <div class="welcome">Welcome Back</div>
+    </div>
 
-<h2 class="section-title">Login Page</h2>
+    <div class="row label-row">Email Address</div>
+    <div class="row input-row">
+      <span class="bracket">[</span>
+      <input type="email" formControlName="email" placeholder="email@example.com">
+      <span class="bracket ribbon">]</span>
+    </div>
+    <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+         style="color: red; font-size: 11px; text-align: center;">
+      Please enter a valid email address.
+    </div>
 
-<div class="login-card">
+    <div class="row label-row">Password</div>
+    <div class="row input-row">
+      <span class="bracket">[</span>
+      <input type="password" formControlName="password" placeholder="••••••••">
+      <span class="bracket">]</span>
+    </div>
 
-<div class="top-bar">
-TuneVault — Login
-</div>
+    <div class="row">
+      <button type="submit" [disabled]="loginForm.invalid" class="login-button">
+        LOG IN
+      </button>
+    </div>
 
-<div class="row welcome">
-Welcome Back 🎵
-</div>
-
-<div class="row subtitle">
-Sign in to your music library
-</div>
-
-<div class="row label-row">Username or Email</div>
-
-<div class="row input-row">
-<span class="bracket">[</span>
-<input type="text">
-<span class="bracket">]</span>
-</div>
-
-<div class="row label-row">Password</div>
-
-<div class="row input-row password-row">
-<span class="bracket">[</span>
-<input type="password" id="loginPassword">
-<span class="bracket">]</span>
-<span class="eye" onclick="toggleLoginPassword()">👁</span>
-</div>
-
-<button class="login-button">[ LOGIN ]</button>
-
-<div class="row register-link">
-Don't have an account?
-<a href="register.html">Register here</a>
-</div>
-
-</div>
-
+    <div class="row register-link">
+      Don't have an account? <a routerLink="/register">Register here</a>
+    </div>
+  </form>
 </div>
 
 <script>

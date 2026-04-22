@@ -11,67 +11,49 @@
 <body>
 
 <div class="page-wrapper">
+  <h2 class="section-title">Register Page</h2>
 
-<h2 class="section-title">Register Page</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="login-card">
+    <div class="top-bar">TuneVault — Register</div>
 
-<div class="login-card">
+    <div class="row welcome">Create Your Account 🎵</div>
 
-<div class="top-bar">
-TuneVault — Register
+    <div class="row label-row">Username</div>
+    <div class="row input-row">
+      <span class="bracket">[</span>
+      <input type="text" formControlName="username" placeholder="Min 3 characters">
+      <span class="bracket">]</span>
+    </div>
+
+    <div class="row label-row">Email Address</div>
+    <div class="row input-row">
+      <span class="bracket">[</span>
+      <input type="email" formControlName="email" placeholder="email@example.com">
+      <span class="bracket">]</span>
+    </div>
+
+    <div class="row label-row">Password</div>
+    <div class="row input-row password-row">
+      <span class="bracket">[</span>
+      <input type="password" formControlName="password" placeholder="Min 8 characters">
+      <span class="bracket">]</span>
+    </div>
+
+    <div class="row register-link">
+      <input type="checkbox"> I agree to the Terms of Service
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid" class="login-button">
+      [ CREATE ACCOUNT ]
+    </button>
+
+    <div class="row register-link">
+      Already have an account?
+      <a routerLink="/login">Login here</a>
+    </div>
+  </form>
 </div>
-
-<div class="row welcome">
-Create Your Account 🎵
-</div>
-
-<div class="row label-row">Full Name</div>
-
-<div class="row input-row">
-<span class="bracket">[</span>
-<input type="text">
-<span class="bracket">]</span>
-</div>
-
-<div class="row label-row">Email Address</div>
-
-<div class="row input-row">
-<span class="bracket">[</span>
-<input type="email">
-<span class="bracket">]</span>
-</div>
-
-<div class="row label-row">Username</div>
-
-<div class="row input-row">
-<span class="bracket">[</span>
-<input type="text">
-<span class="bracket">]</span>
-</div>
-
-<div class="row label-row">Password</div>
-
-<div class="row input-row password-row">
-<span class="bracket">[</span>
-<input type="password" id="registerPassword">
-<span class="bracket">]</span>
-<span class="eye" onclick="toggleRegisterPassword()">👁</span>
-</div>
-
-<div class="row register-link">
-<input type="checkbox"> I agree to the Terms of Service
-</div>
-
-<button class="login-button">[ CREATE ACCOUNT ]</button>
-
-<div class="row register-link">
-Already have an account?
-<a href="login.html">Login here</a>
-</div>
-
-</div>
-
-</div>
-
+  
 <script>
 function toggleRegisterPassword() {
 const password = document.getElementById("registerPassword");

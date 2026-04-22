@@ -8,6 +8,8 @@ const loginRoute = require("./routes/login");
 const registerRoute = require("./routes/register");
 const homepageRoute = require("./routes/homepage");
 
+app.use(express.json());
+
 mongoose.connect("mongodb://127.0.0.1:27017/tunevault", {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -18,6 +20,10 @@ mongoose.connect("mongodb://127.0.0.1:27017/tunevault", {
 const port = 3000;
 const mongoSanitize = require("express-mongo-sanitize");
 app.use(mongoSanitize());
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
 
 app.use(cors());
 app.use(express.json());

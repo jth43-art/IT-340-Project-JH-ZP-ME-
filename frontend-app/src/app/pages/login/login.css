@@ -1,0 +1,25 @@
+<div class="page-wrapper">
+  <div class="login-card">
+    <div class="top-bar">LOGIN</div>
+    
+    <div class="row">
+      <div class="welcome">Welcome Back</div>
+      <div class="subtitle">Please enter your credentials</div>
+    </div>
+
+    <div class="row label-row">Username / Email</div>
+    <div class="row input-row">
+      <span class="bracket">[</span>
+      <input type="text">
+      <span class="bracket">]</span>
+    </div>
+
+    <div class="row">
+      <button class="login-button">LOG IN</button>
+    </div>
+
+    <div class="row register-link">
+      Don't have an account? <a routerLink="/register">Register here</a>
+    </div>
+  </div>
+</div>

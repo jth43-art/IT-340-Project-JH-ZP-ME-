@@ -10,7 +10,7 @@ const homepageRoute = require("./routes/homepage");
 
 app.use(express.json());
 
-mongoose.connect("mongodb://127.0.0.1:27017/tunevault", {
+mongoose.connect("mongodb://100.84.183.114:27017/tunevault", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })

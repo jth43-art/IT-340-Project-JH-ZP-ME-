@@ -1,7 +1,7 @@
 const {MongoClient} = require("mongodb"); // run: mongodb://100.84.183.114:27017/tunevault
 const client = new MongoClient("mongodb://100.84.183.114:27017");
 
-async function test90 {
+async function test() {
   await client.connect();
   console.log("Connected to DB");
 

@@ -64,7 +64,3 @@ app.get('/search', (req, res) => {
         ]
     });
 });
-
-app.listen(port, () => {
-    console.log(`TuneVault backend running on port ${port}`);
-});

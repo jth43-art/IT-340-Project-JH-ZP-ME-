@@ -15,8 +15,8 @@ mongoose.connect("mongodb://100.84.183.114:27017/tunevault")
 .catch(err => console.error("MongoDB connection error:", err));
 
 const port = 3000;
-const mongoSanitize = require("express-mongo-sanitize");
-app.use(mongoSanitize());
+/*const mongoSanitize = require("express-mongo-sanitize");
+app.use(mongoSanitize());*/
 
 app.listen(3000, '0.0.0.0', () => {
   console.log("Server running on Tailscale IP at port 3000");

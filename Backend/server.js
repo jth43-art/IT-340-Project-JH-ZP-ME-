@@ -10,10 +10,7 @@ const homepageRoute = require("./routes/homepage");
 
 app.use(express.json());
 
-mongoose.connect("mongodb://100.84.183.114:27017/tunevault", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect("mongodb://100.84.183.114:27017/tunevault")
 .then(() => console.log("MongoDB connected"))
 .catch(err => console.error("MongoDB connection error:", err));
 

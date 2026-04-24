@@ -21,8 +21,8 @@ const port = 3000;
 const mongoSanitize = require("express-mongo-sanitize");
 app.use(mongoSanitize());
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+app.listen(3000, '0.0.0.0', () => {
+  console.log("Server running on Tailscale IP at port 3000");
 });
 
 app.use(cors());

@@ -1,11 +1,8 @@
 //Used Copilot to construct basis for code
-const mongoose = require("mongoose");
-const userSchema = new mongoose.Schema({
-  fullName: String,
-  email: { type: String, unique: true },
-  username: { type: String, unique: true },
-  password: String,
-  createdAt: { type: Date, default: Date.now },
-  role: { type: String, default: "user" }
+const mongoose = require('mongoose');
+const UserSchema = new mongoose.Schema({
+    email: { type: String, required: true },
+    password: { type: String, required: true }
 });
-module.exports = mongoose.model("User", userSchema);
+
+module.exports = mongoose.model('User', UserSchema);

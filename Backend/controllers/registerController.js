@@ -1,41 +1,49 @@
-//Used Copilot to construct basis for code
+//Used Copilot to construct basis for codeconst bcrypt = require("bcrypt");
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
-exports.registerUser = async (req, res) => {
-    try {
-        const { fullName, email, username, password, termsAccepted } = req.body;
-        if (!fullName || !email || !username || !password) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
-        if (!termsAccepted) {
-            return res.status(400).json({ message: "You must accept the Terms of Service" });
-        }
-        const existingUser = await User.findOne({
-            $or: [{ email }, { username }]
-        });
-        if (existingUser) {
-            return res.status(400).json({ message: "Email or username already exists" });
-        }
-        // 🔐 HASH PASSWORD HERE
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({
-            fullName,
-            email,
-            username,
-            password: hashedPassword,
-            termsAccepted
-        });
-        await newUser.save();
-        res.status(201).json({
-            message: "Registration successful",
-            user: {
-                fullName: newUser.fullName,
-                email: newUser.email,
-                username: newUser.username
-            }
-        });
-    } catch (err) {
-        console.error("Registration error:", err);
-        res.status(500).json({ message: "Server error" });
+const registerUser = async (req, res) => {
+  try {
+    const { fullName, email, username, password, termsAccepted } = req.body;
+
+      // Basic validation
+    if (!fullName || !email || !username || !password || !termsAccepted) {
+      return res.status(400).json({ message: "All fields are required" });
     }
+
+      // Check if user already exists
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }]
+    });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user with ALL fields
+    const newUser = new User({
+      fullName,
+      email,
+      username,
+      password: hashedPassword,
+      createdAt: new Date(),
+      role: "user"
+    });
+
+    await newUser.save();
+    res.status(201).json({
+      message: "Registration successful",
+      user: {
+        fullName: newUser.fullName,
+        email: newUser.email,
+        username: newUser.username,
+        role: newUser.role
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
+
+module.exports = { registerUser };

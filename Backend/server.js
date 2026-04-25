@@ -5,10 +5,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
 const songRoutes = require('./routes/songRoutes');
+cosnt registerRoute = require("./routes/register");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use("/register", registerRoute);
 
 // Add API prefix
 app.use('/api/users', userRoutes);

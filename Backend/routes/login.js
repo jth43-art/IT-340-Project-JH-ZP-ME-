@@ -1,6 +1,6 @@
 //Used Copilot to construct basis for code
 const express = require("express");
 const router = express.Router();
-const { loginUser } = require("../controllers/loginController");
-router.post("/", loginUser);
+const { registerUser } = require("../controllers/registerController");
+router.post("/", registerUser);
 module.exports = router;

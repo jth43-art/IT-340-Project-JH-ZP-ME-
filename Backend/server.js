@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 // Add API prefix
 app.use('/api/users', userRoutes);
 app.use('/api/songs', songRoutes);
-mongoose.connect('mongodb://127.0.0.1:27017/tunevault')
+mongoose.connect('mongodb://100.84.183.114:27017/tunevault')
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 app.listen(3000, () => console.log("Backend running on port 3000"));

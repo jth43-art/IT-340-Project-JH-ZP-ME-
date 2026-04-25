@@ -1,4 +1,5 @@
 //Used Copilot to construct basis for codeconst bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const registerUser = async (req, res) => {
   try {

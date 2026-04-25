@@ -1,21 +1,31 @@
 //Used Copilot to construct basis for code
+// server.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-const userRoutes = require('./routes/userRoutes');
-const songRoutes = require('./routes/songRoutes');
-cosnt registerRoute = require("./routes/register");
+
+const loginRoute = require('./routes/login');
+const registerRoute = require('./routes/register');
+const homepageRoute = require('./routes/homepage');
 
 const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-app.use("/register", registerRoute);
 
-// Add API prefix
-app.use('/api/users', userRoutes);
-app.use('/api/songs', songRoutes);
-mongoose.connect('mongodb://100.84.183.114:27017/tunevault')
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use('/login', loginRoute);
+app.use('/register', registerRoute);
+app.use('/homepage', homepageRoute);
+
+// MongoDB connection (USE YOUR IP)
+mongoose.connect("mongodb://100.84.183.114:27017/tunevault")
   .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
-app.listen(3000, () => console.log("Backend running on port 3000"));
+  .catch(err => console.error("MongoDB connection error:", err));
+
+// Start server
+app.listen(3000, '0.0.0.0', () => {
+  console.log("Server running on port 3000");
+});

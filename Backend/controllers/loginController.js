@@ -1,29 +1,26 @@
-//Used Copilot to construct basis for code
+// Used Copilot to construct basis for code
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    console.log("BODY:", req.body);
 
-    // Check fields
+    const { email, password } = req.body || {};
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Find user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
 
-    // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Success
-    res.json({
+    return res.status(200).json({
       message: "Login successful",
       user: {
         fullName: user.fullName,
@@ -32,9 +29,10 @@ const loginUser = async (req, res) => {
         role: user.role
       }
     });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Login error:", err);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 module.exports = { loginUser };

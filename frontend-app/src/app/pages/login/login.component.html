@@ -1,8 +1,11 @@
 <div class="page-wrapper">
   <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-card">
     <div class="top-bar">LOGIN</div>
-    
-    <div *ngIf="errorMessage" style="background: #ffe6e6; color: #cc0000; padding: 8px; font-size: 12px; text-align: center; border-bottom: 1px solid #cc0000;">
+
+    <div
+      *ngIf="errorMessage"
+      style="background: #ffe6e6; color: #cc0000; padding: 8px; font-size: 12px; text-align: center; border-bottom: 1px solid #cc0000;"
+    >
       {{ errorMessage }}
     </div>
 
@@ -10,20 +13,32 @@
       <div class="welcome">Welcome Back</div>
     </div>
 
-    <div class="row label-row">Email Address</div>
+    <div class="row label-row">Email / Username</div>
     <div class="row input-row">
       <span class="bracket">[</span>
-      <input type="email" formControlName="email" placeholder="email@example.com">
+      <input
+        type="text"
+        formControlName="identifier"
+        placeholder="email or username"
+      >
       <span class="bracket ribbon">]</span>
     </div>
-    <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" style="color: red; font-size: 10px; text-align: center;">
-      A valid email is required.
+
+    <div
+      *ngIf="loginForm.get('identifier')?.invalid && loginForm.get('identifier')?.touched"
+      style="color: red; font-size: 10px; text-align: center;"
+    >
+      Email or username is required.
     </div>
 
     <div class="row label-row">Password</div>
     <div class="row input-row">
       <span class="bracket">[</span>
-      <input type="password" formControlName="password" placeholder="••••••••">
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="••••••••"
+      >
       <span class="bracket">]</span>
     </div>
 

@@ -4,28 +4,37 @@ const User = require("../models/User");
 
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body || {};
+    const { identifier, password } = req.body || {};
 
     // Prevent NoSQL injection by making sure inputs are strings
     if (
-      typeof email !== "string" ||
+      typeof identifier !== "string" ||
       typeof password !== "string"
     ) {
       return res.status(400).json({ message: "Invalid input" });
     }
 
+    const cleanIdentifier = identifier.trim().toLowerCase();
+    const cleanPassword = password.trim();
+
     // Basic validation
-    if (!email || !password) {
+    if (!cleanIdentifier || !cleanPassword) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const cleanEmail = email.trim().toLowerCase();
-    const user = await User.findOne({ email: cleanEmail });
+    const user = await User.findOne({
+      $or: [
+        { email: cleanIdentifier },
+        { username: cleanIdentifier }
+      ]
+    });
+
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(cleanPassword, user.password);
+
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -44,4 +53,5 @@ const loginUser = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
 module.exports = { loginUser };

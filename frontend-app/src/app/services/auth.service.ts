@@ -4,8 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // Use Jackson's Backend Tailscale IP here
-  private baseUrl = 'http://100.105.95.54:3000/auth'; 
+  private baseUrl = 'http://100.105.95.54:3000';
 
   constructor(private http: HttpClient) {}
 

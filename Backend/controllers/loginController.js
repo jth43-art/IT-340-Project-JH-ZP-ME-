@@ -4,7 +4,6 @@ const User = require("../models/User");
 
 const loginUser = async (req, res) => {
   try {
-    console.log("BODY:", req.body);
     const { email, password } = req.body || {};
 
     // Prevent NoSQL injection by making sure inputs are strings

@@ -4,6 +4,13 @@
   <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="login-card">
     <div class="top-bar">TuneVault — Register</div>
 
+    <div
+      *ngIf="errorMessage"
+      style="background: #ffe6e6; color: #cc0000; padding: 8px; font-size: 12px; text-align: center; border-bottom: 1px solid #cc0000;"
+    >
+      {{ errorMessage }}
+    </div>
+
     <div class="row welcome">Create Your Account 🎵</div>
 
     <!-- FULL NAME -->

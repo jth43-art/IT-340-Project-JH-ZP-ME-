@@ -17,7 +17,11 @@ export class RegisterComponent {
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+    this.registerForm.valueChanges.subscribe(() => {
+      this.errorMessage = '';
+    });
+  }
 
   registerForm = new FormGroup({
     fullName: new FormControl('', [Validators.required]),

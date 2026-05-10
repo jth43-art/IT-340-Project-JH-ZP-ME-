@@ -8,6 +8,8 @@ const cors = require('cors');
 const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
 const homepageRoute = require('./routes/homepage');
+const playlistRoute = require('./routes/playlists');
+const searchRoutes = require('./routes/search');
 
 const app = express();
 
@@ -24,10 +26,11 @@ app.use((req, res, next) => {
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
 app.use('/homepage', homepageRoute);
-app.use('/api/playlists', playlistRoutes);
+app.use('/playlists', playlistRoute);
 // If you want /api/search instead of /api/playlists/search,
 // you can also mount the same router at /api:
-app.use('/api', playlistRoutes);
+app.use('/api', playlistRoute);
+app.use('/search', searchRoute);
 
 // MongoDB connection (USE YOUR IP)
 mongoose.connect("mongodb://100.84.183.114:27017/tunevault")

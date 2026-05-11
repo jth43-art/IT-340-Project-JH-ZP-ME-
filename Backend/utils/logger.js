@@ -4,7 +4,7 @@ const path = require("path");
 const logFilePath = path.join(__dirname, "../logs/app.log");
 
 const log = (message) => {
-  const entry = '[${new Date().toISOString()}] ${message}\n';
+  const entry = `[${new Date().toISOString()}] ${message}\n`;
 
   fs.appendFile(logFilePath, entry, (err) => {
     if (err) {

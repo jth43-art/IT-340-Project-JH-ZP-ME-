@@ -1,9 +1,12 @@
+const log = require("../utils/logger");
 // Used Copilot to construct basis for code
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const registerUser = async (req, res) => {
   try {
     const { fullName, email, username, password, termsAccepted } = req.body || {};
+    
+    log(`REGISTER attempt: ${email}`);
 
     // Prevent NoSQL injection by making sure inputs are strings
     if (
@@ -30,6 +33,7 @@ const registerUser = async (req, res) => {
     });
 
     if (existingUser) {
+      log(`REGISTER duplicate: ${cleanEmail}`);
       return res.status(400).json({ message: "User already exists" });
     }
 
@@ -47,6 +51,9 @@ const registerUser = async (req, res) => {
     });
 
     await newUser.save();
+
+    log(`REGISTER success: ${cleanEmail}`);
+
     res.status(201).json({
       message: "Registration successful",
       user: {

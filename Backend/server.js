@@ -1,6 +1,4 @@
 //Used Copilot to construct basis for code
-// server.js
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -9,7 +7,7 @@ const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
 const homepageRoute = require('./routes/homepage');
 const playlistRoute = require('./routes/playlists');
-const searchRoutes = require('./routes/search');
+const searchRoute = require('./routes/search');
 const mockAuth = require('./middleware/mockAuth');
 
 const app = express();

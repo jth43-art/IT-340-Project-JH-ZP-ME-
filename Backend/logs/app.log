@@ -1,0 +1,4 @@
+[2026-05-11T17:17:27.060Z] REGISTER attempt: test@test.com
+[2026-05-11T17:17:27.162Z] REGISTER success: test@test.com
+[2026-05-11T17:22:07.004Z] LOGIN attempt: testuser
+[2026-05-11T17:22:07.090Z] LOGIN success: testuser

@@ -1,11 +1,8 @@
 <div class="page-container">
-
   <div class="search-header">
-
     <h1>Search</h1>
 
     <div class="search-bar">
-
       <input
         type="text"
         [(ngModel)]="searchQuery"
@@ -16,54 +13,32 @@
       <button (click)="onSearch()">
         Search
       </button>
-
     </div>
-
   </div>
 
   <div class="results-container">
-
     <div class="song-card" *ngFor="let song of songs">
-
       <div class="song-info">
-
-        <h3>
-          {{ song.track || song.title }}
-        </h3>
-
-        <p>
-          {{ song.artist }}
-        </p>
-
+        <h3>{{ song.track || song.title }}</h3>
+        <p>{{ song.artist }}</p>
       </div>
 
       <div class="playlist-select">
-
         <select #playlistSelect>
-
-          <option value="">
-            Select Playlist
-          </option>
+          <option value="">Select Playlist</option>
 
           <option
             *ngFor="let playlist of playlists"
             [value]="playlist._id"
           >
-            {{ playlist.name }}
+            {{ playlist.title }}
           </option>
-
         </select>
 
-        <button
-          (click)="addToPlaylist(song, playlistSelect.value)"
-        >
+        <button (click)="addToPlaylist(song, playlistSelect.value)">
           Add
         </button>
-
       </div>
-
     </div>
-
   </div>
-
 </div>

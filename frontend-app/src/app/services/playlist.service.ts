@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import {
   HttpClient,
   HttpHeaders
@@ -10,18 +11,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PlaylistService {
-
   private baseUrl = 'http://100.105.95.54:3000/playlists';
 
-  constructor(private http: HttpClient) {}
-
-  // AUTH HEADERS
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   private getHeaders() {
+    let user: any = {};
 
-    const user = JSON.parse(
-      localStorage.getItem('user') || '{}'
-    );
+    if (isPlatformBrowser(this.platformId)) {
+      user = JSON.parse(localStorage.getItem('user') || '{}');
+    }
 
     return {
       headers: new HttpHeaders({
@@ -32,71 +34,41 @@ export class PlaylistService {
     };
   }
 
-  // GET ALL PLAYLISTS
-
   getPlaylists(): Observable<any> {
-
     return this.http.get<any>(
-      this.baseUrl,
+      `${this.baseUrl}?t=${Date.now()}`,
       this.getHeaders()
     );
-
   }
-
-  // CREATE PLAYLIST
 
   createPlaylist(name: string): Observable<any> {
-
     return this.http.post(
       this.baseUrl,
-      {
-        title: name
-      },
+      { title: name },
       this.getHeaders()
     );
-
   }
 
-  // DELETE PLAYLIST
-
   deletePlaylist(id: string): Observable<any> {
-
     return this.http.delete(
       `${this.baseUrl}/${id}`,
       this.getHeaders()
     );
-
   }
 
-  // UPDATE PLAYLIST
-
-  updatePlaylist(
-    id: string,
-    updatedData: any
-  ): Observable<any> {
-
+  updatePlaylist(id: string, updatedData: any): Observable<any> {
     return this.http.put(
       `${this.baseUrl}/${id}`,
       updatedData,
       this.getHeaders()
     );
-
   }
 
-  // ADD SONG TO PLAYLIST
-
-  addSongToPlaylist(
-    id: string,
-    song: any
-  ): Observable<any> {
-
+  addSongToPlaylist(id: string, song: any): Observable<any> {
     return this.http.post(
       `${this.baseUrl}/${id}/songs`,
-      {
-        song
-      },
+      { song },
       this.getHeaders()
     );
-
   }
 }

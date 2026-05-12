@@ -2,7 +2,8 @@ import {
   Component,
   OnInit,
   Inject,
-  PLATFORM_ID
+  PLATFORM_ID,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import {
@@ -23,7 +24,6 @@ import { PlaylistService } from '../../services/playlist.service';
   styleUrl: './playlist.component.css'
 })
 export class PlaylistComponent implements OnInit {
-
   playlists: any[] = [];
   errorMessage: string = '';
 
@@ -35,11 +35,11 @@ export class PlaylistComponent implements OnInit {
   constructor(
     private playlistService: PlaylistService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
-
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -51,36 +51,37 @@ export class PlaylistComponent implements OnInit {
       return;
     }
 
-    this.loadPlaylists();
+    setTimeout(() => {
+      this.loadPlaylists();
+    }, 0);
   }
 
   loadPlaylists(): void {
-
     this.errorMessage = '';
 
     this.playlistService.getPlaylists().subscribe({
-
       next: (data: any) => {
         this.playlists = data.playlists || [];
         console.log('Playlists loaded:', this.playlists);
+
+        this.cdr.detectChanges();
       },
 
       error: (err: any) => {
         this.errorMessage = 'Could not load playlists.';
         console.error(err);
-      }
 
+        this.cdr.detectChanges();
+      }
     });
   }
 
   createPlaylist(): void {
-
     if (!this.newPlaylistName.trim()) {
       return;
     }
 
     this.playlistService.createPlaylist(this.newPlaylistName).subscribe({
-
       next: () => {
         alert('Playlist Created!');
 
@@ -94,12 +95,10 @@ export class PlaylistComponent implements OnInit {
         console.error(err);
         alert('Failed to create playlist');
       }
-
     });
   }
 
   deletePlaylist(id: string): void {
-
     const confirmed = confirm('Delete this playlist?');
 
     if (!confirmed) {
@@ -107,12 +106,10 @@ export class PlaylistComponent implements OnInit {
     }
 
     this.playlistService.deletePlaylist(id).subscribe({
-
       next: () => {
         alert('Playlist Deleted');
 
         this.selectedPlaylist = null;
-
         this.loadPlaylists();
       },
 
@@ -120,7 +117,6 @@ export class PlaylistComponent implements OnInit {
         console.error(err);
         alert('Failed to delete playlist');
       }
-
     });
   }
 
@@ -133,7 +129,6 @@ export class PlaylistComponent implements OnInit {
   }
 
   removeSong(songIndex: number): void {
-
     if (!this.selectedPlaylist) {
       return;
     }
@@ -144,7 +139,6 @@ export class PlaylistComponent implements OnInit {
       this.selectedPlaylist._id,
       this.selectedPlaylist
     ).subscribe({
-
       next: () => {
         alert('Song Removed');
         this.loadPlaylists();
@@ -154,7 +148,6 @@ export class PlaylistComponent implements OnInit {
         console.error(err);
         alert('Failed to remove song');
       }
-
     });
   }
 }

@@ -66,6 +66,20 @@ exports.deletePlaylist = async (req, res) => {
   res.json({ message: 'Deleted' });
 };
 
+exports.addLocalSong = async (req, res) => {
+  const { id } = req.params;
+  const playlist = await Playlist.findById(id);
+  if (!playlist) return res.status(404).json({ message: 'Not found' });
+  if (!canModify(playlist, req.user))
+    return res.status(403).json({ message: 'Forbidden' });
+  playlist.songs.push({
+    track: req.file.originalname,
+    localFile: req.file.path
+  });
+  await playlist.save();
+  res.json({ playlist });
+};
+
 exports.addSongToPlaylist = async (req, res) => {
   const { id } = req.params;
   const song = req.body.song;

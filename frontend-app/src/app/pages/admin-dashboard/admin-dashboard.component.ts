@@ -22,12 +22,11 @@ export class AdminDashboardComponent implements OnInit {
 
   loadMasterData() {
     this.playlistService.getPlaylists().subscribe({
-      next: (data) => {
+      next: (data: any[]) => {
         this.allPlaylists = data;
-        // Simple math for the "Admin Stats"
-        this.stats.totalSongs = data.reduce((sum, p) => sum + (p.songs?.length || 0), 0);
-        // Set a dummy number or unique owner count if backend provides it
-        this.stats.totalUsers = new Set(data.map(p => p.owner)).size;
+        // Fixes TS7006 by adding types (sum: number, p: any)
+        this.stats.totalSongs = data.reduce((sum: number, p: any) => sum + (p.songs?.length || 0), 0);
+        this.stats.totalUsers = new Set(data.map((p: any) => p.owner)).size;
       },
       error: (err) => console.error('Admin Fetch Error:', err)
     });

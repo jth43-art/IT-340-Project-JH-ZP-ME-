@@ -45,9 +45,11 @@ export default class LoginComponent {
       password: this.loginForm.value.password
     };
 
+    // The .subscribe() starts here
     this.authService.login(credentials).subscribe({
       next: (response: any) => {
         console.log('Login Success:', response);
+        this.isSuccess = true;
 
         if (response.token) {
           localStorage.setItem('token', response.token);
@@ -57,35 +59,21 @@ export default class LoginComponent {
           localStorage.setItem('user', JSON.stringify(response.user));
           localStorage.setItem('username', response.user.username);
           localStorage.setItem('role', response.user.role);
-          // ALSO update the service so other components know who is logged in
-          this.authService.loggedInUser = response.user.username;
-          this.authService.userRole = response.user.role;
         }
 
-       // --- ADD THE OVERRIDE HERE ---
-  setTimeout(() => {
-    // If you log in with the username 'Zeel', it takes you to Admin
-    // Otherwise, it takes everyone else to the normal Homepage
-    if (response.user.username === 'Zeel') { 
-      console.log('Admin detected, redirecting to Dashboard...');
-      this.router.navigate(['/admin-dashboard']);
-    } else {
-      console.log('Normal user detected, redirecting to Homepage...');
-      this.router.navigate(['/homepage-tv']);
-    }
-  }, 1500); 
-},
-
-        this.router.navigate(['/homepage-tv']);
+        // Logic to redirect based on username
+        setTimeout(() => {
+          if (response.user?.username === 'Zeel') {
+            this.router.navigate(['/admin-dashboard']);
+          } else {
+            this.router.navigate(['/homepage-tv']);
+          }
+        }, 1500);
       },
-
       error: (err: any) => {
         console.error('Login Error:', err);
         this.isSuccess = false;
-        this.errorMessage =
-          err.error?.message ||
-          'Login failed. Please check your credentials and try again.';
+        this.errorMessage = err.error?.message || 'Login failed. Please check your credentials.';
       }
-    });
+    }); // This closes the .subscribe() block correctly
   }
-}

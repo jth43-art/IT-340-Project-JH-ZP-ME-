@@ -1,33 +1,69 @@
 <div class="page-container">
+
   <div class="search-header">
+
     <h1>Search</h1>
+
     <div class="search-bar">
-      <i class="search-icon">🔍</i>
-      <input 
-        type="text" 
-        [(ngModel)]="searchQuery" 
-        (keyup.enter)="onSearch()" 
-        placeholder="What do you want to listen to?">
-      <button (click)="onSearch()">Search</button>
+
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+        placeholder="Search for songs"
+      >
+
+      <button (click)="onSearch()">
+        Search
+      </button>
+
     </div>
+
   </div>
 
-  <div class="results-container" *ngIf="songs.length > 0; else noResults">
+  <div class="results-container">
+
     <div class="song-card" *ngFor="let song of songs">
-      <div class="album-art">
-        <div class="play-overlay">▶</div>
-      </div>
+
       <div class="song-info">
-        <span class="song-title">{{ song.title }}</span>
-        <span class="song-artist">{{ song.artist }}</span>
+
+        <h3>
+          {{ song.track || song.title }}
+        </h3>
+
+        <p>
+          {{ song.artist }}
+        </p>
+
       </div>
-      <button class="add-btn" (click)="addToPlaylist(song)">+</button>
+
+      <div class="playlist-select">
+
+        <select #playlistSelect>
+
+          <option value="">
+            Select Playlist
+          </option>
+
+          <option
+            *ngFor="let playlist of playlists"
+            [value]="playlist._id"
+          >
+            {{ playlist.name }}
+          </option>
+
+        </select>
+
+        <button
+          (click)="addToPlaylist(song, playlistSelect.value)"
+        >
+          Add
+        </button>
+
+      </div>
+
     </div>
+
   </div>
 
-  <ng-template #noResults>
-    <div class="empty-state" *ngIf="searchQuery && songs.length === 0">
-      <p>No results found for "{{ searchQuery }}"</p>
-    </div>
-  </ng-template>
 </div>

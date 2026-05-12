@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export default class LoginComponent {
   errorMessage: string = '';
+  isSuccess: boolean = false;
 
   constructor(
     private router: Router,
@@ -26,6 +27,7 @@ export default class LoginComponent {
 
   onLogin() {
     this.errorMessage = '';
+    this.isSuccess = false;
 
     if (this.loginForm.valid) {
       const credentials = {
@@ -45,7 +47,8 @@ export default class LoginComponent {
         },
         error: (err) => {
           console.error('Login Error:', err);
-          this.errorMessage = err.error?.message || 'Login failed. Please try again.';
+          this.isSuccess = false;
+          this.errorMessage = "Login failed. Please check your credentials and try again.";
         }
       });
     }

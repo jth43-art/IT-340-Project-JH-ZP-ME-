@@ -6,17 +6,7 @@
 
     <div class="top-bar">LOGIN</div>
 
-    <div
-      *ngIf="errorMessage"
-      style="
-        background: #ffe6e6;
-        color: #cc0000;
-        padding: 8px;
-        font-size: 12px;
-        text-align: center;
-        border-bottom: 1px solid #cc0000;
-      "
-    >
+    <div *ngIf="errorMessage" [ngClass]="isSuccess ? 'success-box' : 'error-box'">
       {{ errorMessage }}
     </div>
 
@@ -51,7 +41,8 @@
       Email or username is required.
     </div>
 
-    <!-- PASSWORD -->
+  
+
     <div class="row label-row">Password</div>
 
     <div class="row input-row">

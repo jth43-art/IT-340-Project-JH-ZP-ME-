@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegisterComponent {
   errorMessage: string = '';
+  isSuccess: boolean = false;
 
   constructor(
     private router: Router,
@@ -33,6 +34,7 @@ export class RegisterComponent {
 
   onRegister() {
     this.errorMessage = '';
+    this.isSuccess = false;
 
     if (this.registerForm.valid) {
       const userData = {
@@ -46,8 +48,12 @@ export class RegisterComponent {
       this.authService.register(userData).subscribe({
         next: (response) => {
           console.log('Registration Success:', response);
-          alert('Account created successfully!');
-          this.router.navigate(['/login']);
+          this.isSuccess = true;
+          this.errorMessage = 'Registration successful! Redirecting to login...';
+          
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 2000);
         },
         error: (err) => {
           console.error('Registration Error:', err);

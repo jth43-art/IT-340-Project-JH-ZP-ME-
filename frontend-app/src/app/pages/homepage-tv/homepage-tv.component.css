@@ -1,0 +1,92 @@
+/* Make the whole background fill the screen */
+.tv-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #e0f0f8; /* The light blue from your screenshot */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Make the main card MUCH bigger */
+.tv-card {
+    background: white;
+    width: 95vw;          /* 95% of viewport width */
+    max-width: 1200px;    /* But don't let it get crazy wide on big monitors */
+    min-height: 85vh;     /* 85% of viewport height */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header styling */
+.tv-header {
+    background-color: #3b6b91;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.tv-header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+}
+
+/* Navigation Links */
+.tv-nav {
+    margin-top: 15px;
+    font-size: 1.1rem;
+}
+
+.tv-nav a {
+    color: #cce7ff;
+    text-decoration: none;
+    margin: 0 15px;
+    transition: color 0.3s;
+}
+
+.tv-nav a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* Welcome Section */
+.user-profile {
+    padding: 40px;
+    text-align: center;
+}
+
+.highlight {
+    color: #3b6b91;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Action Buttons (The "Professional Improvements") */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.logout-btn {
+    background-color: #ff4d4d;
+    color: white;
+}

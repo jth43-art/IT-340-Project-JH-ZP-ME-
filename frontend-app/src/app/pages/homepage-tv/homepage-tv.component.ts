@@ -1,5 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  OnInit,
+  Inject,
+  PLATFORM_ID
+} from '@angular/core';
+
+import {
+  CommonModule,
+  isPlatformBrowser
+} from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
@@ -24,12 +34,20 @@ export class HomepageTvComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private playlistService: PlaylistService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
+
+    // Prevent SSR/localStorage error
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const userData = localStorage.getItem('user');
 
+    // Redirect if not logged in
     if (!userData) {
       this.router.navigate(['/login']);
       return;
@@ -54,20 +72,27 @@ export class HomepageTvComponent implements OnInit {
 
   savePlaylist(): void {
     if (this.newPlaylistName.trim()) {
+
       this.playlistService.createPlaylist(this.newPlaylistName).subscribe({
+
         next: (res: any) => {
           console.log('Playlist created!', res);
+
           alert('Playlist Created Successfully!');
+
           this.closeModal();
         },
+
         error: (err: any) => {
           console.error('Error creating playlist', err);
         }
+
       });
     }
   }
 
   onLogout(): void {
+
     console.log('Logout button clicked!');
 
     localStorage.removeItem('username');

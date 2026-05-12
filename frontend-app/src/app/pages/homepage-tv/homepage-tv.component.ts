@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage-tv',
+  standalone: true, // If you are on the new Angular
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './homepage-tv.component.html',
   styleUrl: './homepage-tv.component.css'
 })

@@ -8,7 +8,6 @@ function canModify(playlist, user) {
   return owner || admin;
 }
 
-// CREATE PLAYLIST
 exports.createPlaylist = async (req, res) => {
   try {
     const playlist = await Playlist.create({
@@ -25,7 +24,6 @@ exports.createPlaylist = async (req, res) => {
   }
 };
 
-// GET PLAYLISTS
 exports.getPlaylists = async (req, res) => {
   try {
     const playlists = await Playlist.find({
@@ -41,7 +39,6 @@ exports.getPlaylists = async (req, res) => {
   }
 };
 
-// UPDATE PLAYLIST
 exports.updatePlaylist = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id))
@@ -56,7 +53,6 @@ exports.updatePlaylist = async (req, res) => {
   res.json({ playlist });
 };
 
-// DELETE PLAYLIST
 exports.deletePlaylist = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id))
@@ -82,8 +78,6 @@ exports.addSongToPlaylist = async (req, res) => {
   res.json({ playlist });
 };
 
-
-// MUSIC SEARCH API
 // GET /api/search?query=
 exports.searchMusic = async (req, res) => {
   const { query } = req.query;

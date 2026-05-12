@@ -57,7 +57,23 @@ export default class LoginComponent {
           localStorage.setItem('user', JSON.stringify(response.user));
           localStorage.setItem('username', response.user.username);
           localStorage.setItem('role', response.user.role);
+          // ALSO update the service so other components know who is logged in
+          this.authService.loggedInUser = response.user.username;
+          this.authService.userRole = response.user.role;
         }
+
+        setTimeout(() => {
+          const role = response.user?.role || 'user';
+          
+          if (role === 'admin') {
+            console.log('Redirecting to Admin Dashboard');
+            this.router.navigate(['/admin-dashboard']);
+          } else {
+            console.log('Redirecting to Normal Homepage');
+            this.router.navigate(['/homepage-tv']);
+          }
+        }, 1500); // 1.5 second delay so user sees the success message
+      },
 
         this.router.navigate(['/homepage-tv']);
       },

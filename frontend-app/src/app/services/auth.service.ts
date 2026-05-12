@@ -34,8 +34,9 @@ login(credentials: any): Observable<any> {
   return this.http.post(`${this.baseUrl}/login`, credentials).pipe(
     tap((res: any) => {
       // Save the username from the backend response
-      this.currentUser = res.username || credentials.login; 
-      localStorage.setItem('username', this.currentUser);
+      this.loggedInUser = res.username;
+      this.userRole = res.role; // Assuming the backend sends 'admin' or 'user'
+      localStorage.setItem('role', res.role);
     })
   );
 }

@@ -2,60 +2,120 @@
   <h2 class="section-title">Register Page</h2>
 
   <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="login-card">
-    <div class="top-bar">TuneVault — Register</div>
 
-    <div *ngIf="errorMessage" [ngClass]="isSuccess ? 'success-box' : 'error-box'">
+    <div class="top-bar">
+      TuneVault — Register
+    </div>
+
+    <!-- SUCCESS / ERROR MESSAGE -->
+    <div
+      *ngIf="errorMessage"
+      [ngClass]="isSuccess ? 'success-box' : 'error-box'"
+    >
       {{ errorMessage }}
     </div>
 
-    <div class="row welcome">Create Your Account 🎵</div>
+    <!-- WELCOME -->
+    <div class="row welcome">
+      Create Your Account 🎵
+    </div>
 
     <!-- FULL NAME -->
-    <div class="row label-row">Full Name</div>
+    <div class="row label-row">
+      Full Name
+    </div>
+
     <div class="row input-row">
       <span class="bracket">[</span>
-      <input type="text" formControlName="fullName" placeholder="Full Name">
+
+      <input
+        type="text"
+        formControlName="fullName"
+        placeholder="Full Name"
+      >
+
       <span class="bracket">]</span>
     </div>
 
     <!-- USERNAME -->
-    <div class="row label-row">Username</div>
+    <div class="row label-row">
+      Username
+    </div>
+
     <div class="row input-row">
       <span class="bracket">[</span>
-      <input type="text" formControlName="username" placeholder="Min 3 chars">
+
+      <input
+        type="text"
+        formControlName="username"
+        placeholder="Minimum 3 characters"
+      >
+
       <span class="bracket">]</span>
     </div>
 
     <!-- EMAIL -->
-    <div class="row label-row">Email Address</div>
+    <div class="row label-row">
+      Email Address
+    </div>
+
     <div class="row input-row">
       <span class="bracket">[</span>
-      <input type="email" formControlName="email" placeholder="email@example.com">
+
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="email@example.com"
+      >
+
       <span class="bracket">]</span>
     </div>
 
     <!-- PASSWORD -->
-    <div class="row label-row">Password</div>
+    <div class="row label-row">
+      Password
+    </div>
+
     <div class="row input-row password-row">
       <span class="bracket">[</span>
-      <input type="password" formControlName="password" placeholder="Min 8 chars">
+
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Minimum 8 characters"
+      >
+
       <span class="bracket">]</span>
     </div>
 
     <!-- TERMS -->
     <div class="row register-link">
-      <input type="checkbox" formControlName="termsAccepted">
+      <input
+        type="checkbox"
+        formControlName="termsAccepted"
+      >
+
       I agree to the Terms of Service
     </div>
 
-    <!-- BUTTON -->
-    <button type="submit" [disabled]="registerForm.invalid" class="login-button">
-      [ CREATE ACCOUNT ]
-    </button>
+    <!-- CREATE BUTTON -->
+    <div class="row">
+      <button
+        type="submit"
+        class="login-button"
+      >
+        [ CREATE ACCOUNT ]
+      </button>
+    </div>
 
     <!-- LOGIN LINK -->
     <div class="row register-link">
-      Already have an account? <a routerLink="/login">Login here</a>
+      Already have an account?
+
+      <a routerLink="/login">
+        Login here
+      </a>
     </div>
+
   </form>
 </div>

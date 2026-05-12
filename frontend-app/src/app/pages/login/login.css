@@ -1,10 +1,15 @@
 .page-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: #dff3ff;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.section-title {
+  margin-bottom: 20px;
 }
 
 .login-card {

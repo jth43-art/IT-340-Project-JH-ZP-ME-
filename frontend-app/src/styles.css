@@ -5,14 +5,10 @@ body {
   background: #dceff9;
   color: #333;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .page-wrapper {
   width: 100%;
-  max-width: 450px;
 }
 
 

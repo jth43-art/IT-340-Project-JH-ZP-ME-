@@ -8,6 +8,11 @@ function getUserLabel(user) {
   return user.email || user.username || user._id || 'unknown user';
 }
 
+function getPlaylistTitle(playlist) {
+  if (!playlist) return 'unknown playlist';
+  return playlist.title || playlist.name || 'unknown playlist';
+}
+
 function canModify(playlist, user) {
   if (!user) return false;
 
@@ -19,17 +24,24 @@ function canModify(playlist, user) {
 
 exports.createPlaylist = async (req, res) => {
   try {
-    log(`PLAYLIST create attempt by ${getUserLabel(req.user)}: ${req.body.name}`);
+    const playlistTitle = req.body.title || req.body.name;
+
+    log(`PLAYLIST create attempt by ${getUserLabel(req.user)}: ${playlistTitle}`);
+
+    if (!playlistTitle || !playlistTitle.trim()) {
+      log(`PLAYLIST create failed by ${getUserLabel(req.user)}: missing title`);
+      return res.status(400).json({ message: 'Playlist title is required' });
+    }
 
     const playlist = await Playlist.create({
-      name: req.body.name,
+      title: playlistTitle.trim(),
       description: req.body.description || '',
       songs: req.body.songs || [],
       isPublic: req.body.isPublic || false,
       owner: req.user._id
     });
 
-    log(`PLAYLIST create success by ${getUserLabel(req.user)}: ${playlist.name}`);
+    log(`PLAYLIST create success by ${getUserLabel(req.user)}: ${playlist.title}`);
 
     res.status(201).json({ playlist });
   } catch (err) {
@@ -83,10 +95,15 @@ exports.updatePlaylist = async (req, res) => {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
+    if (req.body.name && !req.body.title) {
+      req.body.title = req.body.name;
+      delete req.body.name;
+    }
+
     Object.assign(playlist, req.body);
     await playlist.save();
 
-    log(`PLAYLIST update success by ${getUserLabel(req.user)}: ${playlist.name}`);
+    log(`PLAYLIST update success by ${getUserLabel(req.user)}: ${getPlaylistTitle(playlist)}`);
 
     res.json({ playlist });
   } catch (err) {
@@ -119,9 +136,11 @@ exports.deletePlaylist = async (req, res) => {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
+    const playlistTitle = getPlaylistTitle(playlist);
+
     await playlist.deleteOne();
 
-    log(`PLAYLIST delete success by ${getUserLabel(req.user)}: ${playlist.name}`);
+    log(`PLAYLIST delete success by ${getUserLabel(req.user)}: ${playlistTitle}`);
 
     res.json({ message: 'Deleted' });
   } catch (err) {
@@ -188,7 +207,7 @@ exports.addSongToPlaylist = async (req, res) => {
     playlist.songs.push(song);
     await playlist.save();
 
-    log(`SONG add success by ${getUserLabel(req.user)} to playlist ${playlist.name}`);
+    log(`SONG add success by ${getUserLabel(req.user)} to playlist ${getPlaylistTitle(playlist)}`);
 
     res.json({ playlist });
   } catch (err) {

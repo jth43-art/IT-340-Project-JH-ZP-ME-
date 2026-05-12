@@ -77,3 +77,4 @@ export default class LoginComponent {
       }
     }); // This closes the .subscribe() block correctly
   }
+}

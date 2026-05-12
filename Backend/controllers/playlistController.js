@@ -169,7 +169,8 @@ exports.addLocalSong = async (req, res) => {
     }
 
     playlist.songs.push({
-      track: req.file.originalname,
+      title: req.file.originalname,
+      artist: 'Local Upload',
       localFile: req.file.path
     });
 
@@ -188,7 +189,7 @@ exports.addLocalSong = async (req, res) => {
 exports.addSongToPlaylist = async (req, res) => {
   try {
     const { id } = req.params;
-    const song = req.body.song;
+    const song = req.body.song || {};
 
     log(`SONG add attempt by ${getUserLabel(req.user)} to playlist ${id}`);
 
@@ -204,7 +205,15 @@ exports.addSongToPlaylist = async (req, res) => {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    playlist.songs.push(song);
+    playlist.songs.push({
+      title: song.title || song.track || 'Untitled Song',
+      artist: song.artist || 'Unknown Artist',
+      album: song.album || '',
+      previewUrl: song.previewUrl || '',
+      artworkUrl: song.artworkUrl || '',
+      externalLinks: song.externalLinks || {}
+    });
+
     await playlist.save();
 
     log(`SONG add success by ${getUserLabel(req.user)} to playlist ${getPlaylistTitle(playlist)}`);
@@ -242,8 +251,9 @@ exports.searchMusic = async (req, res) => {
       const encoded = encodeURIComponent(`${artist} ${track}`);
 
       return {
-        artist,
+        title: track,
         track,
+        artist,
         album: item.collectionName,
         previewUrl: item.previewUrl,
         artworkUrl: item.artworkUrl100,

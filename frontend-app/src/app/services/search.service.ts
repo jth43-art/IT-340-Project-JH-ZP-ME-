@@ -8,12 +8,10 @@ export class SearchService {
 
   constructor(private http: HttpClient) {}
 
-  // Hits Jackson's app.get('/search')
   searchSongs(query: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/search?q=${query}`);
+    return this.http.get(`${this.baseUrl}/search?query=${encodeURIComponent(query)}`);
   }
 
-  // Hits Jackson's app.get('/now-playing')
   getNowPlaying(): Observable<any> {
     return this.http.get(`${this.baseUrl}/now-playing`);
   }

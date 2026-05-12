@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class PlaylistService {
 
   private baseUrl = 'http://100.105.95.54:3000/playlists';
@@ -17,7 +19,7 @@ export class PlaylistService {
   // CREATE PLAYLIST
   createPlaylist(name: string): Observable<any> {
     return this.http.post(this.baseUrl, {
-      name
+      title: name
     });
   }
 

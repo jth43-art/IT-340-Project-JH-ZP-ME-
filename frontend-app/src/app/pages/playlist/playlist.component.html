@@ -1,0 +1,22 @@
+<div class="playlist-page">
+  <div class="header">
+    <h1>Your Library</h1>
+    <p>All your created playlists in one place.</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+
+  <div class="playlist-grid">
+    <div class="playlist-card" *ngFor="let list of playlists">
+      <div class="folder-icon">📂</div>
+      <div class="playlist-info">
+        <h3>{{ list.name }}</h3>
+        <p>{{ list.songs?.length || 0 }} Songs</p>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="playlists.length === 0 && !errorMessage">
+      <p>No playlists found. Create one from the Home page!</p>
+    </div>
+  </div>
+</div>

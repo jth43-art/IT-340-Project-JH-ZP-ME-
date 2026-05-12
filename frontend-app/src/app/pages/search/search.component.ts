@@ -1,14 +1,13 @@
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, FormsModule], // 2. Add them here
-  templateUrl: './search.component.html',
-  styleUrl: './search.component.css'
+  imports: [CommonModule, FormsModule],
+  templateUrl: './search.component.html'
 })
 export class SearchComponent {
   searchQuery: string = '';
@@ -17,20 +16,38 @@ export class SearchComponent {
   constructor(private searchService: SearchService) {}
 
   onSearch() {
-    if (!this.searchQuery) return;
+    if (!this.searchQuery.trim()) return;
 
     this.searchService.searchSongs(this.searchQuery).subscribe({
       next: (res) => {
-        // Jackson returns { results: [...] }
-        this.songs = res.results;
+        // Jackson backend should return:
+        // { results: [...] }
+
+        this.songs = res.results || [];
+
+        console.log('Search results:', this.songs);
       },
-      error: (err) => alert("Search failed. Is Jackson's VM up?")
+
+      error: (err) => {
+        console.error('Search Error:', err);
+
+        // temporary fallback demo data
+        this.songs = [
+          {
+            title: 'Backend Offline Demo Song',
+            artist: 'TuneVault'
+          }
+        ];
+
+        alert("Search backend offline. Showing demo data.");
+      }
     });
   }
 
   addToPlaylist(song: any) {
-    console.log('Adding to playlist:', song);
-    // Later, we will call this.playlistService.addToPlaylist(song) here
-    alert(`Added ${song.title} to your library!`);
+    console.log('Added to playlist:', song);
+
+    // placeholder until playlist backend is connected
+    alert(`${song.title} added to playlist`);
   }
 }

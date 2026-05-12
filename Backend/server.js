@@ -14,30 +14,68 @@ const uploadRoutes = require('./routes/upload');
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// =========================
+// CORS CONFIG
+// =========================
+
+app.use(cors({
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'x-user-id',
+    'x-user-email',
+    'x-user-role'
+  ]
+}));
+
+// =========================
+// MIDDLEWARE
+// =========================
+
 app.use(express.json());
 
-// Public routes
+// =========================
+// PUBLIC ROUTES
+// =========================
+
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
 app.use('/homepage', homepageRoute);
 app.use('/search', searchRoute);
 app.use('/api/upload', uploadRoutes);
 
-// Mock auth must come BEFORE protected playlist routes
+// =========================
+// MOCK AUTH
+// MUST COME BEFORE PLAYLIST ROUTES
+// =========================
+
 app.use(mockAuth);
 
-// Protected playlist routes
+// =========================
+// PLAYLIST ROUTES
+// =========================
+
 app.use('/playlists', playlistRoute);
 app.use('/api', playlistRoute);
 
-// MongoDB connection
-mongoose.connect('mongodb://100.84.183.114:27017/tunevault')
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+// =========================
+// MONGODB CONNECTION
+// =========================
 
-// Start server
+mongoose.connect('mongodb://100.84.183.114:27017/tunevault')
+  .then(() => {
+    console.log('MongoDB connected');
+  })
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
+  });
+
+// =========================
+// START SERVER
+// =========================
+
 app.listen(3000, '0.0.0.0', () => {
   console.log('Server running on port 3000');
 });

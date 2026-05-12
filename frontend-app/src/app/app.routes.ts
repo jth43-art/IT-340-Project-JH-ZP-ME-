@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import LoginComponent from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component'; // Fixes TS2304
 import { HomepageTvComponent } from './pages/homepage-tv/homepage-tv.component';
 import { SearchComponent } from './pages/search/search.component';
 import { PlaylistComponent } from './pages/playlist/playlist.component';

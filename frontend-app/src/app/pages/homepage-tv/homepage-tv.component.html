@@ -2,6 +2,7 @@
   <div class="tv-card">
     <header class="tv-header">
       <h1>TuneVault</h1>
+
       <nav class="tv-nav">
         <a routerLink="/homepage-tv">Home</a>
         <a routerLink="/search">Library</a>
@@ -15,8 +16,11 @@
         <div class="user-info">
           <p class="welcome-text">Welcome back,</p>
           <h2 class="username-text">{{ username }}</h2>
-          <p class="role-badge">Role: user</p>
-          <button class="logout-btn-minimal" (click)="onLogout()">Logout</button>
+          <p class="role-badge">Role: {{ role }}</p>
+
+          <button class="logout-btn-minimal" (click)="onLogout()">
+            Logout
+          </button>
         </div>
       </aside>
 
@@ -39,6 +43,7 @@
           <div class="progress-container">
             <div class="progress-bar"></div>
           </div>
+
           <div class="playback-details">
             <button class="play-circle">▶</button>
             <span class="timestamp">2:34 / 4:12</span>
@@ -48,20 +53,17 @@
     </div>
 
     <footer class="quick-links-footer">
-      <button class="link-btn" routerLink="/recent">Recently Added</button>
-      <button class="link-btn" routerLink="/playlists">My Playlists</button>
-      <button class="link-btn primary" (click)="openCreateModal()">+ Create Playlist</button>
-    </footer>
-  </div>
-</div>
+      <button class="link-btn" routerLink="/recent">
+        Recently Added
+      </button>
 
-<div class="modal-overlay" *ngIf="showModal">
-  <div class="modal-box">
-    <h2>Create New Playlist</h2>
-    <input type="text" [(ngModel)]="newPlaylistName" placeholder="Enter playlist name..." class="modal-input">
-    <div class="modal-buttons">
-      <button class="cancel-btn" (click)="closeModal()">Cancel</button>
-      <button class="save-btn" (click)="savePlaylist()">Create</button>
-    </div>
+      <button class="link-btn" routerLink="/playlists">
+        My Playlists
+      </button>
+
+      <button class="link-btn primary" routerLink="/playlists">
+        + Create Playlist
+      </button>
+    </footer>
   </div>
 </div>

@@ -9,6 +9,7 @@ const homepageRoute = require('./routes/homepage');
 const playlistRoute = require('./routes/playlists');
 const searchRoute = require('./routes/search');
 const mockAuth = require('./middleware/mockAuth');
+const uploadRoutes = require('./routes/upload');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/playlists', playlistRoute);
 // you can also mount the same router at /api:
 app.use('/api', playlistRoute);
 app.use('/search', searchRoute);
+app.use('/api/upload', uploadRoutes);
 app.use(mockAuth);
 
 // MongoDB connection (USE YOUR IP)

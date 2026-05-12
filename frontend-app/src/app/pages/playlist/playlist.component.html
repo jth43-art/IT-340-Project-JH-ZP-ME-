@@ -1,22 +1,100 @@
 <div class="playlist-page">
+
   <div class="header">
     <h1>Your Library</h1>
-    <p>All your created playlists in one place.</p>
+    <p>Manage your playlists and songs.</p>
   </div>
 
-  <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+  <div class="top-actions">
+
+    <button (click)="showCreateBox = !showCreateBox">
+      + Create Playlist
+    </button>
+
+  </div>
+
+  <!-- CREATE PLAYLIST -->
+
+  <div *ngIf="showCreateBox" class="create-box">
+
+    <input
+      type="text"
+      [(ngModel)]="newPlaylistName"
+      placeholder="Playlist name"
+    >
+
+    <button (click)="createPlaylist()">
+      Save Playlist
+    </button>
+
+  </div>
+
+  <!-- ERROR -->
+
+  <div *ngIf="errorMessage" class="error-msg">
+    {{ errorMessage }}
+  </div>
+
+  <!-- PLAYLISTS -->
 
   <div class="playlist-grid">
+
     <div class="playlist-card" *ngFor="let list of playlists">
+
       <div class="folder-icon">📂</div>
+
       <div class="playlist-info">
         <h3>{{ list.name }}</h3>
         <p>{{ list.songs?.length || 0 }} Songs</p>
       </div>
+
+      <div class="playlist-actions">
+
+        <button (click)="openPlaylist(list)">
+          Edit
+        </button>
+
+        <button (click)="deletePlaylist(list._id)">
+          Delete
+        </button>
+
+      </div>
+
     </div>
 
-    <div class="empty-state" *ngIf="playlists.length === 0 && !errorMessage">
-      <p>No playlists found. Create one from the Home page!</p>
-    </div>
   </div>
+
+  <!-- PLAYLIST EDIT VIEW -->
+
+  <div *ngIf="selectedPlaylist" class="playlist-editor">
+
+    <h2>
+      Editing: {{ selectedPlaylist.name }}
+    </h2>
+
+    <button (click)="closePlaylist()">
+      Close
+    </button>
+
+    <div *ngIf="selectedPlaylist.songs?.length === 0">
+      No songs in playlist.
+    </div>
+
+    <div
+      class="song-row"
+      *ngFor="let song of selectedPlaylist.songs; let i = index"
+    >
+
+      <span>
+        {{ song.track || song.title }}
+      </span>
+
+      <button (click)="removeSong(i)">
+        Remove Song
+      </button>
+
+    </div>
+
+  </div>
+
 </div>

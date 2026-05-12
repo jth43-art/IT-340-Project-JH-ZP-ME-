@@ -9,6 +9,7 @@ export const routes: Routes = [
   // 1. Authentication Paths
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'admin-dashboard', component: AdminDashboardComponent }
 
   // 2. Main Features
   { path: 'homepage-tv', component: HomepageTvComponent },

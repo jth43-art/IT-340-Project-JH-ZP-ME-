@@ -1,24 +1,22 @@
-/* TuneVault Register Page Styling */
-
 .page-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #dff3ff;
   font-family: Arial, Helvetica, sans-serif;
   flex-direction: column;
 }
 
 .section-title {
   color: #2f5f93;
-  font-size: 26px;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .login-card {
-  width: 850px;
+  width: 520px;
   background: #ffffff;
   border: 1px solid #c7d7e2;
   text-align: center;
@@ -27,25 +25,25 @@
 .top-bar {
   background-color: #2f5f93;
   color: white;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
-  padding: 12px;
+  padding: 8px;
 }
 
 .row {
   width: 100%;
   border-bottom: 1px solid #d8e4ef;
-  padding: 9px 0;
+  padding: 6px 0;
 }
 
 .welcome {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: bold;
   color: #2f5f93;
 }
 
 .label-row {
-  font-size: 20px;
+  font-size: 16px;
   color: #444;
 }
 
@@ -53,27 +51,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .input-row input {
-  width: 350px;
-  height: 28px;
+  width: 250px;
+  height: 24px;
   border: none;
   border-bottom: 1px solid #999;
   background: transparent;
-  font-size: 16px;
+  font-size: 14px;
   text-align: center;
   outline: none;
 }
 
 .bracket {
-  font-size: 24px;
+  font-size: 18px;
   color: #555;
 }
 
 .register-link {
-  font-size: 16px;
+  font-size: 13px;
   color: #666;
   font-style: italic;
 }
@@ -89,8 +87,8 @@
   background-color: #3f87c5;
   color: white;
   border: none;
-  padding: 14px;
-  font-size: 22px;
+  padding: 10px;
+  font-size: 18px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -100,6 +98,7 @@
 }
 
 .login-button:disabled {
-  background-color: #999;
+  background-color: #3f87c5;
+  opacity: 0.6;
   cursor: not-allowed;
 }

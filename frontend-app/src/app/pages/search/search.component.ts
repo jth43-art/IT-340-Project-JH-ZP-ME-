@@ -1,9 +1,14 @@
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-search',
-  templateUrl: './search.component.html'
+  standalone: true,
+  imports: [CommonModule, FormsModule], // 2. Add them here
+  templateUrl: './search.component.html',
+  styleUrl: './search.component.css'
 })
 export class SearchComponent {
   searchQuery: string = '';
@@ -21,5 +26,11 @@ export class SearchComponent {
       },
       error: (err) => alert("Search failed. Is Jackson's VM up?")
     });
+  }
+
+  addToPlaylist(song: any) {
+    console.log('Adding to playlist:', song);
+    // Later, we will call this.playlistService.addToPlaylist(song) here
+    alert(`Added ${song.title} to your library!`);
   }
 }

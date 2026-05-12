@@ -9,7 +9,10 @@
 }
 
 .section-title {
-  margin-bottom: 20px;
+  font-size: 38px;
+  font-weight: bold;
+  color: #2f5f93;
+  margin-bottom: 24px;
 }
 
 .login-card {

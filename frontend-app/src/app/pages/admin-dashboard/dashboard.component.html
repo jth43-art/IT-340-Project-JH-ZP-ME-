@@ -1,0 +1,43 @@
+<div class="admin-container">
+  <aside class="admin-sidebar">
+    <h2>TuneVault Admin</h2>
+    <nav>
+      <button class="nav-active">Overview</button>
+      <button routerLink="/homepage-tv">View as User</button>
+      <button class="logout-btn" (click)='logout()'>Logout</button>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-stats">
+      <div class="stat-card"><h3>{{ allPlaylists.length }}</h3><p>Total Playlists</p></div>
+      <div class="stat-card"><h3>{{ stats.totalSongs }}</h3><p>Total Songs</p></div>
+      <div class="stat-card"><h3>{{ stats.totalUsers }}</h3><p>Active Users</p></div>
+    </header>
+
+    <section class="management-table">
+      <h3>Global Playlist Management</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Playlist Name</th>
+            <th>Owner</th>
+            <th>Songs</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of allPlaylists">
+            <td><strong>{{ p.name }}</strong></td>
+            <td>{{ p.owner || 'System' }}</td>
+            <td>{{ p.songs?.length || 0 }}</td>
+            <td>
+              <button class="btn-edit">Edit</button>
+              <button class="btn-delete" (click)="deleteAnyPlaylist(p.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>

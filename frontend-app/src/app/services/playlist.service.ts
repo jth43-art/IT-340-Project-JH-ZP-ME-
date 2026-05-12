@@ -4,18 +4,37 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistService {
-  // Use Jackson's Tailscale IP
+
   private baseUrl = 'http://100.105.95.54:3000/playlists';
 
   constructor(private http: HttpClient) {}
 
-  // Fetch all playlists
-  getPlaylists(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl);
+  // GET ALL PLAYLISTS
+  getPlaylists(): Observable<any> {
+    return this.http.get<any>(this.baseUrl);
   }
 
-  // Create a new one
+  // CREATE PLAYLIST
   createPlaylist(name: string): Observable<any> {
-    return this.http.post(this.baseUrl, { name });
+    return this.http.post(this.baseUrl, {
+      name
+    });
+  }
+
+  // DELETE PLAYLIST
+  deletePlaylist(id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
+  // UPDATE PLAYLIST
+  updatePlaylist(id: string, updatedData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}`, updatedData);
+  }
+
+  // ADD SONG TO PLAYLIST
+  addSongToPlaylist(id: string, song: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/${id}/songs`, {
+      song
+    });
   }
 }

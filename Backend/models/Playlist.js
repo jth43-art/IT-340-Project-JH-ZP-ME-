@@ -1,13 +1,15 @@
-// Playlist model for tunevault
+// Playlist model for TuneVault
 const mongoose = require("mongoose");
 
 const songSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  artist: { type: String },
+  artist: { type: String, required: true },
   album: { type: String },
+  image: { type: String },
   source: { type: String, enum: ["api", "upload"], default: "api" },
   url: { type: String },
-  filePath: {type: String }
+  filePath: { type: String },
+  createdAt: { type: Date, default: Date.now }
 });
 
 const playlistSchema = new mongoose.Schema(

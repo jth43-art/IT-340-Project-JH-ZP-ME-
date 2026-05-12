@@ -62,18 +62,19 @@ export default class LoginComponent {
           this.authService.userRole = response.user.role;
         }
 
-        setTimeout(() => {
-          const role = response.user?.role || 'user';
-          
-          if (role === 'admin') {
-            console.log('Redirecting to Admin Dashboard');
-            this.router.navigate(['/admin-dashboard']);
-          } else {
-            console.log('Redirecting to Normal Homepage');
-            this.router.navigate(['/homepage-tv']);
-          }
-        }, 1500); // 1.5 second delay so user sees the success message
-      },
+       // --- ADD THE OVERRIDE HERE ---
+  setTimeout(() => {
+    // If you log in with the username 'Zeel', it takes you to Admin
+    // Otherwise, it takes everyone else to the normal Homepage
+    if (response.user.username === 'Zeel') { 
+      console.log('Admin detected, redirecting to Dashboard...');
+      this.router.navigate(['/admin-dashboard']);
+    } else {
+      console.log('Normal user detected, redirecting to Homepage...');
+      this.router.navigate(['/homepage-tv']);
+    }
+  }, 1500); 
+},
 
         this.router.navigate(['/homepage-tv']);
       },

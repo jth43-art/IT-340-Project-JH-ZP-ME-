@@ -16,6 +16,7 @@ import { SearchService } from '../../services/search.service';
 })
 export class HomepageTvComponent implements OnInit {
   username: string = '';
+  role: string = '';
   showModal: boolean = false;
   newPlaylistName: string = '';
 
@@ -27,9 +28,19 @@ export class HomepageTvComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.username = this.authService.getUsername();
-    this.username = this.username || this.authService.loggedInUser || 'Guest';
-    console.log('Current User:', this.username);
+    const userData = localStorage.getItem('user');
+
+    if (!userData) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const user = JSON.parse(userData);
+
+    this.username = user.username || 'User';
+    this.role = user.role || 'user';
+
+    console.log('Current User:', user);
   }
 
   openCreateModal(): void {

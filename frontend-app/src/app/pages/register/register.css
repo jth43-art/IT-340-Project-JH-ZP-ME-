@@ -1,0 +1,61 @@
+/* TuneVault Register Page Styling */
+
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  font-family: Arial, Helvetica, sans-serif;
+  flex-direction: column;
+}
+
+.section-title {
+  color: #2f5f93;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.login-card {
+  width: 850px;
+  background: #ffffff;
+  border: 1px solid #c7d7e2;
+  text-align: center;
+}
+
+.top-bar {
+  background-color: #2f5f93;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 12px;
+}
+
+.row {
+  width: 100%;
+  border-bottom: 1px solid #d8e4ef;
+  padding: 9px 0;
+}
+
+.welcome {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2f5f93;
+}
+
+.label-row {
+  font-size: 20px;
+  color: #444;
+}
+
+.input-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-row input {
+  width: 350px;
+  height: 28

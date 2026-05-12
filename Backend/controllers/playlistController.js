@@ -18,7 +18,6 @@ exports.createPlaylist = async (req, res) => {
       isPublic: req.body.isPublic || false,
       owner: req.user._id
     });
-
     res.status(201).json({ playlist });
   } catch (err) {
     console.error('Error creating playlist:', err);
@@ -35,7 +34,6 @@ exports.getPlaylists = async (req, res) => {
         { isPublic: true }
       ]
     });
-
     res.json({ playlists });
   } catch (err) {
     console.error('Error fetching playlists:', err);
@@ -46,51 +44,52 @@ exports.getPlaylists = async (req, res) => {
 // UPDATE PLAYLIST
 exports.updatePlaylist = async (req, res) => {
   const { id } = req.params;
-
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(400).json({ message: 'Invalid ID' });
-
   const playlist = await Playlist.findById(id);
   if (!playlist)
     return res.status(404).json({ message: 'Not found' });
-
   if (!canModify(playlist, req.user))
     return res.status(403).json({ message: 'Forbidden' });
-
   Object.assign(playlist, req.body);
   await playlist.save();
-
   res.json({ playlist });
 };
 
 // DELETE PLAYLIST
 exports.deletePlaylist = async (req, res) => {
   const { id } = req.params;
-
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(400).json({ message: 'Invalid ID' });
-
   const playlist = await Playlist.findById(id);
   if (!playlist)
     return res.status(404).json({ message: 'Not found' });
-
   if (!canModify(playlist, req.user))
     return res.status(403).json({ message: 'Forbidden' });
-
   await playlist.deleteOne();
   res.json({ message: 'Deleted' });
 };
+
+exports.addSongToPlaylist = async (req, res) => {
+  const { id } = req.params;
+  const song = req.body.song;
+  const playlist = await Playlist.findById(id);
+  if (!playlist) return res.status(404).json({ message: 'Not found' });
+  if (!canModify(playlist, req.user))
+    return res.status(403).json({ message: 'Forbidden' });
+  playlist.songs.push(song);
+  await playlist.save();
+  res.json({ playlist });
+};
+
 
 // MUSIC SEARCH API
 // GET /api/search?query=
 exports.searchMusic = async (req, res) => {
   const { query } = req.query;
-
   if (!query || !query.trim()) {
     return res.status(400).json({ message: 'Search query required' });
-  }
-
-  try {
+  } try {
     const response = await axios.get('https://itunes.apple.com/search', {
       params: {
         term: query,

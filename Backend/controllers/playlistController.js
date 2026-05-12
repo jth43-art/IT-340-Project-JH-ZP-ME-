@@ -1,15 +1,26 @@
 const Playlist = require('../models/Playlist');
 const mongoose = require('mongoose');
 const axios = require('axios');
+const log = require('../utils/logger');
+
+function getUserLabel(user) {
+  if (!user) return 'unknown user';
+  return user.email || user.username || user._id || 'unknown user';
+}
+
 function canModify(playlist, user) {
   if (!user) return false;
+
   const owner = playlist.owner?.toString() === user._id.toString();
   const admin = user.role === 'admin';
+
   return owner || admin;
 }
 
 exports.createPlaylist = async (req, res) => {
   try {
+    log(`PLAYLIST create attempt by ${getUserLabel(req.user)}: ${req.body.name}`);
+
     const playlist = await Playlist.create({
       name: req.body.name,
       description: req.body.description || '',
@@ -17,8 +28,12 @@ exports.createPlaylist = async (req, res) => {
       isPublic: req.body.isPublic || false,
       owner: req.user._id
     });
+
+    log(`PLAYLIST create success by ${getUserLabel(req.user)}: ${playlist.name}`);
+
     res.status(201).json({ playlist });
   } catch (err) {
+    log(`PLAYLIST create failed by ${getUserLabel(req.user)}: ${err.message}`);
     console.error('Error creating playlist:', err);
     res.status(500).json({ message: 'Error creating playlist' });
   }
@@ -26,78 +41,174 @@ exports.createPlaylist = async (req, res) => {
 
 exports.getPlaylists = async (req, res) => {
   try {
+    log(`PLAYLIST fetch attempt by ${getUserLabel(req.user)}`);
+
     const playlists = await Playlist.find({
       $or: [
         { owner: req.user._id },
         { isPublic: true }
       ]
     });
+
+    log(`PLAYLIST fetch success by ${getUserLabel(req.user)}: ${playlists.length} playlist(s)`);
+
     res.json({ playlists });
   } catch (err) {
+    log(`PLAYLIST fetch failed by ${getUserLabel(req.user)}: ${err.message}`);
     console.error('Error fetching playlists:', err);
     res.status(500).json({ message: 'Error fetching playlists' });
   }
 };
 
 exports.updatePlaylist = async (req, res) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(400).json({ message: 'Invalid ID' });
-  const playlist = await Playlist.findById(id);
-  if (!playlist)
-    return res.status(404).json({ message: 'Not found' });
-  if (!canModify(playlist, req.user))
-    return res.status(403).json({ message: 'Forbidden' });
-  Object.assign(playlist, req.body);
-  await playlist.save();
-  res.json({ playlist });
+  try {
+    const { id } = req.params;
+
+    log(`PLAYLIST update attempt by ${getUserLabel(req.user)}: ${id}`);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      log(`PLAYLIST update failed by ${getUserLabel(req.user)}: invalid ID ${id}`);
+      return res.status(400).json({ message: 'Invalid ID' });
+    }
+
+    const playlist = await Playlist.findById(id);
+
+    if (!playlist) {
+      log(`PLAYLIST update failed by ${getUserLabel(req.user)}: playlist not found ${id}`);
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    if (!canModify(playlist, req.user)) {
+      log(`UNAUTHORIZED playlist update attempt by ${getUserLabel(req.user)}: ${id}`);
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    Object.assign(playlist, req.body);
+    await playlist.save();
+
+    log(`PLAYLIST update success by ${getUserLabel(req.user)}: ${playlist.name}`);
+
+    res.json({ playlist });
+  } catch (err) {
+    log(`PLAYLIST update failed by ${getUserLabel(req.user)}: ${err.message}`);
+    console.error('Error updating playlist:', err);
+    res.status(500).json({ message: 'Error updating playlist' });
+  }
 };
 
 exports.deletePlaylist = async (req, res) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(400).json({ message: 'Invalid ID' });
-  const playlist = await Playlist.findById(id);
-  if (!playlist)
-    return res.status(404).json({ message: 'Not found' });
-  if (!canModify(playlist, req.user))
-    return res.status(403).json({ message: 'Forbidden' });
-  await playlist.deleteOne();
-  res.json({ message: 'Deleted' });
+  try {
+    const { id } = req.params;
+
+    log(`PLAYLIST delete attempt by ${getUserLabel(req.user)}: ${id}`);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      log(`PLAYLIST delete failed by ${getUserLabel(req.user)}: invalid ID ${id}`);
+      return res.status(400).json({ message: 'Invalid ID' });
+    }
+
+    const playlist = await Playlist.findById(id);
+
+    if (!playlist) {
+      log(`PLAYLIST delete failed by ${getUserLabel(req.user)}: playlist not found ${id}`);
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    if (!canModify(playlist, req.user)) {
+      log(`UNAUTHORIZED playlist delete attempt by ${getUserLabel(req.user)}: ${id}`);
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    await playlist.deleteOne();
+
+    log(`PLAYLIST delete success by ${getUserLabel(req.user)}: ${playlist.name}`);
+
+    res.json({ message: 'Deleted' });
+  } catch (err) {
+    log(`PLAYLIST delete failed by ${getUserLabel(req.user)}: ${err.message}`);
+    console.error('Error deleting playlist:', err);
+    res.status(500).json({ message: 'Error deleting playlist' });
+  }
 };
 
 exports.addLocalSong = async (req, res) => {
-  const { id } = req.params;
-  const playlist = await Playlist.findById(id);
-  if (!playlist) return res.status(404).json({ message: 'Not found' });
-  if (!canModify(playlist, req.user))
-    return res.status(403).json({ message: 'Forbidden' });
-  playlist.songs.push({
-    track: req.file.originalname,
-    localFile: req.file.path
-  });
-  await playlist.save();
-  res.json({ playlist });
+  try {
+    const { id } = req.params;
+
+    log(`LOCAL SONG upload attempt by ${getUserLabel(req.user)} to playlist ${id}`);
+
+    const playlist = await Playlist.findById(id);
+
+    if (!playlist) {
+      log(`LOCAL SONG upload failed by ${getUserLabel(req.user)}: playlist not found ${id}`);
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    if (!canModify(playlist, req.user)) {
+      log(`UNAUTHORIZED local song upload attempt by ${getUserLabel(req.user)}: ${id}`);
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    playlist.songs.push({
+      track: req.file.originalname,
+      localFile: req.file.path
+    });
+
+    await playlist.save();
+
+    log(`LOCAL SONG upload success by ${getUserLabel(req.user)}: ${req.file.originalname}`);
+
+    res.json({ playlist });
+  } catch (err) {
+    log(`LOCAL SONG upload failed by ${getUserLabel(req.user)}: ${err.message}`);
+    console.error('Error adding local song:', err);
+    res.status(500).json({ message: 'Error adding local song' });
+  }
 };
 
 exports.addSongToPlaylist = async (req, res) => {
-  const { id } = req.params;
-  const song = req.body.song;
-  const playlist = await Playlist.findById(id);
-  if (!playlist) return res.status(404).json({ message: 'Not found' });
-  if (!canModify(playlist, req.user))
-    return res.status(403).json({ message: 'Forbidden' });
-  playlist.songs.push(song);
-  await playlist.save();
-  res.json({ playlist });
+  try {
+    const { id } = req.params;
+    const song = req.body.song;
+
+    log(`SONG add attempt by ${getUserLabel(req.user)} to playlist ${id}`);
+
+    const playlist = await Playlist.findById(id);
+
+    if (!playlist) {
+      log(`SONG add failed by ${getUserLabel(req.user)}: playlist not found ${id}`);
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    if (!canModify(playlist, req.user)) {
+      log(`UNAUTHORIZED song add attempt by ${getUserLabel(req.user)}: ${id}`);
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    playlist.songs.push(song);
+    await playlist.save();
+
+    log(`SONG add success by ${getUserLabel(req.user)} to playlist ${playlist.name}`);
+
+    res.json({ playlist });
+  } catch (err) {
+    log(`SONG add failed by ${getUserLabel(req.user)}: ${err.message}`);
+    console.error('Error adding song to playlist:', err);
+    res.status(500).json({ message: 'Error adding song to playlist' });
+  }
 };
 
-// GET /api/search?query=
 exports.searchMusic = async (req, res) => {
   const { query } = req.query;
+
   if (!query || !query.trim()) {
+    log(`MUSIC search failed by ${getUserLabel(req.user)}: missing search query`);
     return res.status(400).json({ message: 'Search query required' });
-  } try {
+  }
+
+  try {
+    log(`MUSIC search attempt by ${getUserLabel(req.user)}: ${query}`);
+
     const response = await axios.get('https://itunes.apple.com/search', {
       params: {
         term: query,
@@ -110,6 +221,7 @@ exports.searchMusic = async (req, res) => {
       const artist = item.artistName;
       const track = item.trackName || query;
       const encoded = encodeURIComponent(`${artist} ${track}`);
+
       return {
         artist,
         track,
@@ -123,13 +235,15 @@ exports.searchMusic = async (req, res) => {
       };
     });
 
+    log(`MUSIC search success by ${getUserLabel(req.user)}: ${query}, ${results.length} result(s)`);
+
     res.json({
       query,
       count: results.length,
       results
     });
-
   } catch (err) {
+    log(`MUSIC search failed by ${getUserLabel(req.user)}: ${err.message}`);
     console.error('Music API error:', err);
     res.status(502).json({ message: 'Music API error' });
   }

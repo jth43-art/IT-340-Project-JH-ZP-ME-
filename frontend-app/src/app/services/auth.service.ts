@@ -16,6 +16,19 @@ export class AuthService {
 // Add a variable to store the name
 currentUser: string = '';
 public loggedInUser: string = '';
+public userRole: string = 'user'; 
+
+  // 2. Add this function to save data when login is successful
+  setUserData(username: string, role: string) {
+    this.loggedInUser = username;
+    this.userRole = role;
+    localStorage.setItem('role', role); // Keeps the role even if page refreshes
+  }
+
+  // 3. Add this helper function
+  isAdmin(): boolean {
+    return this.userRole === 'admin';
+  }
 
 login(credentials: any): Observable<any> {
   return this.http.post(`${this.baseUrl}/login`, credentials).pipe(

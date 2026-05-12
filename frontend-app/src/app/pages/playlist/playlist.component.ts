@@ -1,6 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  OnInit,
+  Inject,
+  PLATFORM_ID
+} from '@angular/core';
+
+import {
+  CommonModule,
+  isPlatformBrowser
+} from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { PlaylistService } from '../../services/playlist.service';
 
 @Component({
@@ -20,28 +32,48 @@ export class PlaylistComponent implements OnInit {
 
   selectedPlaylist: any = null;
 
-  constructor(private playlistService: PlaylistService) {}
+  constructor(
+    private playlistService: PlaylistService,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit(): void {
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const userData = localStorage.getItem('user');
+
+    if (!userData) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.loadPlaylists();
   }
 
-  loadPlaylists() {
+  loadPlaylists(): void {
+
+    this.errorMessage = '';
+
     this.playlistService.getPlaylists().subscribe({
 
-      next: (data) => {
+      next: (data: any) => {
         this.playlists = data.playlists || [];
         console.log('Playlists loaded:', this.playlists);
       },
 
-      error: (err) => {
+      error: (err: any) => {
         this.errorMessage = 'Could not load playlists.';
         console.error(err);
       }
+
     });
   }
 
-  createPlaylist() {
+  createPlaylist(): void {
 
     if (!this.newPlaylistName.trim()) {
       return;
@@ -58,44 +90,53 @@ export class PlaylistComponent implements OnInit {
         this.loadPlaylists();
       },
 
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         alert('Failed to create playlist');
       }
+
     });
   }
 
-  deletePlaylist(id: string) {
+  deletePlaylist(id: string): void {
 
     const confirmed = confirm('Delete this playlist?');
 
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     this.playlistService.deletePlaylist(id).subscribe({
 
       next: () => {
         alert('Playlist Deleted');
+
+        this.selectedPlaylist = null;
+
         this.loadPlaylists();
       },
 
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         alert('Failed to delete playlist');
       }
+
     });
   }
 
-  openPlaylist(playlist: any) {
+  openPlaylist(playlist: any): void {
     this.selectedPlaylist = playlist;
   }
 
-  closePlaylist() {
+  closePlaylist(): void {
     this.selectedPlaylist = null;
   }
 
-  removeSong(songIndex: number) {
+  removeSong(songIndex: number): void {
 
-    if (!this.selectedPlaylist) return;
+    if (!this.selectedPlaylist) {
+      return;
+    }
 
     this.selectedPlaylist.songs.splice(songIndex, 1);
 
@@ -109,10 +150,11 @@ export class PlaylistComponent implements OnInit {
         this.loadPlaylists();
       },
 
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         alert('Failed to remove song');
       }
+
     });
   }
 }

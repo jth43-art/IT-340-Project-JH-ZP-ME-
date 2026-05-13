@@ -1,43 +1,27 @@
-<div class="page-container">
-  <div class="search-header">
+<div class="search-container">
+  <div class="header-section">
     <h1>Search</h1>
-
     <div class="search-bar">
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        (keyup.enter)="onSearch()"
-        placeholder="Search for songs"
-      >
-
+      <input type="text" placeholder="Search for songs or artists..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
       <button (click)="onSearch()">
-        Search
+        <i class="fas fa-search"></i> Search
       </button>
     </div>
   </div>
 
-  <div class="results-container">
+  <div class="results-grid">
     <div class="song-card" *ngFor="let song of songs">
       <div class="song-info">
-        <h3>{{ song.track || song.title }}</h3>
-        <p>{{ song.artist }}</p>
+        <h3 class="song-title">{{ song.title }}</h3>
+        <p class="artist-name">{{ song.artist }}</p>
       </div>
-
-      <div class="playlist-select">
-        <select #playlistSelect>
-          <option value="">Select Playlist</option>
-
-          <option
-            *ngFor="let playlist of playlists"
-            [value]="playlist._id"
-          >
-            {{ playlist.title }}
-          </option>
+      
+      <div class="actions">
+        <select class="playlist-select">
+          <option value="" disabled selected>Add to Playlist</option>
+          <option *ngFor="let p of playlists" [value]="p.id">{{ p.name }}</option>
         </select>
-
-        <button (click)="addToPlaylist(song, playlistSelect.value)">
-          Add
-        </button>
+        <button class="add-btn">Add</button>
       </div>
     </div>
   </div>

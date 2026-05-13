@@ -1,28 +1,30 @@
-<div class="search-container">
-  <div class="header-section">
-    <h1>Search</h1>
-    <div class="search-bar">
-      <input type="text" placeholder="Search for songs or artists..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
-      <button (click)="onSearch()">
-        <i class="fas fa-search"></i> Search
-      </button>
+<div class="page-wrapper">
+  <div class="search-header">
+    <h1>Explore Music</h1>
+    <div class="search-input-wrapper">
+      <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Search for songs...">
+      <button (click)="onSearch()">Search</button>
     </div>
   </div>
 
-  <div class="results-grid">
+  <div class="results-grid" *ngIf="songs.length > 0">
     <div class="song-card" *ngFor="let song of songs">
-      <div class="song-info">
-        <h3 class="song-title">{{ song.title }}</h3>
-        <p class="artist-name">{{ song.artist }}</p>
+      <div class="song-details">
+        <h3 class="title">{{ song.title }}</h3>
+        <p class="artist">{{ song.artist }}</p>
       </div>
       
-      <div class="actions">
-        <select class="playlist-select">
-          <option value="" disabled selected>Add to Playlist</option>
+      <div class="song-actions">
+        <select class="playlist-dropdown">
+          <option value="" disabled selected>Add to...</option>
           <option *ngFor="let p of playlists" [value]="p.id">{{ p.name }}</option>
         </select>
         <button class="add-btn">Add</button>
       </div>
     </div>
+  </div>
+
+  <div class="no-results" *ngIf="songs.length === 0">
+    <p>Search for something to see results fill this space!</p>
   </div>
 </div>

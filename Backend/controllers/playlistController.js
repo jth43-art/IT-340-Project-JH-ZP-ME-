@@ -22,6 +22,19 @@ function canModify(playlist, user) {
   return owner || admin;
 }
 
+function buildSpotifyUrl(song) {
+  const title = song.title || song.track || '';
+  const artist = song.artist || '';
+  const query = encodeURIComponent(`${title} ${artist}`.trim());
+
+  return (
+    song.url ||
+    song.spotifyUrl ||
+    song.externalLinks?.spotify ||
+    `https://open.spotify.com/search/${query}`
+  );
+}
+
 exports.createPlaylist = async (req, res) => {
   try {
     const playlistTitle = req.body.title || req.body.name;
@@ -177,7 +190,17 @@ exports.addLocalSong = async (req, res) => {
     playlist.songs.push({
       title: req.file.originalname,
       artist: 'Local Upload',
-      localFile: req.file.path
+      album: '',
+      source: 'local',
+      url: '',
+      filePath: req.file.path,
+      localFile: req.file.path,
+      previewUrl: '',
+      artworkUrl: '',
+      externalLinks: {
+        spotify: '',
+        appleMusic: ''
+      }
     });
 
     await playlist.save();
@@ -211,13 +234,22 @@ exports.addSongToPlaylist = async (req, res) => {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
+    const spotifyUrl = buildSpotifyUrl(song);
+
     playlist.songs.push({
       title: song.title || song.track || 'Untitled Song',
       artist: song.artist || 'Unknown Artist',
       album: song.album || '',
+      source: song.source || 'api',
+      url: spotifyUrl,
+      filePath: song.filePath || null,
+      localFile: song.localFile || '',
       previewUrl: song.previewUrl || '',
       artworkUrl: song.artworkUrl || '',
-      externalLinks: song.externalLinks || {}
+      externalLinks: {
+        spotify: spotifyUrl,
+        appleMusic: song.externalLinks?.appleMusic || ''
+      }
     });
 
     await playlist.save();
@@ -256,15 +288,19 @@ exports.searchMusic = async (req, res) => {
       const track = item.trackName || query;
       const encoded = encodeURIComponent(`${artist} ${track}`);
 
+      const spotifyUrl = `https://open.spotify.com/search/${encoded}`;
+
       return {
         title: track,
         track,
         artist,
         album: item.collectionName,
+        source: 'api',
+        url: spotifyUrl,
         previewUrl: item.previewUrl,
         artworkUrl: item.artworkUrl100,
         externalLinks: {
-          spotify: `https://open.spotify.com/search/${encoded}`,
+          spotify: spotifyUrl,
           appleMusic: `https://music.apple.com/us/search?term=${encoded}`
         }
       };

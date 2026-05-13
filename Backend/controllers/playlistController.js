@@ -55,12 +55,18 @@ exports.getPlaylists = async (req, res) => {
   try {
     log(`PLAYLIST fetch attempt by ${getUserLabel(req.user)}`);
 
-    const playlists = await Playlist.find({
-      $or: [
-        { owner: req.user._id },
-        { isPublic: true }
-      ]
-    });
+    let playlists;
+
+    if (req.user.role === 'admin') {
+      playlists = await Playlist.find({});
+    } else {
+      playlists = await Playlist.find({
+        $or: [
+          { owner: req.user._id },
+          { isPublic: true }
+        ]
+      });
+    }
 
     log(`PLAYLIST fetch success by ${getUserLabel(req.user)}: ${playlists.length} playlist(s)`);
 

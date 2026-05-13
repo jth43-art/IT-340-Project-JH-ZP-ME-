@@ -11,7 +11,10 @@
     </button>
   </div>
 
-  <div *ngIf="showCreateBox" class="create-box">
+  <div
+    *ngIf="showCreateBox"
+    class="create-box"
+  >
 
     <input
       type="text"
@@ -25,7 +28,10 @@
 
   </div>
 
-  <div *ngIf="errorMessage" class="error-msg">
+  <div
+    *ngIf="errorMessage"
+    class="error-msg"
+  >
     {{ errorMessage }}
   </div>
 
@@ -34,6 +40,7 @@
     <div
       class="playlist-card"
       *ngFor="let list of playlists"
+      (click)="openPlaylist(list)"
     >
 
       <div class="folder-icon">
@@ -43,7 +50,7 @@
       <div class="playlist-info">
 
         <h3>
-          {{ list.title || list.name || 'Untitled Playlist' }}
+          {{ getPlaylistName(list) }}
         </h3>
 
         <p>
@@ -54,11 +61,9 @@
 
       <div class="playlist-actions">
 
-        <button (click)="openPlaylist(list)">
-          Edit
-        </button>
-
-        <button (click)="deletePlaylist(list._id)">
+        <button
+          (click)="deletePlaylist(list._id, $event)"
+        >
           Delete
         </button>
 
@@ -70,9 +75,11 @@
       class="empty-state"
       *ngIf="playlists.length === 0 && !errorMessage"
     >
+
       <p>
         No playlists found. Create one above.
       </p>
+
     </div>
 
   </div>
@@ -82,17 +89,21 @@
     class="playlist-editor"
   >
 
-    <h2>
-      Editing:
-      {{ selectedPlaylist.title || selectedPlaylist.name || 'Untitled Playlist' }}
-    </h2>
+    <div class="editor-header">
 
-    <button (click)="closePlaylist()">
-      Close
-    </button>
+      <h2>
+        {{ getPlaylistName(selectedPlaylist) }}
+      </h2>
+
+      <button (click)="closePlaylist()">
+        Close
+      </button>
+
+    </div>
 
     <div
       *ngIf="!selectedPlaylist.songs || selectedPlaylist.songs.length === 0"
+      class="empty-playlist"
     >
       No songs in playlist.
     </div>
@@ -102,15 +113,35 @@
       *ngFor="let song of selectedPlaylist.songs; let i = index"
     >
 
-      <span>
-        {{ song.title || song.track || 'Untitled Song' }}
-        -
-        {{ song.artist || 'Unknown Artist' }}
-      </span>
+      <div class="song-details">
 
-      <button (click)="removeSong(i)">
-        Remove Song
-      </button>
+        <div class="song-title">
+          {{ getSongTitle(song) }}
+        </div>
+
+        <div class="song-artist">
+          {{ getSongArtist(song) }}
+        </div>
+
+      </div>
+
+      <div class="song-actions">
+
+        <button
+          class="spotify-btn"
+          (click)="playOnSpotify(song, $event)"
+        >
+          Listen on Spotify
+        </button>
+
+        <button
+          class="remove-btn"
+          (click)="removeSong(i)"
+        >
+          Remove Song
+        </button>
+
+      </div>
 
     </div>
 

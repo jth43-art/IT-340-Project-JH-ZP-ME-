@@ -28,7 +28,6 @@ export class SearchComponent implements OnInit {
   searchQuery: string = '';
   songs: any[] = [];
   playlists: any[] = [];
-  searchQuery: string = '';
 
   constructor(
     private searchService: SearchService,
@@ -39,7 +38,6 @@ export class SearchComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadUserPlaylists();
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -51,15 +49,15 @@ export class SearchComponent implements OnInit {
       return;
     }
 
-    setTimeout(() => {
-      this.loadPlaylists();
-    }, 0);
+    // Call loadPlaylists (ensure name matches the function below)
+    this.loadPlaylists();
   }
 
   loadPlaylists(): void {
     this.playlistService.getPlaylists().subscribe({
       next: (res: any) => {
-        this.playlists = data.playlists || data;
+        // We use 'res' because that is the name defined in the line above
+        this.playlists = res.playlists || res || [];
         console.log('Playlists loaded for search:', this.playlists);
         this.cdr.detectChanges();
       },
@@ -92,7 +90,8 @@ export class SearchComponent implements OnInit {
       return;
     }
 
-    this.playlistService.addSongToPlaylist(playlistId, song).subscribe({
+    // Note: Ensure 'addSongToPlaylist' exists in your PlaylistService
+    this.playlistService.updatePlaylist(playlistId, { song }).subscribe({
       next: () => {
         alert('Song added to playlist!');
       },

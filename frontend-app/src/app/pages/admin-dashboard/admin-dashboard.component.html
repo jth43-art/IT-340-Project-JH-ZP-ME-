@@ -100,7 +100,10 @@
 
             <td>
 
-              <button class="btn-edit">
+              <button
+                class="btn-edit"
+                (click)="openPlaylist(p)"
+              >
                 Edit
               </button>
 
@@ -126,6 +129,57 @@
         <p>
           No playlists found in database.
         </p>
+      </div>
+
+    </section>
+
+    <section
+      class="playlist-editor"
+      *ngIf="selectedPlaylist"
+    >
+
+      <h2>
+        Admin Editing:
+        {{ selectedPlaylist.title || selectedPlaylist.name }}
+      </h2>
+
+      <button (click)="closePlaylist()">
+        Close
+      </button>
+
+      <div
+        *ngIf="!selectedPlaylist.songs || selectedPlaylist.songs.length === 0"
+      >
+        No songs in playlist.
+      </div>
+
+      <div
+        class="song-row"
+        *ngFor="let song of selectedPlaylist.songs; let i = index"
+      >
+
+        <span>
+          {{ song.title || song.track }}
+          -
+          {{ song.artist }}
+        </span>
+
+        <div>
+
+          <button
+            (click)="playOnSpotify(song)"
+          >
+            Listen on Spotify
+          </button>
+
+          <button
+            (click)="removeSong(i)"
+          >
+            Remove Song
+          </button>
+
+        </div>
+
       </div>
 
     </section>

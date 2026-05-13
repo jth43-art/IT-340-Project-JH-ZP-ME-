@@ -1,111 +1,128 @@
-/* Container Background */
-.search-container {
-  padding: 40px;
-  background-color: #121212; /* Dark background */
+/* Background and overall layout */
+.page-wrapper {
+  background-color: #f0f4f8; /* Light blue/grey background */
   min-height: 100vh;
-  color: white;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.header-section {
-  margin-bottom: 40px;
+.search-header {
+  max-width: 800px;
+  margin: 0 auto 40px auto;
   text-align: center;
 }
 
-/* Search Bar Styling */
-.search-bar {
+.search-header h1 {
+  color: #334e68;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.search-input-wrapper {
   display: flex;
-  justify-content: center;
   gap: 10px;
-  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border-radius: 50px;
+  background: white;
+  padding: 5px 15px;
 }
 
-.search-bar input {
-  width: 400px;
-  padding: 12px 20px;
-  border-radius: 25px;
+.search-input-wrapper input {
+  flex: 1;
   border: none;
-  background: #282828;
-  color: white;
-  font-size: 1rem;
+  padding: 15px;
+  font-size: 1.1rem;
+  outline: none;
+  border-radius: 50px;
 }
 
-.search-bar button {
-  padding: 10px 25px;
-  border-radius: 25px;
-  border: none;
-  background-color: #1db954; /* Spotify Green */
+.search-input-wrapper button {
+  background-color: #6272a4;
   color: white;
-  font-weight: bold;
+  border: none;
+  padding: 0 25px;
+  border-radius: 50px;
   cursor: pointer;
-  transition: transform 0.2s;
+  font-weight: bold;
+  transition: background 0.3s;
 }
 
-.search-bar button:hover {
-  transform: scale(1.05);
-  background-color: #1ed760;
+.search-input-wrapper button:hover {
+  background-color: #44475a;
 }
 
-/* Results Grid */
+/* THE GRID SYSTEM - This fills the screen */
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  /* This creates as many columns as will fit, at least 300px wide each */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  width: 100%;
+  max-width: 1400px; /* Limits width on ultra-wide monitors */
+  margin: 0 auto;
 }
 
-/* Individual Song Card */
+/* Card Styling */
 .song-card {
-  background: #181818;
+  background: white;
+  border-radius: 12px;
   padding: 20px;
-  border-radius: 8px;
-  transition: background 0.3s ease;
-  border: 1px solid #282828;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .song-card:hover {
-  background: #282828;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-.song-title {
+.title {
   margin: 0;
-  font-size: 1.1rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #102a43;
+  font-size: 1.25rem;
 }
 
-.artist-name {
-  color: #b3b3b3;
-  margin: 5px 0 15px 0;
-  font-size: 0.9rem;
+.artist {
+  color: #627d98;
+  margin: 5px 0 20px 0;
 }
 
-/* Actions Section */
-.actions {
+/* Action section inside card */
+.song-actions {
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  border-top: 1px solid #f0f4f8;
+  padding-top: 15px;
 }
 
-.playlist-select {
-  background: #3e3e3e;
-  color: white;
-  border: none;
+.playlist-dropdown {
+  flex: 1;
   padding: 8px;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #bcccdc;
+  background: #f9fafb;
 }
 
 .add-btn {
-  background: transparent;
-  border: 1px solid #b3b3b3;
+  background-color: #1db954;
   color: white;
-  padding: 5px;
-  border-radius: 4px;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .add-btn:hover {
-  border-color: white;
-  background: rgba(255,255,255,0.1);
+  background-color: #17a34a;
+}
+
+.no-results {
+  text-align: center;
+  margin-top: 100px;
+  color: #829ab1;
+  font-style: italic;
 }

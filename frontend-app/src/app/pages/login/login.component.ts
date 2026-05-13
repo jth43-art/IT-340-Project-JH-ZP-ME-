@@ -76,9 +76,18 @@ export default class LoginComponent {
         console.error('Login Error:', err);
 
         this.isSuccess = false;
-        this.errorMessage =
-          err.error?.message ||
-          'Login failed. Please check your email/username and password.';
+
+        if (err.status === 401) {
+          this.errorMessage = 'Incorrect password.';
+        } else if (err.status === 404) {
+          this.errorMessage = 'User not found.';
+        } else if (err.status === 400 && err.error?.message) {
+          this.errorMessage = err.error.message;
+        } else if (err.error?.message) {
+          this.errorMessage = err.error.message;
+        } else {
+          this.errorMessage = 'Login failed. Please check your email/username and password.';
+        }
       }
     });
   }

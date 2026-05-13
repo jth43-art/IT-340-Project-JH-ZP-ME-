@@ -24,7 +24,6 @@ import { PlaylistService } from '../../services/playlist.service';
   templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit {
-
   searchQuery: string = '';
   songs: any[] = [];
   playlists: any[] = [];
@@ -49,18 +48,17 @@ export class SearchComponent implements OnInit {
       return;
     }
 
-    // Call loadPlaylists (ensure name matches the function below)
     this.loadPlaylists();
   }
 
   loadPlaylists(): void {
     this.playlistService.getPlaylists().subscribe({
       next: (res: any) => {
-        // We use 'res' because that is the name defined in the line above
         this.playlists = res.playlists || res || [];
         console.log('Playlists loaded for search:', this.playlists);
         this.cdr.detectChanges();
       },
+
       error: (err: any) => {
         console.error('Playlist Load Error:', err);
       }
@@ -78,6 +76,7 @@ export class SearchComponent implements OnInit {
         console.log('Search results:', this.songs);
         this.cdr.detectChanges();
       },
+
       error: (err: any) => {
         console.error('Search Error:', err);
       }
@@ -90,13 +89,15 @@ export class SearchComponent implements OnInit {
       return;
     }
 
-    // Note: Ensure 'addSongToPlaylist' exists in your PlaylistService
-    this.playlistService.updatePlaylist(playlistId, { song }).subscribe({
-      next: () => {
+    this.playlistService.addSongToPlaylist(playlistId, song).subscribe({
+      next: (res: any) => {
+        console.log('Song added response:', res);
         alert('Song added to playlist!');
+        this.loadPlaylists();
       },
+
       error: (err: any) => {
-        console.error(err);
+        console.error('Add song error:', err);
         alert('Failed to add song');
       }
     });

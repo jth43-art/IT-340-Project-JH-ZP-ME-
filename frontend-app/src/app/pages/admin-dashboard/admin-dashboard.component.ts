@@ -23,14 +23,20 @@ export class AdminDashboardComponent implements OnInit {
   loadMasterData() {
     this.playlistService.getPlaylists().subscribe({
       next: (data: any[]) => {
+        console.log('Data received from server:', data); // Debugging line
         this.allPlaylists = data;
         // Fixes TS7006 by adding types (sum: number, p: any)
+        if (data && data.length > 0) {
         this.stats.totalSongs = data.reduce((sum: number, p: any) => sum + (p.songs?.length || 0), 0);
         this.stats.totalUsers = new Set(data.map((p: any) => p.owner)).size;
-      },
-      error: (err) => console.error('Admin Fetch Error:', err)
-    });
-  }
+      }
+    },
+    error: (err) => {
+      console.error('The server rejected the Admin request:', err);
+      // This is likely where your 401 error is being caught now
+    }
+  });
+}
 
   deleteAnyPlaylist(id: string) {
     if(confirm("Admin Warning: Are you sure you want to delete this user's playlist?")) {

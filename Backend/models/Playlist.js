@@ -2,31 +2,102 @@
 const mongoose = require("mongoose");
 
 const songSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  artist: { type: String },
-  artist: { type: String, required: true },
-  album: { type: String },
-  image: { type: String },
-  source: { type: String, enum: ["api", "upload"], default: "api" },
-  url: { type: String },
-  filePath: {type: String }
-  filePath: { type: String },
-  createdAt: { type: Date, default: Date.now }
+  title: {
+    type: String,
+    required: true
+  },
+
+  artist: {
+    type: String,
+    required: true
+  },
+
+  album: {
+    type: String,
+    default: ""
+  },
+
+  image: {
+    type: String,
+    default: ""
+  },
+
+  artworkUrl: {
+    type: String,
+    default: ""
+  },
+
+  source: {
+    type: String,
+    enum: ["api", "upload", "local"],
+    default: "api"
+  },
+
+  url: {
+    type: String,
+    default: ""
+  },
+
+  previewUrl: {
+    type: String,
+    default: ""
+  },
+
+  filePath: {
+    type: String,
+    default: ""
+  },
+
+  localFile: {
+    type: String,
+    default: ""
+  },
+
+  externalLinks: {
+    spotify: {
+      type: String,
+      default: ""
+    },
+    appleMusic: {
+      type: String,
+      default: ""
+    }
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const playlistSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
-    description: { type: String },
+    title: {
+      type: String,
+      required: true
+    },
+
+    description: {
+      type: String,
+      default: ""
+    },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true
     },
+
     songs: [songSchema],
-    isPublic: { type: Boolean, default: false }
+
+    isPublic: {
+      type: Boolean,
+      default: false
+    }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
 module.exports = mongoose.model("Playlist", playlistSchema);

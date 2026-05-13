@@ -1,128 +1,133 @@
-/* Background and overall layout */
-.page-wrapper {
-  background-color: #f0f4f8; /* Light blue/grey background */
-  min-height: 100vh;
+/* Overall Page Style */
+.search-page {
   padding: 40px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8fafc; /* Clean, modern light grey */
+  min-height: 100vh;
+  font-family: 'Inter', -system-ui, sans-serif;
 }
 
 .search-header {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto 40px auto;
-  text-align: center;
 }
 
 .search-header h1 {
-  color: #334e68;
   font-size: 2.5rem;
+  color: #1e293b;
   margin-bottom: 20px;
 }
 
-.search-input-wrapper {
+/* Search Bar Wrapper */
+.search-bar-container {
   display: flex;
-  gap: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  border-radius: 50px;
-  background: white;
-  padding: 5px 15px;
+  gap: 12px;
+  max-width: 600px;
 }
 
-.search-input-wrapper input {
+.search-bar-container input {
   flex: 1;
-  border: none;
-  padding: 15px;
-  font-size: 1.1rem;
-  outline: none;
-  border-radius: 50px;
+  padding: 12px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
 }
 
-.search-input-wrapper button {
-  background-color: #6272a4;
+.search-bar-container input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+.search-bar-container button {
+  background-color: #1e293b;
   color: white;
   border: none;
-  padding: 0 25px;
-  border-radius: 50px;
+  padding: 0 24px;
+  border-radius: 10px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
+  transition: background 0.2s;
 }
 
-.search-input-wrapper button:hover {
-  background-color: #44475a;
+.search-bar-container button:hover {
+  background-color: #334155;
 }
 
 /* THE GRID SYSTEM - This fills the screen */
 .results-grid {
   display: grid;
-  /* This creates as many columns as will fit, at least 300px wide each */
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
-  width: 100%;
-  max-width: 1400px; /* Limits width on ultra-wide monitors */
+  /* Automatically fits as many cards as possible, min 280px wide each */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
-/* Card Styling */
+/* Individual Song Card */
 .song-card {
   background: white;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #f1f5f9;
 }
 
 .song-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.title {
+.song-name {
   margin: 0;
-  color: #102a43;
   font-size: 1.25rem;
+  color: #0f172a;
+  font-weight: 700;
 }
 
-.artist {
-  color: #627d98;
-  margin: 5px 0 20px 0;
+.artist-name {
+  color: #64748b;
+  margin: 4px 0 20px 0;
+  font-size: 0.95rem;
 }
 
-/* Action section inside card */
-.song-actions {
+/* Actions inside the Card */
+.card-actions {
   display: flex;
-  gap: 10px;
-  border-top: 1px solid #f0f4f8;
-  padding-top: 15px;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
 }
 
 .playlist-dropdown {
   flex: 1;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #bcccdc;
-  background: #f9fafb;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc;
+  font-size: 0.85rem;
+  color: #475569;
 }
 
-.add-btn {
-  background-color: #1db954;
+.add-button {
+  background-color: #10b981; /* Success Green */
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
 }
 
-.add-btn:hover {
-  background-color: #17a34a;
+.add-button:hover {
+  background-color: #059669;
 }
 
-.no-results {
+.empty-state {
   text-align: center;
-  margin-top: 100px;
-  color: #829ab1;
-  font-style: italic;
+  margin-top: 80px;
+  color: #94a3b8;
 }

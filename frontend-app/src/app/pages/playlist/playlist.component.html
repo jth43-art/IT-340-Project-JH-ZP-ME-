@@ -1,68 +1,119 @@
 <div class="playlist-page">
+
   <div class="header">
     <h1>Your Library</h1>
     <p>Manage your playlists and songs.</p>
   </div>
 
   <div class="top-actions">
-    <button class="btn-primary" (click)="showCreateBox = !showCreateBox">
+    <button (click)="showCreateBox = !showCreateBox">
       + Create Playlist
     </button>
   </div>
 
   <div *ngIf="showCreateBox" class="create-box">
-    <input type="text" [(ngModel)]="newPlaylistName" placeholder="Playlist name">
-    <button (click)="createPlaylist()">Save Playlist</button>
+
+    <input
+      type="text"
+      [(ngModel)]="newPlaylistName"
+      placeholder="Playlist name"
+    >
+
+    <button (click)="createPlaylist()">
+      Save Playlist
+    </button>
+
   </div>
 
-  <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+  <div *ngIf="errorMessage" class="error-msg">
+    {{ errorMessage }}
+  </div>
 
   <div class="playlist-grid">
-    <div class="playlist-card" *ngFor="let list of playlists">
-      <div class="folder-icon">📂</div>
+
+    <div
+      class="playlist-card"
+      *ngFor="let list of playlists"
+    >
+
+      <div class="folder-icon">
+        📂
+      </div>
+
       <div class="playlist-info">
-        <h3>{{ list.title || list.name }}</h3>
-        <p>{{ list.songs?.length || 0 }} Songs</p>
+
+        <h3>
+          {{ list.title || list.name || 'Untitled Playlist' }}
+        </h3>
+
+        <p>
+          {{ list.songs?.length || 0 }} Songs
+        </p>
+
       </div>
+
       <div class="playlist-actions">
-        <button (click)="openPlaylist(list)">Edit</button>
-        <button class="btn-delete" (click)="deletePlaylist(list._id)">Delete</button>
+
+        <button (click)="openPlaylist(list)">
+          Edit
+        </button>
+
+        <button (click)="deletePlaylist(list._id)">
+          Delete
+        </button>
+
       </div>
+
     </div>
 
-    <div class="empty-state" *ngIf="playlists.length === 0 && !errorMessage">
-      <p>No playlists found. Create one above.</p>
+    <div
+      class="empty-state"
+      *ngIf="playlists.length === 0 && !errorMessage"
+    >
+      <p>
+        No playlists found. Create one above.
+      </p>
     </div>
+
   </div>
 
-  <div *ngIf="selectedPlaylist" class="modal-overlay">
-    <div class="playlist-editor">
-      <div class="editor-header">
-        <h2>Editing: {{ selectedPlaylist.title || selectedPlaylist.name }}</h2>
-        <button class="close-btn" (click)="closePlaylist()">✕</button>
-      </div>
+  <div
+    *ngIf="selectedPlaylist"
+    class="playlist-editor"
+  >
 
-      <div class="song-list">
-        <div *ngIf="!selectedPlaylist.songs || selectedPlaylist.songs.length === 0" class="no-songs">
-          No songs in playlist.
-        </div>
+    <h2>
+      Editing:
+      {{ selectedPlaylist.title || selectedPlaylist.name || 'Untitled Playlist' }}
+    </h2>
 
-        <div class="song-row" *ngFor="let song of selectedPlaylist.songs; let i = index">
-          <div class="song-info">
-            <span class="song-title">{{ song.track || song.title }}</span>
-            <span class="song-artist" *ngIf="song.artist">{{ song.artist }}</span>
-          </div>
+    <button (click)="closePlaylist()">
+      Close
+    </button>
 
-          <div class="song-actions">
-            <button class="spotify-btn" (click)="playOnSpotify(song)">
-              Listen
-            </button>
-            <button class="remove-btn" (click)="removeSong(i)">
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
+    <div
+      *ngIf="!selectedPlaylist.songs || selectedPlaylist.songs.length === 0"
+    >
+      No songs in playlist.
     </div>
+
+    <div
+      class="song-row"
+      *ngFor="let song of selectedPlaylist.songs; let i = index"
+    >
+
+      <span>
+        {{ song.title || song.track || 'Untitled Song' }}
+        -
+        {{ song.artist || 'Unknown Artist' }}
+      </span>
+
+      <button (click)="removeSong(i)">
+        Remove Song
+      </button>
+
+    </div>
+
   </div>
+
 </div>

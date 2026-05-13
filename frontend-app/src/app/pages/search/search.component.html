@@ -1,30 +1,133 @@
-<div class="search-page">
-  <div class="search-header">
-    <h1>Search</h1>
-    <div class="search-bar-container">
-      <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Search for artists, songs, or albums...">
-      <button (click)="onSearch()">Search</button>
-    </div>
-  </div>
+/* Overall Page Style */
+.search-page {
+  padding: 40px;
+  background-color: #f8fafc; /* Clean, modern light grey */
+  min-height: 100vh;
+  font-family: 'Inter', -system-ui, sans-serif;
+}
 
-  <div class="results-grid" *ngIf="songs.length > 0">
-    <div class="song-card" *ngFor="let song of songs">
-      <div class="card-content">
-        <h3 class="song-name">{{ song.title }}</h3>
-        <p class="artist-name">{{ song.artist }}</p>
-      </div>
-      
-      <div class="card-actions">
-        <select class="playlist-dropdown">
-          <option value="" disabled selected>Select Playlist</option>
-          <option *ngFor="let p of playlists" [value]="p.id">{{ p.name }}</option>
-        </select>
-        <button class="add-button">Add</button>
-      </div>
-    </div>
-  </div>
+.search-header {
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+}
 
-  <div class="empty-state" *ngIf="songs.length === 0">
-    <p>Enter a search term to find music.</p>
-  </div>
-</div>
+.search-header h1 {
+  font-size: 2.5rem;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+/* Search Bar Wrapper */
+.search-bar-container {
+  display: flex;
+  gap: 12px;
+  max-width: 600px;
+}
+
+.search-bar-container input {
+  flex: 1;
+  padding: 12px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.search-bar-container input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+.search-bar-container button {
+  background-color: #1e293b;
+  color: white;
+  border: none;
+  padding: 0 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-bar-container button:hover {
+  background-color: #334155;
+}
+
+/* THE GRID SYSTEM - This fills the screen */
+.results-grid {
+  display: grid;
+  /* Automatically fits as many cards as possible, min 280px wide each */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Individual Song Card */
+.song-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #f1f5f9;
+}
+
+.song-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.song-name {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.artist-name {
+  color: #64748b;
+  margin: 4px 0 20px 0;
+  font-size: 0.95rem;
+}
+
+/* Actions inside the Card */
+.card-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.playlist-dropdown {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc;
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.add-button {
+  background-color: #10b981; /* Success Green */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #059669;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 80px;
+  color: #94a3b8;
+}

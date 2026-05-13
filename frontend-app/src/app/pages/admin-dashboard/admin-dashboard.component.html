@@ -1,23 +1,76 @@
 <div class="admin-container">
+
   <aside class="admin-sidebar">
-    <h2>TuneVault Admin</h2>
+
+    <h2>
+      TuneVault Admin
+    </h2>
+
     <nav>
-      <button class="nav-active">Overview</button>
-      <button routerLink="/homepage-tv">View as User</button>
-      <button class="logout-btn" (click)='logout()'>Logout</button>
+
+      <button class="nav-active">
+        Overview
+      </button>
+
+      <button routerLink="/homepage-tv">
+        View as User
+      </button>
+
+      <button
+        class="logout-btn"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+
     </nav>
+
   </aside>
 
   <main class="admin-main">
+
     <header class="admin-stats">
-      <div class="stat-card"><h3>{{ allPlaylists.length }}</h3><p>Total Playlists</p></div>
-      <div class="stat-card"><h3>{{ stats.totalSongs }}</h3><p>Total Songs</p></div>
-      <div class="stat-card"><h3>{{ stats.totalUsers }}</h3><p>Active Users</p></div>
+
+      <div class="stat-card">
+        <h3>
+          {{ allPlaylists.length }}
+        </h3>
+
+        <p>
+          Total Playlists
+        </p>
+      </div>
+
+      <div class="stat-card">
+        <h3>
+          {{ stats.totalSongs }}
+        </h3>
+
+        <p>
+          Total Songs
+        </p>
+      </div>
+
+      <div class="stat-card">
+        <h3>
+          {{ stats.totalUsers }}
+        </h3>
+
+        <p>
+          Active Users
+        </p>
+      </div>
+
     </header>
 
     <section class="management-table">
-      <h3>Global Playlist Management</h3>
+
+      <h3>
+        Global Playlist Management
+      </h3>
+
       <table>
+
         <thead>
           <tr>
             <th>Playlist Name</th>
@@ -26,18 +79,57 @@
             <th>Actions</th>
           </tr>
         </thead>
+
         <tbody>
+
           <tr *ngFor="let p of allPlaylists">
-            <td><strong>{{ p.name }}</strong></td>
-            <td>{{ p.owner || 'System' }}</td>
-            <td>{{ p.songs?.length || 0 }}</td>
+
             <td>
-              <button class="btn-edit">Edit</button>
-              <button class="btn-delete" (click)="deleteAnyPlaylist(p.id)">Delete</button>
+              <strong>
+                {{ p.title || p.name || 'Untitled Playlist' }}
+              </strong>
             </td>
+
+            <td>
+              {{ p.owner?.username || p.owner?.email || p.owner || 'System' }}
+            </td>
+
+            <td>
+              {{ p.songs?.length || 0 }}
+            </td>
+
+            <td>
+
+              <button class="btn-edit">
+                Edit
+              </button>
+
+              <button
+                class="btn-delete"
+                (click)="deleteAnyPlaylist(p._id)"
+              >
+                Delete
+              </button>
+
+            </td>
+
           </tr>
+
         </tbody>
+
       </table>
+
+      <div
+        class="empty-state"
+        *ngIf="allPlaylists.length === 0"
+      >
+        <p>
+          No playlists found in database.
+        </p>
+      </div>
+
     </section>
+
   </main>
+
 </div>

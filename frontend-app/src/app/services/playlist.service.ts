@@ -34,9 +34,18 @@ export class PlaylistService {
     };
   }
 
+  // Normal user view: only user's own playlists and public playlists
   getPlaylists(): Observable<any> {
     return this.http.get<any>(
       `${this.baseUrl}?t=${Date.now()}`,
+      this.getHeaders()
+    );
+  }
+
+  // Admin dashboard only: all playlists
+  getAdminPlaylists(): Observable<any> {
+    return this.http.get<any>(
+      `${this.baseUrl}?admin=true&t=${Date.now()}`,
       this.getHeaders()
     );
   }

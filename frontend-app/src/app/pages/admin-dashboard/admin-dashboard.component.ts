@@ -62,7 +62,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   loadMasterData(): void {
-    this.playlistService.getPlaylists().subscribe({
+    this.playlistService.getAdminPlaylists().subscribe({
       next: (response: any) => {
         console.log('Admin data received from server:', response);
 
@@ -97,6 +97,7 @@ export class AdminDashboardComponent implements OnInit {
 
         this.allPlaylists = [];
         this.selectedPlaylist = null;
+
         this.stats.totalSongs = 0;
         this.stats.totalUsers = 0;
 
@@ -119,6 +120,10 @@ export class AdminDashboardComponent implements OnInit {
 
   getSongArtist(song: any): string {
     return song?.artist || 'Unknown Artist';
+  }
+
+  getPlaylistTitle(playlist: any): string {
+    return playlist?.title || playlist?.name || 'Untitled Playlist';
   }
 
   getSpotifyUrl(song: any): string {

@@ -63,7 +63,7 @@ export default class LoginComponent {
 
         // Logic to redirect based on username
         setTimeout(() => {
-          if (response.user?.username === 'Zeel') {
+          if (response.user?.role === 'admin' || response.user?.username === 'Zeel') {
             this.router.navigate(['/admin-dashboard']);
           } else {
             this.router.navigate(['/homepage-tv']);

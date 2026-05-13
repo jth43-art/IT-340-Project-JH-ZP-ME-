@@ -22,7 +22,11 @@ import { PlaylistService } from '../../services/playlist.service';
   styleUrl: './admin-dashboard.component.css'
 })
 export class AdminDashboardComponent implements OnInit {
+
   allPlaylists: any[] = [];
+
+  selectedPlaylist: any = null;
+
   stats = {
     totalSongs: 0,
     totalUsers: 0
@@ -36,6 +40,7 @@ export class AdminDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -60,8 +65,11 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   loadMasterData(): void {
+
     this.playlistService.getPlaylists().subscribe({
+
       next: (response: any) => {
+
         console.log('Admin data received from server:', response);
 
         const data = Array.isArray(response)
@@ -83,10 +91,13 @@ export class AdminDashboardComponent implements OnInit {
       },
 
       error: (err: any) => {
+
         console.error('The server rejected the Admin request:', err);
 
         this.allPlaylists = [];
+
         this.stats.totalSongs = 0;
+
         this.stats.totalUsers = 0;
 
         this.cdr.detectChanges();
@@ -94,7 +105,59 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
+  openPlaylist(playlist: any): void {
+    this.selectedPlaylist = playlist;
+  }
+
+  closePlaylist(): void {
+    this.selectedPlaylist = null;
+  }
+
+  playOnSpotify(song: any): void {
+
+    const spotifyUrl =
+      song.url ||
+      song.externalLinks?.spotify;
+
+    if (!spotifyUrl) {
+      alert('No Spotify link available.');
+      return;
+    }
+
+    window.open(spotifyUrl, '_blank');
+  }
+
+  removeSong(songIndex: number): void {
+
+    if (!this.selectedPlaylist) {
+      return;
+    }
+
+    this.selectedPlaylist.songs.splice(songIndex, 1);
+
+    this.playlistService.updatePlaylist(
+      this.selectedPlaylist._id,
+      this.selectedPlaylist
+    ).subscribe({
+
+      next: () => {
+
+        alert('Song removed.');
+
+        this.loadMasterData();
+      },
+
+      error: (err: any) => {
+
+        console.error('Failed to remove song:', err);
+
+        alert('Failed to remove song.');
+      }
+    });
+  }
+
   deleteAnyPlaylist(id: string): void {
+
     const confirmed = confirm(
       "Admin Warning: Are you sure you want to delete this user's playlist?"
     );
@@ -104,19 +167,27 @@ export class AdminDashboardComponent implements OnInit {
     }
 
     this.playlistService.deletePlaylist(id).subscribe({
+
       next: () => {
+
         alert('Playlist deleted by admin.');
+
+        this.selectedPlaylist = null;
+
         this.loadMasterData();
       },
 
       error: (err: any) => {
+
         console.error('Admin delete failed:', err);
+
         alert('Failed to delete playlist.');
       }
     });
   }
 
   logout(): void {
+
     if (isPlatformBrowser(this.platformId)) {
       localStorage.clear();
     }

@@ -27,6 +27,7 @@ export class SearchComponent implements OnInit {
   searchQuery: string = '';
   songs: any[] = [];
   playlists: any[] = [];
+  errorMessage: string = '';
 
   constructor(
     private searchService: SearchService,
@@ -61,24 +62,58 @@ export class SearchComponent implements OnInit {
 
       error: (err: any) => {
         console.error('Playlist Load Error:', err);
+        this.errorMessage = 'Could not load playlists.';
+        this.cdr.detectChanges();
       }
     });
   }
 
+  private hasSuspiciousInput(value: string): boolean {
+    const blockedPattern = /(\$|{|}|\[|\]|;|<|>|`|"|'|--)/;
+
+    return blockedPattern.test(value);
+  }
+
   onSearch(): void {
-    if (!this.searchQuery.trim()) {
+    this.errorMessage = '';
+
+    const query = this.searchQuery.trim();
+
+    if (!query) {
+      this.errorMessage = 'Please enter a search term.';
+      this.songs = [];
       return;
     }
 
-    this.searchService.searchSongs(this.searchQuery).subscribe({
+    if (query.length > 60) {
+      this.errorMessage = 'Search term is too long. Please use 60 characters or less.';
+      this.songs = [];
+      return;
+    }
+
+    if (this.hasSuspiciousInput(query)) {
+      this.errorMessage = 'Search contains invalid characters.';
+      this.songs = [];
+      return;
+    }
+
+    this.searchService.searchSongs(query).subscribe({
       next: (res: any) => {
         this.songs = res.results || res || [];
+
+        if (this.songs.length === 0) {
+          this.errorMessage = 'No songs found.';
+        }
+
         console.log('Search results:', this.songs);
         this.cdr.detectChanges();
       },
 
       error: (err: any) => {
         console.error('Search Error:', err);
+        this.errorMessage = err.error?.message || 'Search failed. Please try again.';
+        this.songs = [];
+        this.cdr.detectChanges();
       }
     });
   }

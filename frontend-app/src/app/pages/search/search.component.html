@@ -13,12 +13,20 @@
         [(ngModel)]="searchQuery"
         (keyup.enter)="onSearch()"
         placeholder="Search for artists, songs, or albums..."
+        maxlength="60"
       >
 
       <button (click)="onSearch()">
         Search
       </button>
 
+    </div>
+
+    <div
+      *ngIf="errorMessage"
+      class="error-msg"
+    >
+      {{ errorMessage }}
     </div>
 
   </div>
@@ -80,7 +88,7 @@
 
   <div
     class="empty-state"
-    *ngIf="songs.length === 0"
+    *ngIf="songs.length === 0 && !errorMessage"
   >
     <p>
       Enter a search term to find music.

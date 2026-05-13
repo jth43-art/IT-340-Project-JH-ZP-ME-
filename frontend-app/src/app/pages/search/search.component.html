@@ -1,8 +1,13 @@
 <div class="search-page">
+
   <div class="search-header">
-    <h1>Search</h1>
+
+    <h1>
+      Search
+    </h1>
 
     <div class="search-bar-container">
+
       <input
         type="text"
         [(ngModel)]="searchQuery"
@@ -13,12 +18,23 @@
       <button (click)="onSearch()">
         Search
       </button>
+
     </div>
+
   </div>
 
-  <div class="results-grid" *ngIf="songs.length > 0">
-    <div class="song-card" *ngFor="let song of songs">
+  <div
+    class="results-grid"
+    *ngIf="songs.length > 0"
+  >
+
+    <div
+      class="song-card"
+      *ngFor="let song of songs"
+    >
+
       <div class="card-content">
+
         <h3 class="song-name">
           {{ song.title || song.track || 'Untitled Song' }}
         </h3>
@@ -26,10 +42,16 @@
         <p class="artist-name">
           {{ song.artist || 'Unknown Artist' }}
         </p>
+
       </div>
 
       <div class="card-actions">
-        <select class="playlist-dropdown" #playlistSelect>
+
+        <select
+          class="playlist-dropdown"
+          #playlistSelect
+        >
+
           <option value="">
             Select Playlist
           </option>
@@ -40,6 +62,7 @@
           >
             {{ p.title || p.name || 'Untitled Playlist' }}
           </option>
+
         </select>
 
         <button
@@ -48,11 +71,20 @@
         >
           Add
         </button>
+
       </div>
+
     </div>
+
   </div>
 
-  <div class="empty-state" *ngIf="songs.length === 0">
-    <p>Enter a search term to find music.</p>
+  <div
+    class="empty-state"
+    *ngIf="songs.length === 0"
+  >
+    <p>
+      Enter a search term to find music.
+    </p>
   </div>
+
 </div>

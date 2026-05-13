@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PlaylistService {
+export class PlaylistComponent implements OnInit {
   // Your backend IP address
   private apiUrl = 'http://100.105.95.54:3000'; 
 

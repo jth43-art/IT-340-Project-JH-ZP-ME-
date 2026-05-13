@@ -30,12 +30,13 @@ export default class LoginComponent {
     password: new FormControl('', [Validators.required])
   });
 
-  onLogin() {
+  onLogin(): void {
     this.errorMessage = '';
     this.isSuccess = false;
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      this.isSuccess = false;
       this.errorMessage = 'Please enter your email/username and password.';
       return;
     }
@@ -45,11 +46,12 @@ export default class LoginComponent {
       password: this.loginForm.value.password
     };
 
-    // The .subscribe() starts here
     this.authService.login(credentials).subscribe({
       next: (response: any) => {
         console.log('Login Success:', response);
+
         this.isSuccess = true;
+        this.errorMessage = 'Login successful! Redirecting...';
 
         if (response.token) {
           localStorage.setItem('token', response.token);
@@ -61,20 +63,23 @@ export default class LoginComponent {
           localStorage.setItem('role', response.user.role);
         }
 
-        // Logic to redirect based on username
         setTimeout(() => {
-          if (response.user?.role === 'admin' || response.user?.username === 'Zeel') {
+          if (response.user?.role === 'admin') {
             this.router.navigate(['/admin-dashboard']);
           } else {
             this.router.navigate(['/homepage-tv']);
           }
-        }, 1500);
+        }, 1200);
       },
+
       error: (err: any) => {
         console.error('Login Error:', err);
+
         this.isSuccess = false;
-        this.errorMessage = err.error?.message || 'Login failed. Please check your credentials.';
+        this.errorMessage =
+          err.error?.message ||
+          'Login failed. Please check your email/username and password.';
       }
-    }); // This closes the .subscribe() block correctly
+    });
   }
 }

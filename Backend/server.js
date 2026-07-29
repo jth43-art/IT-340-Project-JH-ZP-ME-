@@ -11,6 +11,9 @@ const playlistRoute = require('./routes/playlists');
 const searchRoute = require('./routes/search');
 const mockAuth = require('./middleware/mockAuth');
 const uploadRoutes = require('./routes/upload');
+const authRoutes = require("./routes/auth");
+const mfaRoutes = require("./routes/mfa");
+const streamRoutes = require("./routes/stream");
 
 const app = express();
 
@@ -56,6 +59,10 @@ app.use('/api/upload', uploadRoutes);
 // =========================
 
 app.use(mockAuth);
+app.use("/api/auth", authRoutes);
+app.use("/api/mfa", mfaRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api", streamRoutes);
 
 // =========================
 // PLAYLIST ROUTES

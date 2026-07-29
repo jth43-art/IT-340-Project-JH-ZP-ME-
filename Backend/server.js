@@ -35,6 +35,10 @@ app.use(cors({
 // =========================
 
 app.use(express.json());
+app.use("/api/playlists", auth);
+app.use("/api/upload", auth);
+app.use("/api/favorites", auth);
+app.use("/api/admin", auth);
 
 // =========================
 // PUBLIC ROUTES

@@ -4,7 +4,11 @@ const log = require("../utils/logger");
 
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
-
+const token = jwt.sign(
+  { _id: user._id, role: user.role },
+  process.env.JWT_SECRET,
+  { expiresIn: "1h" }
+);
 const loginUser = async (req, res) => {
 
   try {

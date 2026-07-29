@@ -1,23 +1,49 @@
 const speakeasy = require("speakeasy");
 const qrcode = require("qrcode");
-exports.enableMFA = async (req, res) => {
-  const secret = speakeasy.generateSecret({ name: "TuneVault" });
-  const qr = await qrcode.toDataURL(secret.otpauth_url);
+const User = require("../models/User");
 
-  // Save secret to user in DB
-  user.mfaSecret = secret.base32;
-  await user.save();
-  res.json({ qr, secret: secret.base32 });
+exports.enableMFA = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    const secret = speakeasy.generateSecret({ name: "TuneVault" });
+    user.mfaSecret = secret.base32;
+    user.mfaEnabled = false; // only true after verification
+    await user.save();
+    const qrDataUrl = await qrcode.toDataURL(secret.otpauth_url);
+    res.json({
+      qrCode: qrDataUrl, secret: secret.base32});
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
-exports.verifyMFA = (req, res) => {
-  const { token } = req.body;
-  const verified = speakeasy.totp.verify({
-    secret: req.user.mfaSecret,
-    encoding: "base32",
-    token
-  });
+exports.verifyMFA = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user || !user.mfaSecret)
+      return res.status(400).json({ message: "MFA not initialized" });
+    const verified = speakeasy.totp.verify({
+      secret: user.mfaSecret, encoding: "base32", token, window: 1});
+    if (!verified) return res.status(400).json({ message: "Invalid code" });
+    user.mfaEnabled = true;
+    await user.save();
+    res.json({ message: "MFA enabled" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-  if (!verified) return res.status(400).json({ message: "Invalid code" });
-  res.json({ message: "MFA enabled" });
+exports.disableMFA = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    user.mfaEnabled = false;
+    user.mfaSecret = null;
+    await user.save();
+    res.json({ message: "MFA disabled" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 };

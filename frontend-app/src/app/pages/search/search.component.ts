@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 
 import { SearchService } from '../../services/search.service';
 import { PlaylistService } from '../../services/playlist.service';
+import { App } from '../../app';
 
 @Component({
   selector: 'app-search',
@@ -25,6 +26,8 @@ import { PlaylistService } from '../../services/playlist.service';
 })
 export class SearchComponent implements OnInit {
   searchQuery: string = '';
+  selectedFilter: string = 'all'; // Filters: all, title, artist, album, genre
+  allSongs: any[] = [];
   songs: any[] = [];
   playlists: any[] = [];
   errorMessage: string = '';
@@ -34,6 +37,7 @@ export class SearchComponent implements OnInit {
     private playlistService: PlaylistService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private appRoot: App,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -56,7 +60,6 @@ export class SearchComponent implements OnInit {
     this.playlistService.getPlaylists().subscribe({
       next: (res: any) => {
         this.playlists = res.playlists || res || [];
-        console.log('Playlists loaded for search:', this.playlists);
         this.cdr.detectChanges();
       },
 
@@ -70,7 +73,6 @@ export class SearchComponent implements OnInit {
 
   private hasSuspiciousInput(value: string): boolean {
     const blockedPattern = /(\$|{|}|\[|\]|;|<|>|`|"|'|--)/;
-
     return blockedPattern.test(value);
   }
 
@@ -82,30 +84,33 @@ export class SearchComponent implements OnInit {
     if (!query) {
       this.errorMessage = 'Please enter a search term.';
       this.songs = [];
+      this.allSongs = [];
       return;
     }
 
     if (query.length > 60) {
       this.errorMessage = 'Search term is too long. Please use 60 characters or less.';
       this.songs = [];
+      this.allSongs = [];
       return;
     }
 
     if (this.hasSuspiciousInput(query)) {
       this.errorMessage = 'Search contains invalid characters.';
       this.songs = [];
+      this.allSongs = [];
       return;
     }
 
     this.searchService.searchSongs(query).subscribe({
       next: (res: any) => {
-        this.songs = res.results || res || [];
+        this.allSongs = res.results || res || [];
+        this.applyFilter();
 
         if (this.songs.length === 0) {
-          this.errorMessage = 'No songs found.';
+          this.errorMessage = 'No matching songs found.';
         }
 
-        console.log('Search results:', this.songs);
         this.cdr.detectChanges();
       },
 
@@ -113,9 +118,28 @@ export class SearchComponent implements OnInit {
         console.error('Search Error:', err);
         this.errorMessage = err.error?.message || 'Search failed. Please try again.';
         this.songs = [];
+        this.allSongs = [];
         this.cdr.detectChanges();
       }
     });
+  }
+
+  applyFilter(): void {
+    if (this.selectedFilter === 'all') {
+      this.songs = [...this.allSongs];
+      return;
+    }
+
+    const queryLower = this.searchQuery.trim().toLowerCase();
+
+    this.songs = this.allSongs.filter(song => {
+      const value = (song[this.selectedFilter] || '').toString().toLowerCase();
+      return value.includes(queryLower);
+    });
+  }
+
+  playSong(song: any): void {
+    this.appRoot.playSong(song);
   }
 
   addToPlaylist(song: any, playlistId: string): void {
@@ -126,7 +150,6 @@ export class SearchComponent implements OnInit {
 
     this.playlistService.addSongToPlaylist(playlistId, song).subscribe({
       next: (res: any) => {
-        console.log('Song added response:', res);
         alert('Song added to playlist!');
         this.loadPlaylists();
       },

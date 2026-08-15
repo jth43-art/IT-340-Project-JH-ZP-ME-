@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import { 
+  Component, 
+  Inject, 
+  PLATFORM_ID, 
+  ChangeDetectorRef 
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   FormGroup,
@@ -6,7 +11,7 @@ import {
   Validators,
   ReactiveFormsModule
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -19,6 +24,7 @@ import { AuthService } from '../../services/auth.service';
 export default class LoginComponent {
   errorMessage: string = '';
   isSuccess: boolean = false;
+  isBrowser: boolean = false;
 
   loginForm = new FormGroup({
     identifier: new FormControl('', [Validators.required]),
@@ -27,8 +33,12 @@ export default class LoginComponent {
 
   constructor(
     private router: Router,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   onLogin(): void {
     this.errorMessage = '';
@@ -37,13 +47,14 @@ export default class LoginComponent {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       this.errorMessage = 'Please enter your email/username and password.';
+      this.cdr.detectChanges();
       return;
     }
 
     const inputVal = this.loginForm.value.identifier?.trim() || '';
     const passwordVal = this.loginForm.value.password || '';
 
-    // Send payload matching backend expectations
+    // Standardized authentication payload
     const credentials = {
       email: inputVal,
       username: inputVal,
@@ -55,21 +66,25 @@ export default class LoginComponent {
       next: (response: any) => {
         this.isSuccess = true;
         this.errorMessage = 'Login successful! Redirecting...';
+        this.cdr.detectChanges();
 
         const user = response.user || response;
-        const isAdmin = user?.role === 'admin' || user?.username === 'Zeel';
+        const role = user?.role || localStorage.getItem('role') || 'user';
+        const isAdmin = role === 'admin' || user?.username === 'Zeel';
 
-        setTimeout(() => {
-          if (isAdmin) {
-            this.router.navigate(['/admin-dashboard']);
-          } else {
-            this.router.navigate(['/homepage-tv']);
-          }
-        }, 1000);
+        const targetRoute = isAdmin ? '/admin-dashboard' : '/homepage-tv';
+
+        if (this.isBrowser) {
+          setTimeout(() => {
+            this.router.navigate([targetRoute]);
+          }, 800);
+        } else {
+          this.router.navigate([targetRoute]);
+        }
       },
 
       error: (err: any) => {
-        console.error('Login Error:', err);
+        console.error('Login Error Details:', err);
         this.isSuccess = false;
 
         if (err.status === 401) {
@@ -81,6 +96,8 @@ export default class LoginComponent {
         } else {
           this.errorMessage = 'Unable to connect to server. Please try again.';
         }
+
+        this.cdr.detectChanges();
       }
     });
   }

@@ -1,0 +1,39 @@
+<div class="library-container">
+  <div class="library-header">
+    <h1>Music Library</h1>
+    <p>Browse all uploaded music tracks</p>
+  </div>
+
+  <div *ngIf="loading" class="status-msg">Loading songs...</div>
+  <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+
+  <div class="song-grid" *ngIf="!loading && songs.length > 0">
+    <div class="song-card" *ngFor="let song of songs">
+      <div class="artwork-container">
+        <img 
+          [src]="song.albumArtwork || song.coverUrl || 'https://via.placeholder.com/200x200?text=No+Cover'" 
+          alt="Album Cover"
+          class="artwork"
+        >
+        <button class="play-overlay-btn" (click)="playSong(song)">▶</button>
+      </div>
+
+      <div class="song-details">
+        <h3 class="song-title">{{ song.title || song.track || 'Untitled' }}</h3>
+        <p class="song-artist"><strong>Artist:</strong> {{ song.artist || 'Unknown Artist' }}</p>
+        <p class="song-album"><strong>Album:</strong> {{ song.album || 'Single' }}</p>
+        <p class="song-date" *ngIf="song.uploadDate || song.createdAt">
+          <strong>Uploaded:</strong> {{ (song.uploadDate || song.createdAt) | date:'mediumDate' }}
+        </p>
+      </div>
+
+      <button class="play-btn" (click)="playSong(song)">
+        Play Song
+      </button>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && songs.length === 0 && !errorMessage">
+    <p>No songs found in the library.</p>
+  </div>
+</div>

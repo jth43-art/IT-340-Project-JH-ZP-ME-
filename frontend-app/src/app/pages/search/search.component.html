@@ -2,9 +2,7 @@
 
   <div class="search-header">
 
-    <h1>
-      Search
-    </h1>
+    <h1>Search Music</h1>
 
     <div class="search-bar-container">
 
@@ -12,9 +10,17 @@
         type="text"
         [(ngModel)]="searchQuery"
         (keyup.enter)="onSearch()"
-        placeholder="Search for artists, songs, or albums..."
+        placeholder="Search title, artist, album, or genre..."
         maxlength="60"
       >
+
+      <select [(ngModel)]="selectedFilter" (change)="applyFilter()" class="filter-dropdown">
+        <option value="all">All Fields</option>
+        <option value="title">Title</option>
+        <option value="artist">Artist</option>
+        <option value="album">Album</option>
+        <option value="genre">Genre</option>
+      </select>
 
       <button (click)="onSearch()">
         Search
@@ -48,12 +54,24 @@
         </h3>
 
         <p class="artist-name">
-          {{ song.artist || 'Unknown Artist' }}
+          <strong>Artist:</strong> {{ song.artist || 'Unknown Artist' }}
+        </p>
+
+        <p class="album-name" *ngIf="song.album">
+          <strong>Album:</strong> {{ song.album }}
+        </p>
+
+        <p class="genre-tag" *ngIf="song.genre">
+          <strong>Genre:</strong> {{ song.genre }}
         </p>
 
       </div>
 
       <div class="card-actions">
+
+        <button class="play-now-btn" (click)="playSong(song)">
+          ▶ Play
+        </button>
 
         <select
           class="playlist-dropdown"
@@ -91,7 +109,7 @@
     *ngIf="songs.length === 0 && !errorMessage"
   >
     <p>
-      Enter a search term to find music.
+      Enter a search term to find music by title, artist, album, or genre.
     </p>
   </div>
 

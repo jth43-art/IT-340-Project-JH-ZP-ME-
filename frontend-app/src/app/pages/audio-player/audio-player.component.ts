@@ -1,5 +1,12 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { 
+  Component, 
+  Input, 
+  OnChanges, 
+  SimpleChanges, 
+  Inject, 
+  PLATFORM_ID 
+} from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-audio-player',
@@ -11,36 +18,45 @@ import { CommonModule } from '@angular/common';
 export class AudioPlayerComponent implements OnChanges {
   @Input() currentSong: any = null;
 
-  private audio = new Audio();
+  private audio: HTMLAudioElement | null = null;
   isPlaying: boolean = false;
   currentTime: number = 0;
   duration: number = 0;
   volume: number = 0.8;
+  isBrowser: boolean = false;
 
-  constructor() {
-    this.audio.volume = this.volume;
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
 
-    this.audio.ontimeupdate = () => {
-      this.currentTime = this.audio.currentTime || 0;
-    };
+    // Only instantiate the browser Audio API on the client side
+    if (this.isBrowser) {
+      this.audio = new Audio();
+      this.audio.volume = this.volume;
 
-    this.audio.onloadedmetadata = () => {
-      this.duration = this.audio.duration || 0;
-    };
+      this.audio.ontimeupdate = () => {
+        this.currentTime = this.audio?.currentTime || 0;
+      };
 
-    this.audio.onended = () => {
-      this.isPlaying = false;
-      this.currentTime = 0;
-    };
+      this.audio.onloadedmetadata = () => {
+        this.duration = this.audio?.duration || 0;
+      };
+
+      this.audio.onended = () => {
+        this.isPlaying = false;
+        this.currentTime = 0;
+      };
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['currentSong'] && this.currentSong) {
+    if (changes['currentSong'] && this.currentSong && this.isBrowser) {
       this.loadAndPlay();
     }
   }
 
   loadAndPlay(): void {
+    if (!this.audio) return;
+
     const streamUrl = this.currentSong.streamUrl || 
                       this.currentSong.url || 
                       `http://100.105.95.54:3000/songs/stream/${this.currentSong._id || this.currentSong.id}`;
@@ -53,7 +69,7 @@ export class AudioPlayerComponent implements OnChanges {
   }
 
   togglePlay(): void {
-    if (!this.audio.src) return;
+    if (!this.audio || !this.audio.src) return;
 
     if (this.isPlaying) {
       this.audio.pause();
@@ -65,6 +81,7 @@ export class AudioPlayerComponent implements OnChanges {
   }
 
   onSeek(event: Event): void {
+    if (!this.audio) return;
     const input = event.target as HTMLInputElement;
     const time = parseFloat(input.value);
     this.audio.currentTime = time;
@@ -72,6 +89,7 @@ export class AudioPlayerComponent implements OnChanges {
   }
 
   onVolumeChange(event: Event): void {
+    if (!this.audio) return;
     const input = event.target as HTMLInputElement;
     const vol = parseFloat(input.value);
     this.volume = vol;

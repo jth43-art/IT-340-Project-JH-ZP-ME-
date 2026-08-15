@@ -6,6 +6,7 @@ import { HomepageTvComponent } from './pages/homepage-tv/homepage-tv.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { SearchComponent } from './pages/search/search.component';
 import { PlaylistComponent } from './pages/playlist/playlist.component';
+import { MusicLibraryComponent } from './pages/music-library/music-library.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -19,6 +20,8 @@ export const routes: Routes = [
   { path: 'search', component: SearchComponent },
 
   { path: 'playlists', component: PlaylistComponent },
+
+  { path: 'music-library', component: MusicLibraryComponent },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 

@@ -1,64 +1,156 @@
 <div class="tv-container">
+
   <div class="tv-card">
+
     <header class="tv-header">
-      <h1>TuneVault</h1>
+
+      <h1>
+        TuneVault
+      </h1>
 
       <nav class="tv-nav">
-        <a routerLink="/homepage-tv">Home</a>
-        <a routerLink="/search">Library</a>
-        <a routerLink="/playlists">Playlists</a>
+
+        <a routerLink="/homepage-tv">
+          Home
+        </a>
+
+        <a routerLink="/search">
+          Library
+        </a>
+
+        <a routerLink="/playlists">
+          Playlists
+        </a>
+
       </nav>
+
     </header>
 
-    <div class="main-layout">
-      <aside class="user-corner">
-        <div class="user-info">
-          <p class="welcome-text">Welcome back,</p>
-          <h2 class="username-text">{{ username }}</h2>
-          <p class="role-badge">Role: {{ role }}</p>
 
-          <button class="logout-btn-minimal" (click)="onLogout()">
+    <div class="main-layout">
+
+      <!-- USER / ACCOUNT AREA -->
+      <aside class="user-corner">
+
+        <div class="user-info">
+
+          <p class="welcome-text">
+            Welcome back,
+          </p>
+
+          <h2 class="username-text">
+            {{ username }}
+          </h2>
+
+          <p class="role-badge">
+            Role: {{ role }}
+          </p>
+
+
+          <!-- MFA SETTINGS -->
+          <button
+            class="security-btn"
+            type="button"
+            (click)="manageMfa()"
+          >
+            {{
+              mfaEnabled
+                ? 'Disable MFA'
+                : 'Enable MFA'
+            }}
+          </button>
+
+
+          <!-- LOGOUT -->
+          <button
+            class="logout-btn-minimal"
+            type="button"
+            (click)="onLogout()"
+          >
             Logout
           </button>
+
         </div>
+
       </aside>
 
+
+      <!-- MUSIC PLAYER -->
       <main class="player-center">
+
         <div class="visualizer">
+
           <div class="bar"></div>
           <div class="bar"></div>
           <div class="bar"></div>
           <div class="bar"></div>
           <div class="bar"></div>
           <div class="bar"></div>
+
         </div>
+
 
         <div class="track-info">
-          <h2 class="song-title">Song Title</h2>
-          <h3 class="artist-name">Artist Name</h3>
+
+          <h2 class="song-title">
+            Song Title
+          </h2>
+
+          <h3 class="artist-name">
+            Artist Name
+          </h3>
+
         </div>
+
 
         <div class="player-controls-large">
+
           <div class="progress-container">
-            <div class="progress-bar"></div>
+
+            <div class="progress-bar">
+            </div>
+
           </div>
+
 
           <div class="playback-details">
-            <button class="play-circle">▶</button>
-            <span class="timestamp">2:34 / 4:12</span>
+
+            <button class="play-circle">
+              ▶
+            </button>
+
+            <span class="timestamp">
+              2:34 / 4:12
+            </span>
+
           </div>
+
         </div>
+
       </main>
+
     </div>
 
+
+    <!-- QUICK LINKS -->
     <footer class="quick-links-footer">
-      <button class="link-btn" routerLink="/playlists">
+
+      <button
+        class="link-btn"
+        routerLink="/playlists"
+      >
         My Playlists
       </button>
 
-      <button class="link-btn primary" routerLink="/playlists">
+      <button
+        class="link-btn primary"
+        routerLink="/playlists"
+      >
         + Create Playlist
       </button>
+
     </footer>
+
   </div>
+
 </div>

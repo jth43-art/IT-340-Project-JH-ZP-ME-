@@ -1,1 +1,68 @@
+<div class="mfa-page">
 
+  <div class="mfa-card">
+
+    <h1>Multi-Factor Authentication</h1>
+
+    <p class="description">
+      Open your authenticator app and enter
+      the 6-digit code for TuneVault.
+    </p>
+
+
+    <form
+      [formGroup]="mfaForm"
+      (ngSubmit)="onVerify()"
+    >
+
+      <label for="token">
+        Authentication Code
+      </label>
+
+
+      <input
+        id="token"
+        type="text"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        maxlength="6"
+        placeholder="000000"
+        formControlName="token"
+      >
+
+
+      <div
+        class="error"
+        *ngIf="errorMessage"
+      >
+        {{ errorMessage }}
+      </div>
+
+
+      <button
+        type="submit"
+        [disabled]="isLoading"
+      >
+
+        {{
+          isLoading
+            ? 'Verifying...'
+            : 'Verify'
+        }}
+
+      </button>
+
+    </form>
+
+
+    <button
+      type="button"
+      class="back-button"
+      (click)="backToLogin()"
+    >
+      Back to Login
+    </button>
+
+  </div>
+
+</div>

@@ -7,11 +7,14 @@ import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard
 import { SearchComponent } from './pages/search/search.component';
 import { PlaylistComponent } from './pages/playlist/playlist.component';
 import { MusicLibraryComponent } from './pages/music-library/music-library.component';
+import MfaVerifyComponent from './pages/mfa-verify/mfa-verify.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
 
   { path: 'register', component: RegisterComponent },
+
+  { path: 'mfa-verify', component: MfaVerifyComponent },
 
   { path: 'homepage-tv', component: HomepageTvComponent },
 

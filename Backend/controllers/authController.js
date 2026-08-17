@@ -2,6 +2,11 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+// ==========================================
+// REGISTER
+// POST /api/auth/register
+// ==========================================
+
 exports.register = async (req, res) => {
   try {
     const { fullName, email, username, password } = req.body || {};
@@ -12,15 +17,24 @@ exports.register = async (req, res) => {
       typeof username !== "string" ||
       typeof password !== "string"
     ) {
-      return res.status(400).json({ message: "Invalid input" });
+      return res.status(400).json({
+        message: "Invalid input"
+      });
     }
 
     const cleanFullName = fullName.trim();
     const cleanEmail = email.trim().toLowerCase();
     const cleanUsername = username.trim();
 
-    if (!cleanFullName || !cleanEmail || !cleanUsername || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (
+      !cleanFullName ||
+      !cleanEmail ||
+      !cleanUsername ||
+      !password
+    ) {
+      return res.status(400).json({
+        message: "All fields are required"
+      });
     }
 
     const existing = await User.findOne({
@@ -31,7 +45,9 @@ exports.register = async (req, res) => {
     });
 
     if (existing) {
-      return res.status(400).json({ message: "User exists" });
+      return res.status(400).json({
+        message: "User already exists"
+      });
     }
 
     const hash = await bcrypt.hash(password, 10);
@@ -44,20 +60,34 @@ exports.register = async (req, res) => {
       role: "user"
     });
 
-    res.status(201).json({
-      message: "Registered",
+    return res.status(201).json({
+      message: "Registered successfully",
       userId: user._id
     });
 
   } catch (err) {
     console.error("Register error:", err);
-    res.status(500).json({ message: "Server error" });
+
+    return res.status(500).json({
+      message: "Server error"
+    });
   }
 };
 
+
+// ==========================================
+// LOGIN
+// POST /api/auth/login
+// ==========================================
+
 exports.login = async (req, res) => {
   try {
-    const { email, username, identifier, password, mfaToken } = req.body || {};
+    const {
+      identifier,
+      email,
+      username,
+      password
+    } = req.body || {};
 
     const loginIdentifier =
       identifier ||
@@ -68,10 +98,19 @@ exports.login = async (req, res) => {
       typeof loginIdentifier !== "string" ||
       typeof password !== "string"
     ) {
-      return res.status(400).json({ message: "Invalid input" });
+      return res.status(400).json({
+        message: "Invalid input"
+      });
     }
 
-    const cleanIdentifier = loginIdentifier.trim().toLowerCase();
+    const cleanIdentifier =
+      loginIdentifier.trim().toLowerCase();
+
+    if (!cleanIdentifier || !password) {
+      return res.status(400).json({
+        message: "All fields are required"
+      });
+    }
 
     const user = await User.findOne({
       $or: [
@@ -81,21 +120,51 @@ exports.login = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    const ok = await bcrypt.compare(password, user.password);
-
-    if (!ok) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    if (user.mfaEnabled && !mfaToken) {
-      return res.status(403).json({
-        message: "MFA required",
-        mfaRequired: true
+      return res.status(400).json({
+        message: "Invalid credentials"
       });
     }
+
+    const passwordCorrect = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!passwordCorrect) {
+      return res.status(400).json({
+        message: "Invalid credentials"
+      });
+    }
+
+    // ======================================
+    // MFA REQUIRED
+    // ======================================
+
+    if (user.mfaEnabled) {
+
+      // Temporary token only allows MFA login verification.
+      // It is NOT the user's authenticated session token.
+      const tempToken = jwt.sign(
+        {
+          _id: user._id,
+          purpose: "mfa-login"
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "5m"
+        }
+      );
+
+      return res.status(403).json({
+        message: "MFA required",
+        mfaRequired: true,
+        tempToken
+      });
+    }
+
+    // ======================================
+    // MFA NOT ENABLED - NORMAL LOGIN
+    // ======================================
 
     const token = jwt.sign(
       {
@@ -104,12 +173,15 @@ exports.login = async (req, res) => {
         role: user.role
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      {
+        expiresIn: "1h"
+      }
     );
 
-    res.json({
+    return res.status(200).json({
       message: "Login successful",
       token,
+
       user: {
         id: user._id,
         fullName: user.fullName,
@@ -122,6 +194,9 @@ exports.login = async (req, res) => {
 
   } catch (err) {
     console.error("Login error:", err);
-    res.status(500).json({ message: "Server error" });
+
+    return res.status(500).json({
+      message: "Server error"
+    });
   }
 };

@@ -54,12 +54,6 @@ const UserSchema = new mongoose.Schema({
   // Songs uploaded by this user
   uploadedSongs: [{
     type: String
-  }],
-
-  // Songs favorited by this user
-  favoriteSongs: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Song"
   }]
 });
 

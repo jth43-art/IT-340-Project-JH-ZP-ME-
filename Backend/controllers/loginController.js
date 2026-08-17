@@ -11,6 +11,7 @@ const loginUser = async (req, res) => {
 
     log(`LOGIN attempt: ${identifier}`);
 
+    // Prevent NoSQL injection
     if (
       typeof identifier !== "string" ||
       typeof password !== "string"
@@ -20,15 +21,16 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const cleanIdentifier = identifier.trim().toLowerCase();
-    const cleanPassword = password.trim();
+    const cleanIdentifier =
+      identifier.trim().toLowerCase();
 
-    if (!cleanIdentifier || !cleanPassword) {
+    if (!cleanIdentifier || !password) {
       return res.status(400).json({
         message: "All fields are required"
       });
     }
 
+    // Find by email OR username
     const user = await User.findOne({
       $or: [
         { email: cleanIdentifier },
@@ -44,8 +46,9 @@ const loginUser = async (req, res) => {
       });
     }
 
+    // Verify password
     const isMatch = await bcrypt.compare(
-      cleanPassword,
+      password,
       user.password
     );
 
@@ -57,7 +60,33 @@ const loginUser = async (req, res) => {
       });
     }
 
-    log(`LOGIN success: ${cleanIdentifier}`);
+    // ======================================
+    // MFA REQUIRED
+    // ======================================
+
+    if (user.mfaEnabled) {
+
+      const tempToken = jwt.sign(
+        {
+          _id: user._id,
+          purpose: "mfa-login"
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "5m"
+        }
+      );
+
+      return res.status(403).json({
+        message: "MFA required",
+        mfaRequired: true,
+        tempToken
+      });
+    }
+
+    // ======================================
+    // MFA NOT ENABLED
+    // ======================================
 
     const token = jwt.sign(
       {
@@ -66,8 +95,12 @@ const loginUser = async (req, res) => {
         role: user.role
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      {
+        expiresIn: "1h"
+      }
     );
+
+    log(`LOGIN success: ${cleanIdentifier}`);
 
     return res.status(200).json({
       message: "Login successful",

@@ -4,27 +4,32 @@ const songSchema = new mongoose.Schema({
   // Basic song information
   title: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
 
   artist: {
     type: String,
-    default: ''
+    default: '',
+    trim: true
   },
 
   album: {
     type: String,
-    default: ''
+    default: '',
+    trim: true
   },
 
   genre: {
     type: String,
-    default: ''
+    default: '',
+    trim: true
   },
 
   duration: {
     type: Number,
-    default: null
+    default: null,
+    min: 0
   },
 
   // Uploaded MP3 information
@@ -35,7 +40,8 @@ const songSchema = new mongoose.Schema({
 
   fileSize: {
     type: Number,
-    default: null
+    default: null,
+    min: 0
   },
 
   mimeType: {
@@ -80,5 +86,21 @@ const songSchema = new mongoose.Schema({
   // Automatically creates createdAt and updatedAt
   timestamps: true
 });
+
+// ==========================================
+// SEARCH INDEXES
+// ==========================================
+
+// Speeds up direct searches and sorting by title
+songSchema.index({ title: 1 });
+
+// Speeds up direct searches and sorting by artist
+songSchema.index({ artist: 1 });
+
+// Speeds up direct searches and sorting by album
+songSchema.index({ album: 1 });
+
+// Useful if the app commonly searches title + artist together
+songSchema.index({ title: 1, artist: 1 });
 
 module.exports = mongoose.model('Song', songSchema);

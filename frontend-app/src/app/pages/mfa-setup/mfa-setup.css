@@ -1,1 +1,172 @@
+.mfa-wrapper {
+  min-height: 100vh;
+  background: #dceff9;
 
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding-top: 40px;
+}
+
+.mfa-card {
+  width: 100%;
+  max-width: 520px;
+
+  background: #ffffff;
+
+  border: 1px solid #a9cce3;
+  border-radius: 0 0 10px 10px;
+
+  overflow: hidden;
+  text-align: center;
+}
+
+.mfa-top-bar {
+  background: #2f6595;
+  color: white;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  padding: 8px;
+}
+
+.mfa-title {
+  color: #245c91;
+
+  font-size: 20px;
+  font-weight: bold;
+
+  padding: 16px;
+
+  border-bottom: 1px solid #b9d7ea;
+}
+
+.setup-start,
+.setup-content {
+  padding: 20px;
+}
+
+.setup-start p,
+.setup-content p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.step-title {
+  color: #245c91;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  margin-top: 16px;
+  margin-bottom: 10px;
+}
+
+.qr-container {
+  margin: 20px 0;
+}
+
+.qr-container img {
+  width: 220px;
+  max-width: 100%;
+}
+
+.manual-secret {
+  padding: 12px;
+
+  background: #f3f8fc;
+
+  border: 1px solid #b9d7ea;
+
+  margin-bottom: 20px;
+}
+
+.manual-secret code {
+  display: block;
+
+  word-break: break-all;
+
+  margin-top: 8px;
+
+  font-size: 13px;
+}
+
+.code-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+
+  margin: 18px 0;
+}
+
+.code-row input {
+  width: 180px;
+
+  border: none;
+  border-bottom: 1px solid #b0b0b0;
+
+  outline: none;
+
+  text-align: center;
+
+  font-size: 18px;
+  letter-spacing: 7px;
+
+  padding: 6px;
+}
+
+button {
+  width: 100%;
+
+  background: #4389c4;
+  color: white;
+
+  border: none;
+
+  padding: 12px;
+
+  font-size: 15px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #b42318;
+
+  font-size: 13px;
+
+  padding: 10px;
+}
+
+.success-message {
+  color: #137333;
+
+  font-size: 13px;
+
+  padding: 10px;
+}
+
+.cancel-section {
+  padding: 14px;
+
+  border-top: 1px solid #b9d7ea;
+}
+
+.cancel-button {
+  background: none;
+  color: #2d6fa3;
+
+  font-style: italic;
+
+  padding: 5px;
+}

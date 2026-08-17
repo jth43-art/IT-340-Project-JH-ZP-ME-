@@ -10,10 +10,11 @@ const homepageRoute = require('./routes/homepage');
 const playlistRoute = require('./routes/playlists');
 const searchRoute = require('./routes/search');
 const mockAuth = require('./middleware/mockAuth');
+const auth = require('./middleware/auth');
 const uploadRoutes = require('./routes/upload');
-const authRoutes = require("./routes/auth");
-const mfaRoutes = require("./routes/mfa");
-const streamRoutes = require("./routes/stream");
+const authRoutes = require('./routes/auth');
+const mfaRoutes = require('./routes/mfa');
+const streamRoutes = require('./routes/stream');
 
 const app = express();
 
@@ -38,10 +39,6 @@ app.use(cors({
 // =========================
 
 app.use(express.json());
-app.use("/api/playlists", auth);
-app.use("/api/upload", auth);
-app.use("/api/favorites", auth);
-app.use("/api/admin", auth);
 
 // =========================
 // PUBLIC ROUTES
@@ -51,18 +48,27 @@ app.use('/login', loginRoute);
 app.use('/register', registerRoute);
 app.use('/homepage', homepageRoute);
 app.use('/search', searchRoute);
-app.use('/api/upload', uploadRoutes);
+
+// New authentication endpoints
+app.use('/api/auth', authRoutes);
+app.use('/api/mfa', mfaRoutes);
+
+// =========================
+// PROTECTED ROUTES
+// =========================
+
+// Uploads require JWT authentication
+app.use('/api/upload', auth, uploadRoutes);
+
+// Streaming routes
+app.use('/api', streamRoutes);
 
 // =========================
 // MOCK AUTH
-// MUST COME BEFORE PLAYLIST ROUTES
+// Legacy playlist compatibility
 // =========================
 
 app.use(mockAuth);
-app.use("/api/auth", authRoutes);
-app.use("/api/mfa", mfaRoutes);
-app.use("/api/upload", uploadRoutes);
-app.use("/api", streamRoutes);
 
 // =========================
 // PLAYLIST ROUTES

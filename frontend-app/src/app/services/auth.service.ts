@@ -10,7 +10,6 @@ export class AuthService {
 
   private baseUrl = 'http://100.105.95.54:3000';
 
-  // Properties required by existing TuneVault components
   currentUser: string = '';
   loggedInUser: string = '';
   userRole: string = 'user';
@@ -29,7 +28,7 @@ export class AuthService {
   }
 
   // ==========================================
-  // LOGIN WITH USERNAME / EMAIL + PASSWORD
+  // LOGIN
   // ==========================================
 
   login(credentials: any): Observable<any> {
@@ -38,14 +37,9 @@ export class AuthService {
       credentials
     ).pipe(
       tap((res: any) => {
-
-        // A normal login returns the real JWT here.
-        // MFA-enabled accounts return a 403 instead,
-        // so this code will NOT run until MFA is complete.
         if (res?.token) {
           this.storeSession(res);
         }
-
       })
     );
   }
@@ -67,31 +61,82 @@ export class AuthService {
       }
     ).pipe(
       tap((res: any) => {
-
-        // MFA succeeded.
-        // Backend has now returned the real JWT.
         if (res?.token) {
           this.storeSession(res);
         }
-
       })
     );
   }
 
   // ==========================================
-  // TEMPORARY MFA TOKEN
+  // MFA SETUP - GENERATE QR CODE
+  // ==========================================
+
+  enableMfa(): Observable<any> {
+
+    return this.http.post(
+      `${this.baseUrl}/api/mfa/enable`,
+      {},
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+
+  }
+
+  // ==========================================
+  // MFA SETUP - VERIFY FIRST 6-DIGIT CODE
+  // ==========================================
+
+  verifyMfaSetup(token: string): Observable<any> {
+
+    return this.http.post(
+      `${this.baseUrl}/api/mfa/verify`,
+      {
+        token
+      },
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+
+  }
+
+  // ==========================================
+  // DISABLE MFA
+  // ==========================================
+
+  disableMfa(): Observable<any> {
+
+    return this.http.post(
+      `${this.baseUrl}/api/mfa/disable`,
+      {},
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+
+  }
+
+  // ==========================================
+  // TEMPORARY MFA LOGIN TOKEN
   // ==========================================
 
   saveMfaTempToken(tempToken: string): void {
+
     if (typeof localStorage !== 'undefined') {
+
       localStorage.setItem(
         'mfaTempToken',
         tempToken
       );
+
     }
+
   }
 
   getMfaTempToken(): string {
+
     if (typeof localStorage === 'undefined') {
       return '';
     }
@@ -99,18 +144,23 @@ export class AuthService {
     return localStorage.getItem(
       'mfaTempToken'
     ) || '';
+
   }
 
   clearMfaTempToken(): void {
+
     if (typeof localStorage !== 'undefined') {
+
       localStorage.removeItem(
         'mfaTempToken'
       );
+
     }
+
   }
 
   // ==========================================
-  // STORE AUTHENTICATED SESSION
+  // STORE LOGGED-IN SESSION
   // ==========================================
 
   private storeSession(res: any): void {
@@ -140,10 +190,12 @@ export class AuthService {
     }
 
     if (token) {
+
       localStorage.setItem(
         'token',
         token
       );
+
     }
 
     localStorage.setItem(
@@ -161,13 +213,11 @@ export class AuthService {
       this.userRole
     );
 
-    // MFA challenge is finished once
-    // the real authentication token exists.
     this.clearMfaTempToken();
   }
 
   // ==========================================
-  // USER DATA
+  // SET USER DATA
   // ==========================================
 
   setUserData(
@@ -192,6 +242,7 @@ export class AuthService {
       );
 
     }
+
   }
 
   // ==========================================
@@ -223,6 +274,7 @@ export class AuthService {
         user?._id ||
         ''
     });
+
   }
 
   // ==========================================
@@ -238,10 +290,11 @@ export class AuthService {
     if (typeof localStorage !== 'undefined') {
       localStorage.clear();
     }
+
   }
 
   // ==========================================
-  // AUTH STATUS
+  // LOGIN STATUS
   // ==========================================
 
   isLoggedIn(): boolean {
@@ -250,10 +303,8 @@ export class AuthService {
       return false;
     }
 
-    // Require the real JWT.
-    // Do not count the temporary MFA token
-    // as a logged-in session.
     return !!localStorage.getItem('token');
+
   }
 
   getUsername(): string {
@@ -270,6 +321,7 @@ export class AuthService {
       localStorage.getItem('username') ||
       'Guest'
     );
+
   }
 
   isAdmin(): boolean {
@@ -285,5 +337,6 @@ export class AuthService {
     return (
       localStorage.getItem('role') === 'admin'
     );
+
   }
 }

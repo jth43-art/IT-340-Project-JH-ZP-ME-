@@ -45,34 +45,92 @@
     padding: 20px;
 }
 
-/* 1. Welcome Corner (Left) */
+/* Welcome Corner */
 .user-corner {
     position: absolute;
     top: 20px;
     left: 40px;
     text-align: left;
     width: fit-content;
+    min-width: 150px;
     padding: 15px;
     background: #f8fbff;
     border-radius: 12px;
     border: 1px solid #d0e4f5;
 }
 
-.welcome-text { margin: 0; font-size: 0.9rem; color: #666; }
-.username-text { margin: 5px 0; color: #3b6b91; font-size: 1.4rem; }
-.role-badge { font-size: 0.8rem; color: #999; margin-bottom: 10px; }
+.welcome-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
 
+.username-text {
+    margin: 5px 0;
+    color: #3b6b91;
+    font-size: 1.4rem;
+}
+
+.role-badge {
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+/* MFA Security Button */
+.security-btn {
+    display: block;
+    width: 100%;
+
+    background: #eaf4fb;
+    color: #3b6b91;
+
+    border: 1px solid #b8d4e8;
+
+    padding: 7px 12px;
+    margin-bottom: 8px;
+
+    border-radius: 6px;
+
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s,
+        transform 0.2s;
+}
+
+.security-btn:hover {
+    background: #dcecf7;
+    transform: translateY(-1px);
+}
+
+/* Logout Button */
 .logout-btn-minimal {
+    display: block;
+    width: 100%;
+
     background: #ffeded;
     color: #d9534f;
+
     border: 1px solid #ffcccc;
-    padding: 5px 12px;
+
+    padding: 7px 12px;
+
     border-radius: 6px;
+
     font-size: 0.8rem;
+
     cursor: pointer;
 }
 
-/* 2. Now Playing (Center & Animated) */
+.logout-btn-minimal:hover {
+    background: #ffe1e1;
+}
+
+/* Now Playing */
 .player-center {
     flex: 1;
     display: flex;
@@ -81,8 +139,18 @@
     align-items: center;
 }
 
-.song-title { font-size: 3.5rem; margin: 10px 0 0 0; color: #222; }
-.artist-name { font-size: 1.8rem; color: #3b6b91; margin: 0; opacity: 0.8; }
+.song-title {
+    font-size: 3.5rem;
+    margin: 10px 0 0 0;
+    color: #222;
+}
+
+.artist-name {
+    font-size: 1.8rem;
+    color: #3b6b91;
+    margin: 0;
+    opacity: 0.8;
+}
 
 /* Visualizer Animation */
 .visualizer {
@@ -100,17 +168,39 @@
 }
 
 @keyframes bounce {
-    0%, 100% { height: 20px; }
-    50% { height: 80px; }
+    0%, 100% {
+        height: 20px;
+    }
+
+    50% {
+        height: 80px;
+    }
 }
 
-/* Stagger the animation bars */
-.bar:nth-child(1) { animation-delay: 0.1s; }
-.bar:nth-child(2) { animation-delay: 0.3s; }
-.bar:nth-child(3) { animation-delay: 0.6s; }
-.bar:nth-child(4) { animation-delay: 0.2s; }
-.bar:nth-child(5) { animation-delay: 0.4s; }
-.bar:nth-child(6) { animation-delay: 0.5s; }
+/* Stagger animation bars */
+.bar:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.bar:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.bar:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.bar:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.bar:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+.bar:nth-child(6) {
+    animation-delay: 0.5s;
+}
 
 /* Player Controls */
 .player-controls-large {
@@ -152,7 +242,9 @@
     transition: transform 0.2s;
 }
 
-.play-circle:hover { transform: scale(1.1); }
+.play-circle:hover {
+    transform: scale(1.1);
+}
 
 /* Footer Links */
 .quick-links-footer {

@@ -34,7 +34,6 @@ import {
   templateUrl: './mfa-setup.component.html',
   styleUrl: './mfa-setup.css'
 })
-
 export default class MfaSetupComponent {
 
   qrCode: string = '';
@@ -47,6 +46,7 @@ export default class MfaSetupComponent {
   setupStarted: boolean = false;
 
   verifyForm = new FormGroup({
+
     token: new FormControl(
       '',
       [
@@ -54,6 +54,7 @@ export default class MfaSetupComponent {
         Validators.pattern(/^\d{6}$/)
       ]
     )
+
   });
 
   constructor(
@@ -72,32 +73,39 @@ export default class MfaSetupComponent {
     this.successMessage = '';
     this.isLoading = true;
 
-    this.authService.enableMfa().subscribe({
+    this.authService
+      .enableMfa()
+      .subscribe({
 
-      next: (response: any) => {
+        next: (response: any) => {
 
-        this.isLoading = false;
+          this.isLoading = false;
 
-        this.qrCode = response?.qrCode || '';
-        this.secret = response?.secret || '';
+          this.qrCode =
+            response?.qrCode || '';
 
-        this.setupStarted = true;
+          this.secret =
+            response?.secret || '';
 
-        this.cdr.detectChanges();
-      },
+          this.setupStarted = true;
 
-      error: (err: any) => {
+          this.cdr.detectChanges();
 
-        this.isLoading = false;
+        },
 
-        this.errorMessage =
-          err.error?.message ||
-          'Unable to start MFA setup.';
+        error: (err: any) => {
 
-        this.cdr.detectChanges();
-      }
+          this.isLoading = false;
 
-    });
+          this.errorMessage =
+            err.error?.message ||
+            'Unable to start MFA setup.';
+
+          this.cdr.detectChanges();
+
+        }
+
+      });
   }
 
   // ==========================================
@@ -124,41 +132,74 @@ export default class MfaSetupComponent {
 
     this.isLoading = true;
 
-    this.authService.verifyMfaSetup(code).subscribe({
+    this.authService
+      .verifyMfaSetup(code)
+      .subscribe({
 
-      next: () => {
+        next: () => {
 
-        this.isLoading = false;
+          this.isLoading = false;
 
-        this.successMessage =
-          'MFA has been enabled successfully.';
+          this.successMessage =
+            'MFA has been enabled successfully.';
 
-        this.cdr.detectChanges();
+          // ==================================
+          // UPDATE LOCAL USER SESSION
+          // ==================================
 
-        setTimeout(() => {
-          this.router.navigate(['/homepage-tv']);
-        }, 1000);
-      },
+          const userData =
+            localStorage.getItem('user');
 
-      error: (err: any) => {
+          if (userData) {
 
-        this.isLoading = false;
+            const user =
+              JSON.parse(userData);
 
-        this.errorMessage =
-          err.error?.message ||
-          'Invalid authentication code.';
+            user.mfaEnabled = true;
 
-        this.cdr.detectChanges();
-      }
+            localStorage.setItem(
+              'user',
+              JSON.stringify(user)
+            );
 
-    });
+          }
+
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+
+            this.router.navigate([
+              '/homepage-tv'
+            ]);
+
+          }, 1000);
+
+        },
+
+        error: (err: any) => {
+
+          this.isLoading = false;
+
+          this.errorMessage =
+            err.error?.message ||
+            'Invalid authentication code.';
+
+          this.cdr.detectChanges();
+
+        }
+
+      });
   }
 
   // ==========================================
-  // CANCEL
+  // CANCEL MFA SETUP
   // ==========================================
 
   cancel(): void {
-    this.router.navigate(['/homepage-tv']);
+
+    this.router.navigate([
+      '/homepage-tv'
+    ]);
+
   }
 }

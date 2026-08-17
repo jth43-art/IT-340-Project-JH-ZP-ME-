@@ -1,1 +1,169 @@
+<div class="mfa-wrapper">
 
+  <div class="mfa-card">
+
+    <div class="mfa-top-bar">
+      MFA SETUP
+    </div>
+
+    <div class="mfa-title">
+      Secure Your TuneVault Account
+    </div>
+
+    <div
+      class="setup-start"
+      *ngIf="!setupStarted"
+    >
+
+      <p>
+        TuneVault can use an authenticator app
+        to add an extra layer of security to your account.
+      </p>
+
+      <p>
+        You can use Google Authenticator,
+        Microsoft Authenticator, Authy,
+        or another compatible authenticator app.
+      </p>
+
+      <button
+        type="button"
+        (click)="enableMfa()"
+        [disabled]="isLoading"
+      >
+        {{
+          isLoading
+            ? 'SETTING UP...'
+            : 'ENABLE MFA'
+        }}
+      </button>
+
+    </div>
+
+
+    <div
+      class="setup-content"
+      *ngIf="setupStarted"
+    >
+
+      <div class="step-title">
+        Step 1 — Scan the QR Code
+      </div>
+
+      <p>
+        Open your authenticator app and scan this QR code.
+      </p>
+
+      <div
+        class="qr-container"
+        *ngIf="qrCode"
+      >
+        <img
+          [src]="qrCode"
+          alt="TuneVault MFA QR Code"
+        >
+      </div>
+
+
+      <div class="manual-secret">
+
+        <p>
+          If you cannot scan the QR code,
+          enter this setup key manually:
+        </p>
+
+        <code>
+          {{ secret }}
+        </code>
+
+      </div>
+
+
+      <div class="step-title">
+        Step 2 — Verify Setup
+      </div>
+
+      <p>
+        Enter the current 6-digit code
+        displayed in your authenticator app.
+      </p>
+
+
+      <form
+        [formGroup]="verifyForm"
+        (ngSubmit)="verifyMfa()"
+      >
+
+        <div class="code-row">
+
+          <span>[</span>
+
+          <input
+            type="text"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="6"
+            placeholder="000000"
+            formControlName="token"
+          >
+
+          <span>]</span>
+
+        </div>
+
+
+        <div
+          class="error-message"
+          *ngIf="errorMessage"
+        >
+          {{ errorMessage }}
+        </div>
+
+
+        <div
+          class="success-message"
+          *ngIf="successMessage"
+        >
+          {{ successMessage }}
+        </div>
+
+
+        <button
+          type="submit"
+          [disabled]="isLoading"
+        >
+          {{
+            isLoading
+              ? 'VERIFYING...'
+              : 'VERIFY & ENABLE MFA'
+          }}
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <div
+      class="error-message"
+      *ngIf="errorMessage && !setupStarted"
+    >
+      {{ errorMessage }}
+    </div>
+
+
+    <div class="cancel-section">
+
+      <button
+        type="button"
+        class="cancel-button"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

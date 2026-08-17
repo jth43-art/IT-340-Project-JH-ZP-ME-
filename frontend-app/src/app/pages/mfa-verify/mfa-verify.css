@@ -1,1 +1,84 @@
+.mfa-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
 
+.mfa-card {
+  width: 100%;
+  max-width: 520px;
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  text-align: center;
+
+  box-shadow:
+    0 4px 18px
+    rgba(0, 0, 0, 0.12);
+}
+
+.mfa-card h1 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.description {
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  text-align: left;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  box-sizing: border-box;
+
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 8px;
+
+  border:
+    1px solid #ccc;
+
+  border-radius: 6px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+
+  border: none;
+  border-radius: 6px;
+
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.back-button {
+  margin-top: 12px;
+}
+
+.error {
+  padding: 10px;
+  border-radius: 6px;
+}

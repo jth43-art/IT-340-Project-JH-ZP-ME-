@@ -8,6 +8,7 @@ import { SearchComponent } from './pages/search/search.component';
 import { PlaylistComponent } from './pages/playlist/playlist.component';
 import { MusicLibraryComponent } from './pages/music-library/music-library.component';
 import MfaVerifyComponent from './pages/mfa-verify/mfa-verify.component';
+import MfaSetupComponent from './pages/mfa-setup/mfa-setup.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -15,6 +16,8 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
 
   { path: 'mfa-verify', component: MfaVerifyComponent },
+
+  { path: 'mfa-setup', component: MfaSetupComponent },
 
   { path: 'homepage-tv', component: HomepageTvComponent },
 

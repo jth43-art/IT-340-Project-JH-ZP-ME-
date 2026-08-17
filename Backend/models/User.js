@@ -1,17 +1,11 @@
 // Used Copilot to construct basis for code
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  passwordHash: { type: String, required: true },
-  role: { type: String, default: "user" },
-  mfaEnabled: { type: Boolean, default: false },
-  mfaSecret: { type: String, default: null },
-  uploadedSongs: [{ type: String }]
-});
-
 const UserSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
+  fullName: {
+    type: String,
+    required: true
+  },
 
   email: {
     type: String,
@@ -39,7 +33,28 @@ const UserSchema = new mongoose.Schema({
     type: String,
     enum: ["user", "admin"],
     default: "user"
-  }
+  },
+
+  // Multi-Factor Authentication (MFA)
+  mfaEnabled: {
+    type: Boolean,
+    default: false
+  },
+
+  mfaSecret: {
+    type: String,
+    default: null
+  },
+
+  // Backup recovery codes for MFA
+  backupCodes: [{
+    type: String
+  }],
+
+  // Songs uploaded by this user
+  uploadedSongs: [{
+    type: String
+  }]
 });
 
 module.exports = mongoose.model("User", UserSchema);

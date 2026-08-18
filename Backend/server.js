@@ -1,4 +1,5 @@
 // Used Copilot to construct basis for code
+require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');

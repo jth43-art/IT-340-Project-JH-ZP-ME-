@@ -1,0 +1,61 @@
+<div class="upload-container">
+  <div class="upload-header">
+    <h1>Upload MP3 Music</h1>
+    <p>Add new tracks to the system library</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-box">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success-box">{{ successMessage }}</div>
+
+  <form (ngSubmit)="onSubmit()" class="upload-form">
+    <!-- DRAG AND DROP ZONE -->
+    <div 
+      class="drop-zone" 
+      [class.drag-over]="isDragOver"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <div class="drop-zone-content">
+        <span class="upload-icon">🎵</span>
+        <p *ngIf="!selectedAudioFile">Drag and drop an MP3 file here, or click to browse</p>
+        <p *ngIf="selectedAudioFile" class="file-name">Selected: <strong>{{ selectedAudioFile.name }}</strong></p>
+        <input type="file" accept="audio/*" (change)="onAudioSelected($event)" class="file-input">
+      </div>
+    </div>
+
+    <!-- METADATA INPUTS -->
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Song Title *</label>
+        <input type="text" [(ngModel)]="title" name="title" placeholder="Enter title" required>
+      </div>
+
+      <div class="form-group">
+        <label>Artist</label>
+        <input type="text" [(ngModel)]="artist" name="artist" placeholder="Enter artist name">
+      </div>
+
+      <div class="form-group">
+        <label>Album</label>
+        <input type="text" [(ngModel)]="album" name="album" placeholder="Enter album name">
+      </div>
+
+      <div class="form-group">
+        <label>Genre</label>
+        <input type="text" [(ngModel)]="genre" name="genre" placeholder="e.g. Pop, Rock, Jazz">
+      </div>
+    </div>
+
+    <!-- ALBUM ARTWORK UPLOAD -->
+    <div class="form-group">
+      <label>Album Artwork (Image File)</label>
+      <input type="file" accept="image/*" (change)="onImageSelected($event)">
+      <p *ngIf="selectedImageFile" class="file-hint">Selected Artwork: {{ selectedImageFile.name }}</p>
+    </div>
+
+    <button type="submit" [disabled]="isUploading" class="submit-btn">
+      {{ isUploading ? 'Uploading...' : 'Submit Upload' }}
+    </button>
+  </form>
+</div>

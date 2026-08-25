@@ -1,4 +1,51 @@
 /* Used AI to generate style.css file for frontend */
+
+/* Universal Top Navigation Header */
+.tv-header {
+  background-color: #3b6b91;
+  color: white;
+  padding: 18px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.tv-header .logo {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tv-nav {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.tv-nav a {
+  color: #cce7ff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.tv-nav a:hover {
+  color: #ffffff;
+}
+
+/* Highlights the active page automatically */
+.tv-nav a.active {
+  color: #ffffff;
+  font-weight: 700;
+  border-bottom: 2px solid #ffffff;
+  padding-bottom: 2px;
+}
+
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;

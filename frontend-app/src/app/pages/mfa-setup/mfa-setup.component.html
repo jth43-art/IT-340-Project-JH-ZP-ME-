@@ -1,4 +1,5 @@
 <div class="mfa-page">
+
   <div class="mfa-card">
 
     <div class="mfa-header">
@@ -30,15 +31,15 @@
       </div>
 
       <div
-        *ngIf="errorMessage"
         class="message error-message"
+        *ngIf="errorMessage"
       >
         {{ errorMessage }}
       </div>
 
       <div
-        *ngIf="successMessage"
         class="message success-message"
+        *ngIf="successMessage"
       >
         {{ successMessage }}
       </div>
@@ -47,12 +48,30 @@
         class="start-section"
         *ngIf="!setupStarted"
       >
+
         <div class="info-box">
+
           <h3>How it works</h3>
 
-          <p>1. Enable MFA below.</p>
-          <p>2. Scan the QR code with your authenticator app.</p>
-          <p>3. Enter the 6-digit verification code.</p>
+          <div class="info-step">
+            <span class="small-step">1</span>
+            <span>Enable MFA below.</span>
+          </div>
+
+          <div class="info-step">
+            <span class="small-step">2</span>
+            <span>
+              Scan the QR code with your authenticator app.
+            </span>
+          </div>
+
+          <div class="info-step">
+            <span class="small-step">3</span>
+            <span>
+              Enter the 6-digit verification code.
+            </span>
+          </div>
+
         </div>
 
         <button
@@ -71,6 +90,7 @@
         >
           CANCEL
         </button>
+
       </div>
 
       <div
@@ -79,16 +99,18 @@
       >
 
         <div class="step-box">
+
           <div class="step-number">
             1
           </div>
 
           <div class="step-content">
+
             <h3>Scan the QR Code</h3>
 
             <p>
               Open Google Authenticator or another compatible
-              authenticator app and scan this code.
+              authenticator app and scan this QR code.
             </p>
 
             <div
@@ -105,8 +127,9 @@
               class="manual-key"
               *ngIf="secret"
             >
+
               <span class="manual-label">
-                Can't scan it?
+                Can't scan the QR code?
               </span>
 
               <span class="manual-description">
@@ -116,18 +139,23 @@
               <div class="secret-box">
                 {{ secret }}
               </div>
+
             </div>
+
           </div>
+
         </div>
 
         <div class="step-divider"></div>
 
         <div class="step-box">
+
           <div class="step-number">
             2
           </div>
 
           <div class="step-content">
+
             <h3>Verify Your Code</h3>
 
             <p>
@@ -139,7 +167,9 @@
               [formGroup]="verifyForm"
               (ngSubmit)="verifyMfa()"
             >
+
               <div class="code-container">
+
                 <span class="bracket">[</span>
 
                 <input
@@ -152,17 +182,21 @@
                 >
 
                 <span class="bracket">]</span>
+
               </div>
 
               <button
-                class="primary-btn verify-btn"
+                class="primary-btn"
                 type="submit"
                 [disabled]="isLoading"
               >
                 {{ isLoading ? 'VERIFYING...' : 'VERIFY & ENABLE MFA' }}
               </button>
+
             </form>
+
           </div>
+
         </div>
 
         <button
@@ -182,4 +216,5 @@
     </div>
 
   </div>
+
 </div>

@@ -16,6 +16,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
   styleUrl: './audio-player.component.css'
 })
 export class AudioPlayerComponent implements OnChanges {
+  // Alias input to accept [song] from app.component.html
+  @Input() song: any = null;
   @Input() currentSong: any = null;
 
   private audio: HTMLAudioElement | null = null;
@@ -49,7 +51,12 @@ export class AudioPlayerComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['currentSong'] && this.currentSong && this.isBrowser) {
+    // Sync song input to currentSong if passed as [song]
+    if (changes['song'] && this.song) {
+      this.currentSong = this.song;
+    }
+
+    if ((changes['currentSong'] || changes['song']) && this.currentSong && this.isBrowser) {
       this.loadAndPlay();
     }
   }
@@ -57,9 +64,12 @@ export class AudioPlayerComponent implements OnChanges {
   loadAndPlay(): void {
     if (!this.audio) return;
 
-    const streamUrl = this.currentSong.streamUrl || 
-                      this.currentSong.url || 
-                      `http://100.105.95.54:3000/songs/stream/${this.currentSong._id || this.currentSong.id}`;
+    const activeTrack = this.currentSong || this.song;
+    if (!activeTrack) return;
+
+    const streamUrl = activeTrack.streamUrl || 
+                      activeTrack.url || 
+                      `http://100.105.95.54:3000/songs/stream/${activeTrack._id || activeTrack.id}`;
 
     this.audio.src = streamUrl;
     this.audio.load();

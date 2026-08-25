@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { AudioPlayerComponent } from './pages/audio-player/audio-player.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet, 
-    RouterLink, 
-    RouterLinkActive, 
+    RouterOutlet,
     AudioPlayerComponent
   ],
   templateUrl: './app.component.html'

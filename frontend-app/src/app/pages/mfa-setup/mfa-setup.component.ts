@@ -1,40 +1,37 @@
 import {
   Component,
-  ChangeDetectorRef
+  Inject,
+  PLATFORM_ID
 } from '@angular/core';
 
 import {
-  CommonModule
+  CommonModule,
+  isPlatformBrowser
 } from '@angular/common';
 
 import {
-  ReactiveFormsModule,
-  FormControl,
+  FormBuilder,
   FormGroup,
+  ReactiveFormsModule,
   Validators
 } from '@angular/forms';
 
-import {
-  Router
-} from '@angular/router';
-
-import {
-  AuthService
-} from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-mfa-setup',
   standalone: true,
-
   imports: [
     CommonModule,
     ReactiveFormsModule
   ],
-
   templateUrl: './mfa-setup.component.html',
-  styleUrl: './mfa-setup.css'
+  styleUrl: './mfa-setup.component.css'
 })
 export default class MfaSetupComponent {
+
+  verifyForm: FormGroup;
 
   qrCode: string = '';
   secret: string = '';
@@ -45,115 +42,77 @@ export default class MfaSetupComponent {
   isLoading: boolean = false;
   setupStarted: boolean = false;
 
-  verifyForm = new FormGroup({
-
-    token: new FormControl(
-      '',
-      [
-        Validators.required,
-        Validators.pattern(/^\d{6}$/)
-      ]
-    )
-
-  });
-
   constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
-
-  // ==========================================
-  // START MFA SETUP
-  // ==========================================
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.verifyForm = this.fb.group({
+      token: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d{6}$/)
+        ]
+      ]
+    });
+  }
 
   enableMfa(): void {
-
     this.errorMessage = '';
     this.successMessage = '';
     this.isLoading = true;
 
-    this.authService
-      .enableMfa()
-      .subscribe({
+    this.authService.enableMfa().subscribe({
+      next: (res: any) => {
+        this.qrCode = res.qrCode || '';
+        this.secret = res.secret || '';
+        this.setupStarted = true;
+        this.isLoading = false;
+      },
 
-        next: (response: any) => {
+      error: (err: any) => {
+        console.error('MFA setup error:', err);
 
-          this.isLoading = false;
+        this.errorMessage =
+          err.error?.message ||
+          'Unable to start MFA setup.';
 
-          this.qrCode =
-            response?.qrCode || '';
-
-          this.secret =
-            response?.secret || '';
-
-          this.setupStarted = true;
-
-          this.cdr.detectChanges();
-
-        },
-
-        error: (err: any) => {
-
-          this.isLoading = false;
-
-          this.errorMessage =
-            err.error?.message ||
-            'Unable to start MFA setup.';
-
-          this.cdr.detectChanges();
-
-        }
-
-      });
+        this.isLoading = false;
+      }
+    });
   }
 
-  // ==========================================
-  // VERIFY FIRST AUTHENTICATOR CODE
-  // ==========================================
-
   verifyMfa(): void {
-
     this.errorMessage = '';
     this.successMessage = '';
 
     if (this.verifyForm.invalid) {
-
-      this.verifyForm.markAllAsTouched();
-
       this.errorMessage =
-        'Please enter the 6-digit code from your authenticator app.';
-
+        'Enter the 6-digit code from your authenticator app.';
       return;
     }
 
-    const code =
-      this.verifyForm.value.token || '';
+    const token =
+      this.verifyForm.value.token;
 
     this.isLoading = true;
 
-    this.authService
-      .verifyMfaSetup(code)
-      .subscribe({
+    this.authService.verifyMfaSetup(token).subscribe({
+      next: () => {
+        this.successMessage =
+          'MFA has been enabled successfully.';
 
-        next: () => {
+        this.isLoading = false;
 
-          this.isLoading = false;
-
-          this.successMessage =
-            'MFA has been enabled successfully.';
-
-          // ==================================
-          // UPDATE LOCAL USER SESSION
-          // ==================================
-
-          const userData =
+        if (isPlatformBrowser(this.platformId)) {
+          const storedUser =
             localStorage.getItem('user');
 
-          if (userData) {
-
+          if (storedUser) {
             const user =
-              JSON.parse(userData);
+              JSON.parse(storedUser);
 
             user.mfaEnabled = true;
 
@@ -161,45 +120,30 @@ export default class MfaSetupComponent {
               'user',
               JSON.stringify(user)
             );
-
           }
-
-          this.cdr.detectChanges();
-
-          setTimeout(() => {
-
-            this.router.navigate([
-              '/homepage-tv'
-            ]);
-
-          }, 1000);
-
-        },
-
-        error: (err: any) => {
-
-          this.isLoading = false;
-
-          this.errorMessage =
-            err.error?.message ||
-            'Invalid authentication code.';
-
-          this.cdr.detectChanges();
-
         }
 
-      });
+        setTimeout(() => {
+          this.router.navigate(['/homepage-tv']);
+        }, 1200);
+      },
+
+      error: (err: any) => {
+        console.error(
+          'MFA verification error:',
+          err
+        );
+
+        this.errorMessage =
+          err.error?.message ||
+          'Invalid verification code. Please try again.';
+
+        this.isLoading = false;
+      }
+    });
   }
 
-  // ==========================================
-  // CANCEL MFA SETUP
-  // ==========================================
-
   cancel(): void {
-
-    this.router.navigate([
-      '/homepage-tv'
-    ]);
-
+    this.router.navigate(['/homepage-tv']);
   }
 }

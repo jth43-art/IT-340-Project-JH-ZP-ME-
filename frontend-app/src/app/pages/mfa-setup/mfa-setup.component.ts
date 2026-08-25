@@ -30,7 +30,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./mfa-setup.component.css']
 })
 export default class MfaSetupComponent {
-
   verifyForm: FormGroup;
 
   qrCode = '';
@@ -94,8 +93,7 @@ export default class MfaSetupComponent {
       return;
     }
 
-    const token =
-      this.verifyForm.value.token;
+    const token = this.verifyForm.value.token;
 
     this.isLoading = true;
 
@@ -107,13 +105,11 @@ export default class MfaSetupComponent {
         this.isLoading = false;
 
         if (isPlatformBrowser(this.platformId)) {
-          const storedUser =
-            localStorage.getItem('user');
+          const storedUser = localStorage.getItem('user');
 
           if (storedUser) {
             try {
-              const user =
-                JSON.parse(storedUser);
+              const user = JSON.parse(storedUser);
 
               user.mfaEnabled = true;
 

@@ -43,12 +43,10 @@
         {{ successMessage }}
       </div>
 
-      <!-- BEFORE MFA SETUP -->
       <div
         class="start-section"
         *ngIf="!setupStarted"
       >
-
         <div class="info-box">
           <h3>How it works</h3>
 
@@ -73,23 +71,19 @@
         >
           CANCEL
         </button>
-
       </div>
 
-      <!-- AFTER MFA SETUP STARTS -->
       <div
         class="setup-section"
         *ngIf="setupStarted"
       >
 
         <div class="step-box">
-
           <div class="step-number">
             1
           </div>
 
           <div class="step-content">
-
             <h3>Scan the QR Code</h3>
 
             <p>
@@ -123,20 +117,17 @@
                 {{ secret }}
               </div>
             </div>
-
           </div>
         </div>
 
         <div class="step-divider"></div>
 
         <div class="step-box">
-
           <div class="step-number">
             2
           </div>
 
           <div class="step-content">
-
             <h3>Verify Your Code</h3>
 
             <p>
@@ -148,9 +139,7 @@
               [formGroup]="verifyForm"
               (ngSubmit)="verifyMfa()"
             >
-
               <div class="code-container">
-
                 <span class="bracket">[</span>
 
                 <input
@@ -163,7 +152,6 @@
                 >
 
                 <span class="bracket">]</span>
-
               </div>
 
               <button
@@ -173,9 +161,7 @@
               >
                 {{ isLoading ? 'VERIFYING...' : 'VERIFY & ENABLE MFA' }}
               </button>
-
             </form>
-
           </div>
         </div>
 

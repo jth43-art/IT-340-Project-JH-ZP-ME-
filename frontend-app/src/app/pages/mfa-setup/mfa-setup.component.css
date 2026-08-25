@@ -292,31 +292,3 @@
   font-size: 11px;
   font-style: italic;
 }
-
-@media (max-width: 600px) {
-  .mfa-page {
-    padding: 25px 12px;
-  }
-
-  .mfa-content {
-    padding: 22px 18px 25px;
-  }
-
-  .mfa-content h1 {
-    font-size: 21px;
-  }
-
-  .step-box {
-    gap: 10px;
-  }
-
-  .qr-wrapper img {
-    width: 180px;
-    height: 180px;
-  }
-
-  .code-container input {
-    width: 150px;
-    font-size: 19px;
-  }
-}

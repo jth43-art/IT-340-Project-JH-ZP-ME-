@@ -27,20 +27,20 @@ import { AuthService } from '../../services/auth.service';
     ReactiveFormsModule
   ],
   templateUrl: './mfa-setup.component.html',
-  styleUrl: './mfa-setup.component.css'
+  styleUrls: ['./mfa-setup.component.css']
 })
 export default class MfaSetupComponent {
 
   verifyForm: FormGroup;
 
-  qrCode: string = '';
-  secret: string = '';
+  qrCode = '';
+  secret = '';
 
-  errorMessage: string = '';
-  successMessage: string = '';
+  errorMessage = '';
+  successMessage = '';
 
-  isLoading: boolean = false;
-  setupStarted: boolean = false;
+  isLoading = false;
+  setupStarted = false;
 
   constructor(
     private fb: FormBuilder,
@@ -111,15 +111,22 @@ export default class MfaSetupComponent {
             localStorage.getItem('user');
 
           if (storedUser) {
-            const user =
-              JSON.parse(storedUser);
+            try {
+              const user =
+                JSON.parse(storedUser);
 
-            user.mfaEnabled = true;
+              user.mfaEnabled = true;
 
-            localStorage.setItem(
-              'user',
-              JSON.stringify(user)
-            );
+              localStorage.setItem(
+                'user',
+                JSON.stringify(user)
+              );
+            } catch (err) {
+              console.error(
+                'Could not update local user data:',
+                err
+              );
+            }
           }
         }
 

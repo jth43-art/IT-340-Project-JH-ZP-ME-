@@ -1,5 +1,6 @@
 :host {
   display: block;
+  width: 100%;
 }
 
 * {
@@ -7,33 +8,35 @@
 }
 
 .mfa-page {
+  width: 100%;
   min-height: 100vh;
-  background: #dceff9;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding: 55px 20px;
+  background-color: #dceff9;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .mfa-card {
-  width: 100%;
-  max-width: 520px;
-  background: #ffffff;
-  border: 1px solid #b9d7ea;
+  width: 520px;
+  max-width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #b8d5e8;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.15);
 }
 
 .mfa-header {
-  background: #326998;
+  width: 100%;
+  padding: 12px 15px;
+  background-color: #326998;
   color: #ffffff;
   text-align: center;
   font-size: 15px;
   font-weight: bold;
-  padding: 12px 15px;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.5px;
 }
 
 .mfa-content {
@@ -42,12 +45,12 @@
 }
 
 .shield-icon {
-  font-size: 42px;
   margin-bottom: 10px;
+  font-size: 42px;
 }
 
 .mfa-content h1 {
-  margin: 0 0 12px;
+  margin: 0 0 12px 0;
   color: #2c6497;
   font-size: 24px;
   font-weight: 700;
@@ -55,7 +58,7 @@
 
 .intro-text {
   max-width: 420px;
-  margin: 0 auto 18px;
+  margin: 0 auto 18px auto;
   color: #4b4b4b;
   font-size: 14px;
   line-height: 1.5;
@@ -64,58 +67,72 @@
 .supported-apps {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
   margin-bottom: 22px;
   color: #58748c;
   font-size: 12px;
 }
 
 .dot {
-  color: #9bb7ca;
+  color: #8caac0;
 }
 
 .info-box {
-  background: #f5fbff;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 16px 18px;
+  background-color: #f5fbff;
   border: 1px solid #c8dfef;
   border-radius: 6px;
   text-align: left;
-  padding: 16px 18px;
-  margin-bottom: 20px;
 }
 
 .info-box h3 {
-  margin: 0 0 10px;
+  margin: 0 0 14px 0;
   color: #2c6497;
   font-size: 15px;
 }
 
-.info-box p {
-  margin: 7px 0;
+.info-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 9px 0;
   color: #4d5962;
   font-size: 13px;
 }
 
-.primary-btn,
-.secondary-btn {
+.small-step {
+  width: 23px;
+  height: 23px;
+  min-width: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dcecf7;
+  color: #2c6497;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.primary-btn {
   width: 100%;
-  min-height: 40px;
+  min-height: 42px;
+  margin-bottom: 10px;
   padding: 10px 14px;
+  background-color: #438dcc;
+  color: #ffffff;
+  border: 1px solid #367db8;
   border-radius: 5px;
   font-size: 13px;
   font-weight: bold;
   cursor: pointer;
 }
 
-.primary-btn {
-  background: #438dcc;
-  color: #ffffff;
-  border: 1px solid #367db8;
-  margin-bottom: 10px;
-}
-
-.primary-btn:hover:not(:disabled) {
-  background: #347dbb;
+.primary-btn:hover {
+  background-color: #347dbb;
 }
 
 .primary-btn:disabled {
@@ -124,31 +141,38 @@
 }
 
 .secondary-btn {
-  background: #f3f8fc;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 14px;
+  background-color: #f3f8fc;
   color: #3b6d95;
   border: 1px solid #b8d2e5;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .secondary-btn:hover {
-  background: #e6f2fa;
+  background-color: #e6f2fa;
 }
 
 .message {
+  margin-bottom: 16px;
   padding: 10px 12px;
   border-radius: 5px;
-  margin-bottom: 16px;
   font-size: 13px;
   font-weight: bold;
 }
 
 .error-message {
-  background: #fde5e5;
+  background-color: #fde5e5;
   color: #9e2f2f;
   border: 1px solid #efbebe;
 }
 
 .success-message {
-  background: #e6f6e9;
+  background-color: #e6f6e9;
   color: #2f7a3d;
   border: 1px solid #b9dfc1;
 }
@@ -168,9 +192,9 @@
   height: 34px;
   min-width: 34px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: #326998;
+  align-items: center;
+  background-color: #326998;
   color: #ffffff;
   border-radius: 50%;
   font-weight: bold;
@@ -181,22 +205,23 @@
 }
 
 .step-content h3 {
-  margin: 0 0 8px;
+  margin: 0 0 8px 0;
   color: #2c6497;
   font-size: 16px;
 }
 
 .step-content p {
-  margin: 0 0 15px;
+  margin: 0 0 15px 0;
   color: #555555;
   font-size: 13px;
   line-height: 1.5;
 }
 
 .step-divider {
+  width: 100%;
   height: 1px;
-  background: #d5e7f2;
   margin: 22px 0;
+  background-color: #d5e7f2;
 }
 
 .qr-wrapper {
@@ -208,43 +233,42 @@
 .qr-wrapper img {
   width: 205px;
   height: 205px;
-  object-fit: contain;
-  background: #ffffff;
   padding: 6px;
+  background-color: #ffffff;
   border-radius: 8px;
+  object-fit: contain;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
 .manual-key {
-  text-align: center;
   margin-top: 12px;
+  text-align: center;
 }
 
 .manual-label {
   display: block;
-  color: #2c6497;
-  font-weight: bold;
-  font-size: 13px;
   margin-bottom: 4px;
+  color: #2c6497;
+  font-size: 13px;
+  font-weight: bold;
 }
 
 .manual-description {
   display: block;
+  margin-bottom: 8px;
   color: #687985;
   font-size: 12px;
-  margin-bottom: 8px;
 }
 
 .secret-box {
-  background: #f7fbfe;
+  padding: 10px;
+  background-color: #f7fbfe;
+  color: #294d68;
   border: 1px dashed #91b7d2;
   border-radius: 5px;
-  padding: 10px;
-  color: #294d68;
-  font-family: "Courier New", monospace;
+  font-family: monospace;
   font-size: 12px;
   word-break: break-all;
-  user-select: all;
 }
 
 .code-container {
@@ -252,24 +276,23 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin: 14px 0 18px;
+  margin: 14px 0 18px 0;
 }
 
 .code-container input {
   width: 180px;
   padding: 11px;
-  text-align: center;
-  background: #fffbd3;
+  background-color: #fffbd3;
   border: 1px solid #aebdca;
-  outline: none;
+  text-align: center;
   font-size: 22px;
-  letter-spacing: 6px;
   font-weight: 600;
+  letter-spacing: 6px;
+  outline: none;
 }
 
 .code-container input:focus {
   border-color: #438dcc;
-  box-shadow: 0 0 0 2px rgba(67, 141, 204, 0.15);
 }
 
 .bracket {
@@ -278,16 +301,12 @@
   font-weight: bold;
 }
 
-.verify-btn {
-  margin-top: 4px;
-}
-
 .mfa-footer {
   padding: 10px;
-  text-align: center;
-  border-top: 1px solid #c8dfef;
-  background: #f7fbfe;
+  background-color: #f7fbfe;
   color: #748896;
+  border-top: 1px solid #c8dfef;
+  text-align: center;
   font-size: 11px;
   font-style: italic;
 }

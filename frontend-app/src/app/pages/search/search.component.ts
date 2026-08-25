@@ -12,7 +12,7 @@ import {
 } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { SearchService } from '../../services/search.service';
 import { PlaylistService } from '../../services/playlist.service';
@@ -21,8 +21,9 @@ import { App } from '../../app';
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './search.component.html'
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './search.component.html',
+  styleUrl: './search.component.css'
 })
 export class SearchComponent implements OnInit {
   searchQuery: string = '';
@@ -62,7 +63,6 @@ export class SearchComponent implements OnInit {
         this.playlists = res.playlists || res || [];
         this.cdr.detectChanges();
       },
-
       error: (err: any) => {
         console.error('Playlist Load Error:', err);
         this.errorMessage = 'Could not load playlists.';
@@ -113,7 +113,6 @@ export class SearchComponent implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (err: any) => {
         console.error('Search Error:', err);
         this.errorMessage = err.error?.message || 'Search failed. Please try again.';
@@ -153,7 +152,6 @@ export class SearchComponent implements OnInit {
         alert('Song added to playlist!');
         this.loadPlaylists();
       },
-
       error: (err: any) => {
         console.error('Add song error:', err);
         alert('Failed to add song');

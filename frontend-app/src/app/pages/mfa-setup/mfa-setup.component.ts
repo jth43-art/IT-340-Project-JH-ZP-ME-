@@ -1,456 +1,153 @@
 import {
-  Component,
-  Inject,
-  PLATFORM_ID
+  Component,
+  Inject,
+  PLATFORM_ID
 } from '@angular/core';
 
 import {
-  CommonModule,
-  isPlatformBrowser
+  CommonModule,
+  isPlatformBrowser
 } from '@angular/common';
 
 import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
 } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-mfa-setup',
-  standalone: true,
-
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
-
-  templateUrl: './mfa-setup.component.html',
-
-  styles: [`
-    :host {
-      display: block;
-      width: 100%;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    .mfa-page {
-      width: 100%;
-      min-height: 100vh;
-      background: #dceff9;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 55px 20px;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .mfa-card {
-      width: 100%;
-      max-width: 520px;
-      background: #ffffff;
-      border: 1px solid #b9d7ea;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    }
-
-    .mfa-header {
-      width: 100%;
-      background: #326998;
-      color: #ffffff;
-      text-align: center;
-      font-size: 15px;
-      font-weight: bold;
-      padding: 12px 15px;
-      letter-spacing: 0.4px;
-    }
-
-    .mfa-content {
-      padding: 28px 32px;
-      text-align: center;
-    }
-
-    .shield-icon {
-      font-size: 42px;
-      margin-bottom: 10px;
-    }
-
-    .mfa-content h1 {
-      margin: 0 0 12px;
-      color: #2c6497;
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .intro-text {
-      max-width: 420px;
-      margin: 0 auto 18px;
-      color: #4b4b4b;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .supported-apps {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 22px;
-      color: #58748c;
-      font-size: 12px;
-    }
-
-    .dot {
-      color: #9bb7ca;
-    }
-
-    .info-box {
-      width: 100%;
-      background: #f5fbff;
-      border: 1px solid #c8dfef;
-      border-radius: 6px;
-      text-align: left;
-      padding: 16px 18px;
-      margin-bottom: 20px;
-    }
-
-    .info-box h3 {
-      margin: 0 0 10px;
-      color: #2c6497;
-      font-size: 15px;
-    }
-
-    .info-box p {
-      margin: 7px 0;
-      color: #4d5962;
-      font-size: 13px;
-    }
-
-    .primary-btn,
-    .secondary-btn {
-      display: block;
-      width: 100%;
-      min-height: 42px;
-      padding: 10px 14px;
-      border-radius: 5px;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .primary-btn {
-      background: #438dcc;
-      color: #ffffff;
-      border: 1px solid #367db8;
-      margin-bottom: 10px;
-    }
-
-    .primary-btn:hover:not(:disabled) {
-      background: #347dbb;
-    }
-
-    .primary-btn:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
-
-    .secondary-btn {
-      background: #f3f8fc;
-      color: #3b6d95;
-      border: 1px solid #b8d2e5;
-    }
-
-    .secondary-btn:hover {
-      background: #e6f2fa;
-    }
-
-    .message {
-      padding: 10px 12px;
-      border-radius: 5px;
-      margin-bottom: 16px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .error-message {
-      background: #fde5e5;
-      color: #9e2f2f;
-      border: 1px solid #efbebe;
-    }
-
-    .success-message {
-      background: #e6f6e9;
-      color: #2f7a3d;
-      border: 1px solid #b9dfc1;
-    }
-
-    .setup-section {
-      margin-top: 10px;
-    }
-
-    .step-box {
-      display: flex;
-      gap: 14px;
-      text-align: left;
-    }
-
-    .step-number {
-      width: 34px;
-      height: 34px;
-      min-width: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #326998;
-      color: #ffffff;
-      border-radius: 50%;
-      font-weight: bold;
-    }
-
-    .step-content {
-      flex: 1;
-    }
-
-    .step-content h3 {
-      margin: 0 0 8px;
-      color: #2c6497;
-      font-size: 16px;
-    }
-
-    .step-content p {
-      margin: 0 0 15px;
-      color: #555555;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .step-divider {
-      height: 1px;
-      background: #d5e7f2;
-      margin: 22px 0;
-    }
-
-    .qr-wrapper {
-      display: flex;
-      justify-content: center;
-      margin: 18px 0;
-    }
-
-    .qr-wrapper img {
-      width: 205px;
-      height: 205px;
-      object-fit: contain;
-      background: #ffffff;
-      padding: 6px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-    }
-
-    .manual-key {
-      text-align: center;
-      margin-top: 12px;
-    }
-
-    .manual-label {
-      display: block;
-      color: #2c6497;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-
-    .manual-description {
-      display: block;
-      color: #687985;
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-
-    .secret-box {
-      background: #f7fbfe;
-      border: 1px dashed #91b7d2;
-      border-radius: 5px;
-      padding: 10px;
-      color: #294d68;
-      font-family: monospace;
-      font-size: 12px;
-      word-break: break-all;
-    }
-
-    .code-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin: 14px 0 18px;
-    }
-
-    .code-container input {
-      width: 180px;
-      padding: 11px;
-      text-align: center;
-      background: #fffbd3;
-      border: 1px solid #aebdca;
-      outline: none;
-      font-size: 22px;
-      letter-spacing: 6px;
-      font-weight: 600;
-    }
-
-    .code-container input:focus {
-      border-color: #438dcc;
-      box-shadow: 0 0 0 2px rgba(67, 141, 204, 0.15);
-    }
-
-    .bracket {
-      color: #315e83;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .verify-btn {
-      margin-top: 4px;
-    }
-
-    .mfa-footer {
-      padding: 10px;
-      text-align: center;
-      border-top: 1px solid #c8dfef;
-      background: #f7fbfe;
-      color: #748896;
-      font-size: 11px;
-      font-style: italic;
-    }
-  `]
+  selector: 'app-mfa-setup',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule
+  ],
+  templateUrl: './mfa-setup.component.html',
+  styleUrls: ['./mfa-setup.component.css']
 })
 export default class MfaSetupComponent {
 
-  verifyForm: FormGroup;
+  verifyForm: FormGroup;
 
-  qrCode = '';
-  secret = '';
+  qrCode = '';
+  secret = '';
 
-  errorMessage = '';
-  successMessage = '';
+  errorMessage = '';
+  successMessage = '';
 
-  isLoading = false;
-  setupStarted = false;
+  isLoading = false;
+  setupStarted = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    this.verifyForm = this.fb.group({
-      token: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^\d{6}$/)
-        ]
-      ]
-    });
-  }
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.verifyForm = this.fb.group({
+      token: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d{6}$/)
+        ]
+      ]
+    });
+  }
 
-  enableMfa(): void {
-    this.errorMessage = '';
-    this.successMessage = '';
-    this.isLoading = true;
+  enableMfa(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.isLoading = true;
 
-    this.authService.enableMfa().subscribe({
-      next: (res: any) => {
-        this.qrCode = res.qrCode || '';
-        this.secret = res.secret || '';
-        this.setupStarted = true;
-        this.isLoading = false;
-      },
+    this.authService.enableMfa().subscribe({
+      next: (res: any) => {
+        this.qrCode = res.qrCode || '';
+        this.secret = res.secret || '';
+        this.setupStarted = true;
+        this.isLoading = false;
+      },
 
-      error: (err: any) => {
-        console.error('MFA setup error:', err);
+      error: (err: any) => {
+        console.error('MFA setup error:', err);
 
-        this.errorMessage =
-          err.error?.message ||
-          'Unable to start MFA setup.';
+        this.errorMessage =
+          err.error?.message ||
+          'Unable to start MFA setup.';
 
-        this.isLoading = false;
-      }
-    });
-  }
+        this.isLoading = false;
+      }
+    });
+  }
 
-  verifyMfa(): void {
-    this.errorMessage = '';
-    this.successMessage = '';
+  verifyMfa(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
 
-    if (this.verifyForm.invalid) {
-      this.errorMessage =
-        'Enter the 6-digit code from your authenticator app.';
-      return;
-    }
+    if (this.verifyForm.invalid) {
+      this.errorMessage =
+        'Enter the 6-digit code from your authenticator app.';
+      return;
+    }
 
-    const token = this.verifyForm.value.token;
+    const token = this.verifyForm.value.token;
 
-    this.isLoading = true;
+    this.isLoading = true;
 
-    this.authService.verifyMfaSetup(token).subscribe({
-      next: () => {
-        this.successMessage =
-          'MFA has been enabled successfully.';
+    this.authService.verifyMfaSetup(token).subscribe({
+      next: () => {
+        this.successMessage =
+          'MFA has been enabled successfully.';
 
-        this.isLoading = false;
+        this.isLoading = false;
 
-        if (isPlatformBrowser(this.platformId)) {
-          const storedUser =
-            localStorage.getItem('user');
+        if (isPlatformBrowser(this.platformId)) {
+          const storedUser = localStorage.getItem('user');
 
-          if (storedUser) {
-            try {
-              const user = JSON.parse(storedUser);
+          if (storedUser) {
+            try {
+              const user = JSON.parse(storedUser);
 
-              user.mfaEnabled = true;
+              user.mfaEnabled = true;
 
-              localStorage.setItem(
-                'user',
-                JSON.stringify(user)
-              );
-            } catch (err) {
-              console.error(
-                'Could not update local user data:',
-                err
-              );
-            }
-          }
-        }
+              localStorage.setItem(
+                'user',
+                JSON.stringify(user)
+              );
+            } catch (err) {
+              console.error(
+                'Could not update local user data:',
+                err
+              );
+            }
+          }
+        }
 
-        setTimeout(() => {
-          this.router.navigate(['/homepage-tv']);
-        }, 1200);
-      },
+        setTimeout(() => {
+          this.router.navigate(['/homepage-tv']);
+        }, 1200);
+      },
 
-      error: (err: any) => {
-        console.error(
-          'MFA verification error:',
-          err
-        );
+      error: (err: any) => {
+        console.error(
+          'MFA verification error:',
+          err
+        );
 
-        this.errorMessage =
-          err.error?.message ||
-          'Invalid verification code. Please try again.';
+        this.errorMessage =
+          err.error?.message ||
+          'Invalid verification code. Please try again.';
 
-        this.isLoading = false;
-      }
-    });
-  }
+        this.isLoading = false;
+      }
+    });
+  }
 
-  cancel(): void {
-    this.router.navigate(['/homepage-tv']);
-  }
+  cancel(): void {
+    this.router.navigate(['/homepage-tv']);
+  }
 }

@@ -4,112 +4,66 @@
 
 .mfa-page {
   min-height: 100vh;
-
   display: flex;
   justify-content: center;
   align-items: flex-start;
-
   padding: 55px 20px;
-
   background: #dceff9;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .mfa-card {
   width: 100%;
   max-width: 520px;
-
   background: #ffffff;
-
-  border-radius: 8px;
-
-  overflow: hidden;
-
   border: 1px solid #b9d7ea;
-
-  box-shadow:
-    0 5px 15px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
 }
-
-/* =========================================
-   HEADER
-   ========================================= */
 
 .mfa-header {
   background: #326998;
-
   color: #ffffff;
-
   text-align: center;
-
   font-size: 15px;
   font-weight: bold;
-
   padding: 11px 15px;
-
   letter-spacing: 0.4px;
 }
 
-/* =========================================
-   CONTENT
-   ========================================= */
-
 .mfa-content {
   padding: 25px 32px 28px;
-
   text-align: center;
 }
 
 .shield-icon {
   font-size: 42px;
-
   margin-bottom: 8px;
 }
 
 .mfa-content h1 {
-  margin:
-    0
-    0
-    10px;
-
+  margin: 0 0 10px;
   color: #2c6497;
-
   font-size: 24px;
-
   font-weight: 700;
 }
 
 .intro-text {
   max-width: 420px;
-
-  margin:
-    0
-    auto
-    17px;
-
+  margin: 0 auto 17px;
   color: #4b4b4b;
-
   font-size: 14px;
-
   line-height: 1.55;
 }
 
 .supported-apps {
   display: flex;
-
   justify-content: center;
   flex-wrap: wrap;
-
   gap: 7px;
-
   margin-bottom: 22px;
-
   font-size: 12px;
-
   color: #58748c;
 }
 
@@ -117,76 +71,42 @@
   color: #9bb7ca;
 }
 
-/* =========================================
-   INFO BOX
-   ========================================= */
-
 .info-box {
   text-align: left;
-
   background: #f5fbff;
-
   border: 1px solid #c8dfef;
-
   border-radius: 6px;
-
   padding: 15px 18px;
-
-  margin:
-    8px
-    0
-    20px;
+  margin: 8px 0 20px;
 }
 
 .info-box h3 {
-  margin:
-    0
-    0
-    10px;
-
+  margin: 0 0 10px;
   color: #2c6497;
-
   font-size: 15px;
 }
 
 .info-box p {
   margin: 6px 0;
-
   font-size: 13px;
-
   color: #4d5962;
 }
-
-/* =========================================
-   BUTTONS
-   ========================================= */
 
 .primary-btn,
 .secondary-btn {
   width: 100%;
-
   min-height: 40px;
-
   border-radius: 5px;
-
   font-size: 13px;
-
   font-weight: bold;
-
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    transform 0.1s ease;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .primary-btn {
   background: #438dcc;
-
   color: #ffffff;
-
   border: 1px solid #367db8;
-
   margin-bottom: 10px;
 }
 
@@ -200,15 +120,12 @@
 
 .primary-btn:disabled {
   opacity: 0.65;
-
   cursor: not-allowed;
 }
 
 .secondary-btn {
   background: #f3f8fc;
-
   color: #3b6d95;
-
   border: 1px solid #b8d2e5;
 }
 
@@ -216,41 +133,25 @@
   background: #e6f2fa;
 }
 
-/* =========================================
-   MESSAGES
-   ========================================= */
-
 .message {
   padding: 10px 12px;
-
   border-radius: 5px;
-
   margin-bottom: 16px;
-
   font-size: 13px;
-
   font-weight: 600;
 }
 
 .error-message {
   background: #fde5e5;
-
   color: #9e2f2f;
-
   border: 1px solid #efbebe;
 }
 
 .success-message {
   background: #e6f6e9;
-
   color: #2f7a3d;
-
   border: 1px solid #b9dfc1;
 }
-
-/* =========================================
-   SETUP STEPS
-   ========================================= */
 
 .setup-section {
   margin-top: 10px;
@@ -258,30 +159,21 @@
 
 .step-box {
   display: flex;
-
   gap: 14px;
-
   text-align: left;
 }
 
 .step-number {
   width: 34px;
   height: 34px;
-
   min-width: 34px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: #326998;
-
   color: #ffffff;
-
   border-radius: 50%;
-
   font-weight: bold;
-
   margin-top: 2px;
 }
 
@@ -290,172 +182,100 @@
 }
 
 .step-content h3 {
-  margin:
-    0
-    0
-    7px;
-
+  margin: 0 0 7px;
   color: #2c6497;
-
   font-size: 16px;
 }
 
 .step-content p {
-  margin:
-    0
-    0
-    15px;
-
-  color: #555;
-
+  margin: 0 0 15px;
+  color: #555555;
   font-size: 13px;
-
   line-height: 1.5;
 }
 
 .step-divider {
   height: 1px;
-
   background: #d5e7f2;
-
   margin: 22px 0;
 }
 
-/* =========================================
-   QR CODE
-   ========================================= */
-
 .qr-wrapper {
   display: flex;
-
   justify-content: center;
-
   margin: 18px 0;
 }
 
 .qr-wrapper img {
   width: 205px;
   height: 205px;
-
   object-fit: contain;
-
   background: #ffffff;
-
   border: 7px solid #ffffff;
-
   border-radius: 8px;
-
-  box-shadow:
-    0 2px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
-
-/* =========================================
-   MANUAL SECRET
-   ========================================= */
 
 .manual-key {
   text-align: center;
-
-  margin:
-    10px
-    0
-    5px;
+  margin: 10px 0 5px;
 }
 
 .manual-label {
   display: block;
-
   color: #2c6497;
-
   font-size: 13px;
-
   font-weight: bold;
-
   margin-bottom: 3px;
 }
 
 .manual-description {
   display: block;
-
   color: #687985;
-
   font-size: 12px;
-
   margin-bottom: 8px;
 }
 
 .secret-box {
   padding: 10px;
-
   background: #f7fbfe;
-
   border: 1px dashed #91b7d2;
-
   border-radius: 5px;
-
   color: #294d68;
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  font-family: "Courier New", monospace;
   font-size: 12px;
-
   word-break: break-all;
-
   user-select: all;
 }
 
-/* =========================================
-   MFA CODE INPUT
-   ========================================= */
-
 .code-container {
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   gap: 8px;
-
-  margin:
-    12px
-    0
-    16px;
+  margin: 12px 0 16px;
 }
 
 .code-container input {
   width: 180px;
-
   padding: 11px;
-
   text-align: center;
-
   background: #fffbd3;
-
   border: 1px solid #aebdca;
-
   outline: none;
-
   font-size: 22px;
-
   letter-spacing: 6px;
-
   font-weight: 600;
 }
 
 .code-container input:focus {
   border-color: #438dcc;
-
-  box-shadow:
-    0 0 0 2px rgba(67, 141, 204, 0.15);
+  box-shadow: 0 0 0 2px rgba(67, 141, 204, 0.15);
 }
 
 .bracket {
   color: #315e83;
-
   font-size: 25px;
-
   font-weight: bold;
 }
 
@@ -463,43 +283,23 @@
   margin-top: 4px;
 }
 
-/* =========================================
-   FOOTER
-   ========================================= */
-
 .mfa-footer {
   padding: 10px;
-
   text-align: center;
-
   border-top: 1px solid #c8dfef;
-
   background: #f7fbfe;
-
   color: #748896;
-
   font-size: 11px;
-
   font-style: italic;
 }
 
-/* =========================================
-   MOBILE
-   ========================================= */
-
 @media (max-width: 600px) {
-
   .mfa-page {
-    padding:
-      25px
-      12px;
+    padding: 25px 12px;
   }
 
   .mfa-content {
-    padding:
-      22px
-      18px
-      25px;
+    padding: 22px 18px 25px;
   }
 
   .mfa-content h1 {
@@ -517,7 +317,6 @@
 
   .code-container input {
     width: 150px;
-
     font-size: 19px;
   }
 }

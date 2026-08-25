@@ -1,30 +1,17 @@
-<header class="tv-header">
-  <h1 routerLink="/homepage-tv" style="cursor: pointer;">TuneVault</h1>
-
-  <nav class="tv-nav">
-    <a routerLink="/homepage-tv" routerLinkActive="active">Home</a>
-    <a routerLink="/music-library" routerLinkActive="active">Music Library</a>
-    <a routerLink="/search" routerLinkActive="active">Search</a>
-    <a routerLink="/playlists" routerLinkActive="active">Playlists</a>
-    <a routerLink="/upload" routerLinkActive="active">Upload MP3</a>
-  </nav>
-</header>
-
 <div class="tv-container">
 
   <div class="tv-card">
 
-    <!-- HEADER NAVIGATION LINKS -->
+    <!-- SINGLE TOP NAVBAR -->
     <header class="tv-header">
-      <h1>TuneVault</h1>
+      <h1 routerLink="/homepage-tv" style="cursor: pointer;">TuneVault</h1>
 
       <nav class="tv-nav">
-        <a routerLink="/homepage-tv">Home</a>
-        <a routerLink="/music-library">Music Library</a>
-        <a routerLink="/search">Search</a>
-        <a routerLink="/playlists">Playlists</a>
-        <a routerLink="/upload">Upload MP3</a>
-        <a routerLink="/admin-dashboard" *ngIf="role === 'admin'">Admin Dashboard</a>
+        <a routerLink="/homepage-tv" routerLinkActive="active">Home</a>
+        <a routerLink="/music-library" routerLinkActive="active">Music Library</a>
+        <a routerLink="/search" routerLinkActive="active">Search</a>
+        <a routerLink="/playlists" routerLinkActive="active">Playlists</a>
+        <a routerLink="/upload" routerLinkActive="active">Upload MP3</a>
       </nav>
     </header>
 
@@ -90,14 +77,14 @@
     </div>
 
 
-    <!-- PAGE BUTTONS FOOTER -->
+    <!-- QUICK ACTION FOOTER BUTTONS -->
     <footer class="quick-links-footer">
       <button class="link-btn" routerLink="/music-library">
         🎵 Music Library
       </button>
 
       <button class="link-btn" routerLink="/search">
-        🔍 Search & Filter
+        🔍 Search Track
       </button>
 
       <button class="link-btn" routerLink="/upload">
@@ -110,10 +97,6 @@
 
       <button class="link-btn primary" type="button" (click)="openCreateModal()">
         + Create Playlist
-      </button>
-
-      <button class="link-btn admin-btn" routerLink="/admin-dashboard" *ngIf="role === 'admin'">
-        ⚙️ Admin Panel
       </button>
     </footer>
 

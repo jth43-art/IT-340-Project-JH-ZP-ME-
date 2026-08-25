@@ -1,133 +1,261 @@
-/* Overall Page Style */
-.search-page {
-  padding: 40px;
-  background-color: #f8fafc; /* Clean, modern light grey */
+/* Container & Card matching Homepage TV */
+.tv-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
-  font-family: 'Inter', -system-ui, sans-serif;
+  background-color: #e0f0f8;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.search-header {
+.tv-card {
+  background: white;
+  width: 95vw;
   max-width: 1200px;
-  margin: 0 auto 40px auto;
+  min-height: 85vh;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.search-header h1 {
-  font-size: 2.5rem;
-  color: #1e293b;
-  margin-bottom: 20px;
+/* Header Navigation */
+.tv-header {
+  background-color: #3b6b91;
+  color: white;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Search Bar Wrapper */
+.tv-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.tv-nav {
+  display: flex;
+  align-items: center;
+}
+
+.tv-nav a {
+  color: #cce7ff;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.tv-nav a:hover,
+.tv-nav a.active {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Search Page Body */
+.search-body {
+  padding: 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-header-content {
+  max-width: 800px;
+  margin: 0 auto 30px auto;
+  text-align: center;
+}
+
+.search-header-content h2 {
+  color: #3b6b91;
+  margin: 0 0 5px 0;
+  font-size: 2rem;
+}
+
+.search-subtitle {
+  color: #666;
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+}
+
+/* Search Controls Bar */
 .search-bar-container {
   display: flex;
-  gap: 12px;
-  max-width: 600px;
+  gap: 10px;
+  justify-content: center;
 }
 
 .search-bar-container input {
   flex: 1;
-  padding: 12px 20px;
-  border: 2px solid #e2e8f0;
+  padding: 12px 18px;
+  border: 1px solid #b8d4e8;
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  background: #f8fbff;
+  outline: none;
   transition: border-color 0.2s;
 }
 
 .search-bar-container input:focus {
-  border-color: #3b82f6;
-  outline: none;
+  border-color: #3b6b91;
 }
 
-.search-bar-container button {
-  background-color: #1e293b;
+.filter-dropdown {
+  padding: 12px 14px;
+  border: 1px solid #b8d4e8;
+  border-radius: 10px;
+  background-color: #f8fbff;
+  color: #3b6b91;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.search-btn {
+  background-color: #3b6b91;
   color: white;
   border: none;
-  padding: 0 24px;
+  padding: 12px 24px;
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.2s;
 }
 
-.search-bar-container button:hover {
-  background-color: #334155;
+.search-btn:hover {
+  background-color: #2d5372;
+  transform: translateY(-1px);
 }
 
-/* THE GRID SYSTEM - This fills the screen */
+.error-msg {
+  color: #d9534f;
+  margin-top: 15px;
+  font-weight: 600;
+  background: #ffeded;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ffcccc;
+}
+
+/* Grid System */
 .results-grid {
   display: grid;
-  /* Automatically fits as many cards as possible, min 280px wide each */
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-  max-width: 1400px;
-  margin: 0 auto;
+  gap: 20px;
+  margin-top: 20px;
 }
 
-/* Individual Song Card */
+/* Song Card */
 .song-card {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
+  background: #f8fbff;
+  border-radius: 14px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #d0e4f5;
   transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid #f1f5f9;
 }
 
 .song-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(59, 107, 145, 0.15);
 }
 
 .song-name {
-  margin: 0;
-  font-size: 1.25rem;
-  color: #0f172a;
-  font-weight: 700;
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  color: #222;
 }
 
-.artist-name {
-  color: #64748b;
-  margin: 4px 0 20px 0;
-  font-size: 0.95rem;
+.artist-name, .album-name {
+  color: #555;
+  margin: 4px 0;
+  font-size: 0.9rem;
 }
 
-/* Actions inside the Card */
+.artist-name strong, .album-name strong {
+  color: #3b6b91;
+}
+
+.badge {
+  display: inline-block;
+  background: #eaf4fb;
+  color: #3b6b91;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 6px;
+  border: 1px solid #b8d4e8;
+}
+
+/* Actions inside Card */
 .card-actions {
   display: flex;
-  gap: 8px;
-  padding-top: 16px;
-  border-top: 1px solid #f1f5f9;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid #e0f0f8;
 }
 
-.playlist-dropdown {
-  flex: 1;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  background-color: #f8fafc;
-  font-size: 0.85rem;
-  color: #475569;
-}
-
-.add-button {
-  background-color: #10b981; /* Success Green */
+.play-now-btn {
+  background: #3b6b91;
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s;
+}
+
+.play-now-btn:hover {
+  background: #2d5372;
+}
+
+.playlist-add-group {
+  display: flex;
+  gap: 6px;
+}
+
+.playlist-dropdown {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.85rem;
+  background: white;
+}
+
+.add-button {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .add-button:hover {
   background-color: #059669;
 }
 
+/* Empty State */
 .empty-state {
   text-align: center;
-  margin-top: 80px;
-  color: #94a3b8;
+  margin-top: 60px;
+  color: #888;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
 }

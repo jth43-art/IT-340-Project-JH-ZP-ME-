@@ -1,167 +1,237 @@
-<div class="mfa-wrapper">
+<div class="mfa-page">
 
   <div class="mfa-card">
 
-    <div class="mfa-top-bar">
+    <div class="mfa-header">
       MFA SETUP
     </div>
 
-    <div class="mfa-title">
-      Secure Your TuneVault Account
-    </div>
+    <div class="mfa-content">
 
-    <div
-      class="setup-start"
-      *ngIf="!setupStarted"
-    >
-
-      <p>
-        TuneVault can use an authenticator app
-        to add an extra layer of security to your account.
-      </p>
-
-      <p>
-        You can use Google Authenticator,
-        Microsoft Authenticator, Authy,
-        or another compatible authenticator app.
-      </p>
-
-      <button
-        type="button"
-        (click)="enableMfa()"
-        [disabled]="isLoading"
-      >
-        {{
-          isLoading
-            ? 'SETTING UP...'
-            : 'ENABLE MFA'
-        }}
-      </button>
-
-    </div>
-
-
-    <div
-      class="setup-content"
-      *ngIf="setupStarted"
-    >
-
-      <div class="step-title">
-        Step 1 — Scan the QR Code
+      <div class="shield-icon">
+        🔐
       </div>
 
-      <p>
-        Open your authenticator app and scan this QR code.
+      <h1>
+        Secure Your TuneVault Account
+      </h1>
+
+      <p class="intro-text">
+        Add an extra layer of security to your TuneVault account
+        using an authenticator app.
       </p>
 
       <div
-        class="qr-container"
-        *ngIf="qrCode"
+        class="supported-apps"
+        *ngIf="!setupStarted"
       >
-        <img
-          [src]="qrCode"
-          alt="TuneVault MFA QR Code"
-        >
+        <span>
+          Google Authenticator
+        </span>
+
+        <span class="dot">•</span>
+
+        <span>
+          Microsoft Authenticator
+        </span>
+
+        <span class="dot">•</span>
+
+        <span>
+          Authy
+        </span>
       </div>
 
-
-      <div class="manual-secret">
-
-        <p>
-          If you cannot scan the QR code,
-          enter this setup key manually:
-        </p>
-
-        <code>
-          {{ secret }}
-        </code>
-
+      <div
+        *ngIf="errorMessage"
+        class="message error-message"
+      >
+        {{ errorMessage }}
       </div>
 
-
-      <div class="step-title">
-        Step 2 — Verify Setup
+      <div
+        *ngIf="successMessage"
+        class="message success-message"
+      >
+        {{ successMessage }}
       </div>
 
-      <p>
-        Enter the current 6-digit code
-        displayed in your authenticator app.
-      </p>
-
-
-      <form
-        [formGroup]="verifyForm"
-        (ngSubmit)="verifyMfa()"
+      <!-- BEFORE MFA SETUP STARTS -->
+      <div
+        class="start-section"
+        *ngIf="!setupStarted"
       >
 
-        <div class="code-row">
+        <div class="info-box">
+          <h3>
+            How it works
+          </h3>
 
-          <span>[</span>
+          <p>
+            1. Enable MFA below.
+          </p>
 
-          <input
-            type="text"
-            inputmode="numeric"
-            autocomplete="one-time-code"
-            maxlength="6"
-            placeholder="000000"
-            formControlName="token"
-          >
+          <p>
+            2. Scan the QR code with your authenticator app.
+          </p>
 
-          <span>]</span>
-
+          <p>
+            3. Enter the 6-digit verification code.
+          </p>
         </div>
-
-
-        <div
-          class="error-message"
-          *ngIf="errorMessage"
-        >
-          {{ errorMessage }}
-        </div>
-
-
-        <div
-          class="success-message"
-          *ngIf="successMessage"
-        >
-          {{ successMessage }}
-        </div>
-
 
         <button
-          type="submit"
+          class="primary-btn"
+          type="button"
+          (click)="enableMfa()"
           [disabled]="isLoading"
         >
-          {{
-            isLoading
-              ? 'VERIFYING...'
-              : 'VERIFY & ENABLE MFA'
-          }}
+          {{ isLoading ? 'SETTING UP...' : 'ENABLE MFA' }}
         </button>
 
-      </form>
+        <button
+          class="secondary-btn"
+          type="button"
+          (click)="cancel()"
+        >
+          CANCEL
+        </button>
 
-    </div>
+      </div>
 
-
-    <div
-      class="error-message"
-      *ngIf="errorMessage && !setupStarted"
-    >
-      {{ errorMessage }}
-    </div>
-
-
-    <div class="cancel-section">
-
-      <button
-        type="button"
-        class="cancel-button"
-        (click)="cancel()"
+      <!-- AFTER MFA SETUP STARTS -->
+      <div
+        class="setup-section"
+        *ngIf="setupStarted"
       >
-        Cancel
-      </button>
 
+        <div class="step-box">
+
+          <div class="step-number">
+            1
+          </div>
+
+          <div class="step-content">
+
+            <h3>
+              Scan the QR Code
+            </h3>
+
+            <p>
+              Open Google Authenticator or another compatible
+              authenticator app and scan this code.
+            </p>
+
+            <div
+              class="qr-wrapper"
+              *ngIf="qrCode"
+            >
+              <img
+                [src]="qrCode"
+                alt="TuneVault MFA QR Code"
+              >
+            </div>
+
+            <div
+              class="manual-key"
+              *ngIf="secret"
+            >
+
+              <span class="manual-label">
+                Can't scan it?
+              </span>
+
+              <span class="manual-description">
+                Enter this setup key manually:
+              </span>
+
+              <div class="secret-box">
+                {{ secret }}
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="step-divider"></div>
+
+        <div class="step-box">
+
+          <div class="step-number">
+            2
+          </div>
+
+          <div class="step-content">
+
+            <h3>
+              Verify Your Code
+            </h3>
+
+            <p>
+              Enter the current 6-digit code shown in your
+              authenticator app.
+            </p>
+
+            <form
+              [formGroup]="verifyForm"
+              (ngSubmit)="verifyMfa()"
+            >
+
+              <div class="code-container">
+
+                <span class="bracket">
+                  [
+                </span>
+
+                <input
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="6"
+                  autocomplete="one-time-code"
+                  formControlName="token"
+                  placeholder="000000"
+                >
+
+                <span class="bracket">
+                  ]
+                </span>
+
+              </div>
+
+              <button
+                class="primary-btn verify-btn"
+                type="submit"
+                [disabled]="isLoading"
+              >
+                {{
+                  isLoading
+                    ? 'VERIFYING...'
+                    : 'VERIFY & ENABLE MFA'
+                }}
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+        <button
+          class="secondary-btn"
+          type="button"
+          (click)="cancel()"
+        >
+          CANCEL
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="mfa-footer">
+      TuneVault Account Security
     </div>
 
   </div>

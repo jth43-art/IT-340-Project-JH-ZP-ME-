@@ -2,14 +2,14 @@
 
   <div class="tv-card">
 
-    <!-- HEADER NAVIGATION -->
+    <!-- HEADER NAVIGATION LINKS -->
     <header class="tv-header">
       <h1>TuneVault</h1>
 
       <nav class="tv-nav">
         <a routerLink="/homepage-tv">Home</a>
-        <a routerLink="/search">Search</a>
         <a routerLink="/music-library">Music Library</a>
+        <a routerLink="/search">Search</a>
         <a routerLink="/playlists">Playlists</a>
         <a routerLink="/upload">Upload MP3</a>
         <a routerLink="/admin-dashboard" *ngIf="role === 'admin'">Admin Dashboard</a>
@@ -19,14 +19,13 @@
 
     <div class="main-layout">
 
-      <!-- USER / ACCOUNT SIDEBAR -->
+      <!-- USER SIDEBAR -->
       <aside class="user-corner">
         <div class="user-info">
           <p class="welcome-text">Welcome back,</p>
           <h2 class="username-text">{{ username }}</h2>
           <p class="role-badge">Role: {{ role }}</p>
 
-          <!-- MFA SETTINGS BUTTON -->
           <button
             class="security-btn"
             type="button"
@@ -35,7 +34,6 @@
             {{ mfaEnabled ? 'Disable MFA' : 'Enable MFA' }}
           </button>
 
-          <!-- LOGOUT BUTTON -->
           <button
             class="logout-btn-minimal"
             type="button"
@@ -47,7 +45,7 @@
       </aside>
 
 
-      <!-- MAIN PLAYER CENTER -->
+      <!-- PLAYER CENTER -->
       <main class="player-center">
 
         <div class="visualizer">
@@ -80,14 +78,14 @@
     </div>
 
 
-    <!-- QUICK ACTION FOOTER BUTTONS -->
+    <!-- PAGE BUTTONS FOOTER -->
     <footer class="quick-links-footer">
       <button class="link-btn" routerLink="/music-library">
         🎵 Music Library
       </button>
 
       <button class="link-btn" routerLink="/search">
-        🔍 Search Track
+        🔍 Search & Filter
       </button>
 
       <button class="link-btn" routerLink="/upload">

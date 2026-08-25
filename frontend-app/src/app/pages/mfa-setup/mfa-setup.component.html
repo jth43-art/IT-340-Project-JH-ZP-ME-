@@ -1,5 +1,4 @@
 <div class="mfa-page">
-
   <div class="mfa-card">
 
     <div class="mfa-header">
@@ -12,9 +11,7 @@
         🔐
       </div>
 
-      <h1>
-        Secure Your TuneVault Account
-      </h1>
+      <h1>Secure Your TuneVault Account</h1>
 
       <p class="intro-text">
         Add an extra layer of security to your TuneVault account
@@ -25,21 +22,11 @@
         class="supported-apps"
         *ngIf="!setupStarted"
       >
-        <span>
-          Google Authenticator
-        </span>
-
+        <span>Google Authenticator</span>
         <span class="dot">•</span>
-
-        <span>
-          Microsoft Authenticator
-        </span>
-
+        <span>Microsoft Authenticator</span>
         <span class="dot">•</span>
-
-        <span>
-          Authy
-        </span>
+        <span>Authy</span>
       </div>
 
       <div
@@ -56,28 +43,18 @@
         {{ successMessage }}
       </div>
 
-      <!-- BEFORE MFA SETUP STARTS -->
+      <!-- BEFORE MFA SETUP -->
       <div
         class="start-section"
         *ngIf="!setupStarted"
       >
 
         <div class="info-box">
-          <h3>
-            How it works
-          </h3>
+          <h3>How it works</h3>
 
-          <p>
-            1. Enable MFA below.
-          </p>
-
-          <p>
-            2. Scan the QR code with your authenticator app.
-          </p>
-
-          <p>
-            3. Enter the 6-digit verification code.
-          </p>
+          <p>1. Enable MFA below.</p>
+          <p>2. Scan the QR code with your authenticator app.</p>
+          <p>3. Enter the 6-digit verification code.</p>
         </div>
 
         <button
@@ -113,9 +90,7 @@
 
           <div class="step-content">
 
-            <h3>
-              Scan the QR Code
-            </h3>
+            <h3>Scan the QR Code</h3>
 
             <p>
               Open Google Authenticator or another compatible
@@ -136,7 +111,6 @@
               class="manual-key"
               *ngIf="secret"
             >
-
               <span class="manual-label">
                 Can't scan it?
               </span>
@@ -148,11 +122,9 @@
               <div class="secret-box">
                 {{ secret }}
               </div>
-
             </div>
 
           </div>
-
         </div>
 
         <div class="step-divider"></div>
@@ -165,9 +137,7 @@
 
           <div class="step-content">
 
-            <h3>
-              Verify Your Code
-            </h3>
+            <h3>Verify Your Code</h3>
 
             <p>
               Enter the current 6-digit code shown in your
@@ -181,9 +151,7 @@
 
               <div class="code-container">
 
-                <span class="bracket">
-                  [
-                </span>
+                <span class="bracket">[</span>
 
                 <input
                   type="text"
@@ -194,9 +162,7 @@
                   placeholder="000000"
                 >
 
-                <span class="bracket">
-                  ]
-                </span>
+                <span class="bracket">]</span>
 
               </div>
 
@@ -205,17 +171,12 @@
                 type="submit"
                 [disabled]="isLoading"
               >
-                {{
-                  isLoading
-                    ? 'VERIFYING...'
-                    : 'VERIFY & ENABLE MFA'
-                }}
+                {{ isLoading ? 'VERIFYING...' : 'VERIFY & ENABLE MFA' }}
               </button>
 
             </form>
 
           </div>
-
         </div>
 
         <button
@@ -235,5 +196,4 @@
     </div>
 
   </div>
-
 </div>

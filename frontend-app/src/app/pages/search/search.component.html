@@ -1,116 +1,102 @@
-<div class="search-page">
+<div class="tv-container">
 
-  <div class="search-header">
+  <div class="tv-card">
 
-    <h1>Search Music</h1>
+    <!-- HEADER NAVIGATION -->
+    <header class="tv-header">
+      <h1>TuneVault</h1>
+      <nav class="tv-nav">
+        <a routerLink="/homepage-tv">Home</a>
+        <a routerLink="/music-library">Music Library</a>
+        <a routerLink="/search" class="active">Search</a>
+        <a routerLink="/playlists">Playlists</a>
+        <a routerLink="/upload">Upload MP3</a>
+      </nav>
+    </header>
 
-    <div class="search-bar-container">
+    <!-- SEARCH BODY -->
+    <div class="search-body">
 
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        (keyup.enter)="onSearch()"
-        placeholder="Search title, artist, album, or genre..."
-        maxlength="60"
-      >
+      <div class="search-header-content">
+        <h2>Search & Discover Music</h2>
+        <p class="search-subtitle">Find tracks by title, artist, album, or genre</p>
 
-      <select [(ngModel)]="selectedFilter" (change)="applyFilter()" class="filter-dropdown">
-        <option value="all">All Fields</option>
-        <option value="title">Title</option>
-        <option value="artist">Artist</option>
-        <option value="album">Album</option>
-        <option value="genre">Genre</option>
-      </select>
-
-      <button (click)="onSearch()">
-        Search
-      </button>
-
-    </div>
-
-    <div
-      *ngIf="errorMessage"
-      class="error-msg"
-    >
-      {{ errorMessage }}
-    </div>
-
-  </div>
-
-  <div
-    class="results-grid"
-    *ngIf="songs.length > 0"
-  >
-
-    <div
-      class="song-card"
-      *ngFor="let song of songs"
-    >
-
-      <div class="card-content">
-
-        <h3 class="song-name">
-          {{ song.title || song.track || 'Untitled Song' }}
-        </h3>
-
-        <p class="artist-name">
-          <strong>Artist:</strong> {{ song.artist || 'Unknown Artist' }}
-        </p>
-
-        <p class="album-name" *ngIf="song.album">
-          <strong>Album:</strong> {{ song.album }}
-        </p>
-
-        <p class="genre-tag" *ngIf="song.genre">
-          <strong>Genre:</strong> {{ song.genre }}
-        </p>
-
-      </div>
-
-      <div class="card-actions">
-
-        <button class="play-now-btn" (click)="playSong(song)">
-          ▶ Play
-        </button>
-
-        <select
-          class="playlist-dropdown"
-          #playlistSelect
-        >
-
-          <option value="">
-            Select Playlist
-          </option>
-
-          <option
-            *ngFor="let p of playlists"
-            [value]="p._id"
+        <div class="search-bar-container">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearch()"
+            placeholder="Search title, artist, album, or genre..."
+            maxlength="60"
           >
-            {{ p.title || p.name || 'Untitled Playlist' }}
-          </option>
 
-        </select>
+          <select [(ngModel)]="selectedFilter" (change)="applyFilter()" class="filter-dropdown">
+            <option value="all">All Fields</option>
+            <option value="title">Title</option>
+            <option value="artist">Artist</option>
+            <option value="album">Album</option>
+            <option value="genre">Genre</option>
+          </select>
 
-        <button
-          class="add-button"
-          (click)="addToPlaylist(song, playlistSelect.value)"
-        >
-          Add
-        </button>
+          <button class="search-btn" (click)="onSearch()">
+            🔍 Search
+          </button>
+        </div>
 
+        <div *ngIf="errorMessage" class="error-msg">
+          {{ errorMessage }}
+        </div>
+      </div>
+
+      <!-- RESULTS GRID -->
+      <div class="results-grid" *ngIf="songs.length > 0">
+        <div class="song-card" *ngFor="let song of songs">
+
+          <div class="card-content">
+            <h3 class="song-name">
+              {{ song.title || song.track || 'Untitled Song' }}
+            </h3>
+            <p class="artist-name">
+              <strong>Artist:</strong> {{ song.artist || 'Unknown Artist' }}
+            </p>
+            <p class="album-name" *ngIf="song.album">
+              <strong>Album:</strong> {{ song.album }}
+            </p>
+            <p class="genre-tag" *ngIf="song.genre">
+              <span class="badge">{{ song.genre }}</span>
+            </p>
+          </div>
+
+          <div class="card-actions">
+            <button class="play-now-btn" (click)="playSong(song)">
+              ▶ Play
+            </button>
+
+            <div class="playlist-add-group">
+              <select class="playlist-dropdown" #playlistSelect>
+                <option value="">Select Playlist</option>
+                <option *ngFor="let p of playlists" [value]="p._id">
+                  {{ p.title || p.name || 'Untitled Playlist' }}
+                </option>
+              </select>
+
+              <button class="add-button" (click)="addToPlaylist(song, playlistSelect.value)">
+                + Add
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div class="empty-state" *ngIf="songs.length === 0 && !errorMessage">
+        <div class="empty-icon">🎵</div>
+        <p>Enter a keyword above to find music in your library.</p>
       </div>
 
     </div>
 
-  </div>
-
-  <div
-    class="empty-state"
-    *ngIf="songs.length === 0 && !errorMessage"
-  >
-    <p>
-      Enter a search term to find music by title, artist, album, or genre.
-    </p>
   </div>
 
 </div>

@@ -14,6 +14,6 @@ export class UploadService {
 
   uploadSong(formData: FormData): Observable<any> {
     const headers = this.authService.getAuthHeaders();
-    return this.http.post(`${this.baseUrl}/songs/upload`, formData, { headers });
+    return this.http.post(`${this.baseUrl}/api/upload/song`, formData, { headers });
   }
 }

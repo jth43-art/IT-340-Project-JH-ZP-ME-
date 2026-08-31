@@ -10,62 +10,111 @@ const router = express.Router();
 // UPLOAD DIRECTORY
 // ==========================================
 
-const uploadDirectory = path.join(__dirname, '..', 'uploads');
+const uploadDirectory =
+  path.join(__dirname, '..', 'uploads');
 
-// Create uploads folder if it does not exist
 if (!fs.existsSync(uploadDirectory)) {
-  fs.mkdirSync(uploadDirectory, {
-    recursive: true
-  });
+  fs.mkdirSync(
+    uploadDirectory,
+    { recursive: true }
+  );
 }
 
 // ==========================================
-// MULTER STORAGE
+// STORAGE
 // ==========================================
 
 const storage = multer.diskStorage({
+
   destination: (req, file, cb) => {
     cb(null, uploadDirectory);
   },
 
   filename: (req, file, cb) => {
+
+    const extension =
+      path.extname(file.originalname)
+        .toLowerCase();
+
     const uniqueName =
       Date.now() +
       '-' +
       Math.round(Math.random() * 1e9) +
-      path.extname(file.originalname).toLowerCase();
+      extension;
 
     cb(null, uniqueName);
   }
 });
 
 // ==========================================
-// MP3 FILE FILTER
+// FILE VALIDATION
 // ==========================================
 
 const fileFilter = (req, file, cb) => {
+
   const extension =
-    path.extname(file.originalname).toLowerCase();
+    path.extname(file.originalname)
+      .toLowerCase();
 
-  const validExtension =
-    extension === '.mp3';
+  // MP3 field
+  if (file.fieldname === 'file') {
 
-  const validMimeType =
-    file.mimetype === 'audio/mpeg' ||
-    file.mimetype === 'audio/mp3';
+    const validMp3 =
+      extension === '.mp3' &&
+      (
+        file.mimetype === 'audio/mpeg' ||
+        file.mimetype === 'audio/mp3' ||
+        file.mimetype === 'application/octet-stream'
+      );
 
-  if (!validExtension || !validMimeType) {
-    return cb(
-      new Error('Only MP3 files are allowed'),
-      false
-    );
+    if (!validMp3) {
+      return cb(
+        new Error(
+          'Only MP3 files are allowed'
+        ),
+        false
+      );
+    }
+
+    return cb(null, true);
   }
 
-  cb(null, true);
+  // Artwork field
+  if (file.fieldname === 'artwork') {
+
+    const validImage =
+      (
+        extension === '.jpg' ||
+        extension === '.jpeg' ||
+        extension === '.png' ||
+        extension === '.webp'
+      ) &&
+      (
+        file.mimetype === 'image/jpeg' ||
+        file.mimetype === 'image/png' ||
+        file.mimetype === 'image/webp'
+      );
+
+    if (!validImage) {
+      return cb(
+        new Error(
+          'Artwork must be a JPG, PNG, or WebP image'
+        ),
+        false
+      );
+    }
+
+    return cb(null, true);
+  }
+
+  return cb(
+    new Error('Unexpected upload field'),
+    false
+  );
 };
 
 // ==========================================
-// MULTER CONFIGURATION
+// MULTER
 // ==========================================
 
 const upload = multer({
@@ -85,30 +134,46 @@ const upload = multer({
 
 router.post(
   '/song',
-  upload.single('file'),
+
+  upload.fields([
+    {
+      name: 'file',
+      maxCount: 1
+    },
+    {
+      name: 'artwork',
+      maxCount: 1
+    }
+  ]),
+
   async (req, res) => {
+
     try {
 
-      if (!req.file) {
-        return res.status(400).json({
-          message: 'No MP3 file uploaded'
-        });
-      }
-
-      // This route expects the authentication
-      // middleware in server.js to provide req.user.
       if (!req.user || !req.user._id) {
         return res.status(401).json({
           message: 'Authentication required'
         });
       }
 
-      // Use provided title or fall back
-      // to the original MP3 filename.
+      const audioFile =
+        req.files?.file?.[0];
+
+      const artworkFile =
+        req.files?.artwork?.[0] || null;
+
+      if (!audioFile) {
+        return res.status(400).json({
+          message: 'No MP3 file uploaded'
+        });
+      }
+
       const defaultTitle =
         path.basename(
-          req.file.originalname,
-          path.extname(req.file.originalname)
+          audioFile.originalname,
+          path.extname(
+            audioFile.originalname
+          )
         );
 
       const title =
@@ -132,61 +197,91 @@ router.post(
           ? req.body.genre.trim()
           : '';
 
-      let duration = null;
+      const song =
+        await Song.create({
 
-      if (
-        req.body.duration !== undefined &&
-        req.body.duration !== ''
-      ) {
-        const parsedDuration =
-          Number(req.body.duration);
+          title,
 
-        if (
-          Number.isFinite(parsedDuration) &&
-          parsedDuration >= 0
-        ) {
-          duration = parsedDuration;
-        }
-      }
+          artist,
 
-      // ======================================
-      // SAVE SONG TO MONGODB
-      // ======================================
+          album,
 
-      const song = await Song.create({
-        title,
-        artist,
-        album,
-        genre,
-        duration,
+          genre,
 
-        filePath: req.file.path,
-        fileSize: req.file.size,
-        mimeType: req.file.mimetype,
+          filePath:
+            audioFile.path,
 
-        albumArtworkPath:
-          req.body.albumArtworkPath || null,
+          fileSize:
+            audioFile.size,
 
-        owner:
-          req.user._id
-      });
+          mimeType:
+            audioFile.mimetype,
+
+          albumArtworkPath:
+            artworkFile
+              ? artworkFile.path
+              : null,
+
+          owner:
+            req.user._id
+        });
 
       return res.status(201).json({
-        message: 'Song uploaded successfully',
+        message:
+          'Song uploaded successfully',
+
         song
       });
 
     } catch (err) {
+
       console.error(
         'Song upload error:',
         err
       );
 
       return res.status(500).json({
-        message: 'Error uploading song'
+        message:
+          'Error uploading song'
       });
     }
   }
 );
+
+// ==========================================
+// MULTER ERROR HANDLER
+// ==========================================
+
+router.use((err, req, res, next) => {
+
+  if (err instanceof multer.MulterError) {
+
+    console.error(
+      'Multer error:',
+      err
+    );
+
+    return res.status(400).json({
+      message:
+        `Upload error: ${err.message}`
+    });
+  }
+
+  if (err) {
+
+    console.error(
+      'Upload validation error:',
+      err
+    );
+
+    return res.status(400).json({
+      message:
+        err.message ||
+        'Invalid upload'
+    });
+  }
+
+  next();
+});
 
 module.exports = router;

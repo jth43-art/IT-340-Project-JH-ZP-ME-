@@ -1,106 +1,161 @@
 const mongoose = require('mongoose');
 
-const songSchema = new mongoose.Schema({
-  // Basic song information
-  title: {
-    type: String,
-    required: true,
-    trim: true
-  },
+const songSchema = new mongoose.Schema(
+  {
+    // ==========================================
+    // BASIC SONG INFORMATION
+    // ==========================================
 
-  artist: {
-    type: String,
-    default: '',
-    trim: true
-  },
+    title: {
+      type: String,
+      required: true,
+      trim: true
+    },
 
-  album: {
-    type: String,
-    default: '',
-    trim: true
-  },
+    artist: {
+      type: String,
+      default: '',
+      trim: true
+    },
 
-  genre: {
-    type: String,
-    default: '',
-    trim: true
-  },
+    album: {
+      type: String,
+      default: '',
+      trim: true
+    },
 
-  duration: {
-    type: Number,
-    default: null,
-    min: 0
-  },
+    genre: {
+      type: String,
+      default: '',
+      trim: true
+    },
 
-  // Uploaded MP3 information
-  filePath: {
-    type: String,
-    default: null
-  },
+    duration: {
+      type: Number,
+      default: null,
+      min: 0
+    },
 
-  fileSize: {
-    type: Number,
-    default: null,
-    min: 0
-  },
+    // ==========================================
+    // UPLOADED MP3 INFORMATION
+    // ==========================================
 
-  mimeType: {
-    type: String,
-    default: 'audio/mpeg'
-  },
-
-  // Optional album artwork
-  albumArtworkPath: {
-    type: String,
-    default: null
-  },
-
-  // Optional external music links
-  externalLinks: {
-    spotify: {
+    filePath: {
       type: String,
       default: null
     },
 
-    appleMusic: {
+    fileSize: {
+      type: Number,
+      default: null,
+      min: 0
+    },
+
+    mimeType: {
       type: String,
+      default: 'audio/mpeg'
+    },
+
+    // ==========================================
+    // OPTIONAL ALBUM ARTWORK
+    // ==========================================
+
+    albumArtworkPath: {
+      type: String,
+      default: null
+    },
+
+    // ==========================================
+    // OPTIONAL EXTERNAL MUSIC LINKS
+    // ==========================================
+
+    externalLinks: {
+      spotify: {
+        type: String,
+        default: null
+      },
+
+      appleMusic: {
+        type: String,
+        default: null
+      }
+    },
+
+    // ==========================================
+    // USER WHO UPLOADED THE SONG
+    // ==========================================
+
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      index: true
+    },
+
+    // ==========================================
+    // OPTIONAL PLAYLIST ASSOCIATION
+    // ==========================================
+
+    playlist: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Playlist',
       default: null
     }
   },
-
-  // User who uploaded the song
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-
-  // Optional playlist association
-  playlist: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Playlist',
-    default: null
+  {
+    // Automatically creates:
+    // createdAt
+    // updatedAt
+    timestamps: true
   }
-
-}, {
-  // Automatically creates createdAt and updatedAt
-  timestamps: true
-});
+);
 
 // ==========================================
 // SEARCH INDEXES
 // ==========================================
 
-// Speeds up direct searches and sorting by title
-songSchema.index({ title: 1 });
+// Speeds up title-based searches and sorting.
+songSchema.index({
+  title: 1
+});
 
-// Speeds up direct searches and sorting by artist
-songSchema.index({ artist: 1 });
+// Speeds up artist-based searches and sorting.
+songSchema.index({
+  artist: 1
+});
 
-// Speeds up direct searches and sorting by album
-songSchema.index({ album: 1 });
+// Speeds up album-based searches and sorting.
+songSchema.index({
+  album: 1
+});
 
-// Useful if the app commonly searches title + artist together
-songSchema.index({ title: 1, artist: 1 });
+// Useful when title and artist are searched together.
+songSchema.index({
+  title: 1,
+  artist: 1
+});
 
-module.exports = mongoose.model('Song', songSchema);
+// ==========================================
+// MUSIC LIBRARY INDEX
+// ==========================================
+
+// Optimized for:
+//
+// Song.find({ owner: req.user._id })
+//   .sort({ createdAt: -1 })
+//
+// This allows TuneVault to quickly retrieve a user's
+// uploaded songs with newest uploads first.
+songSchema.index({
+  owner: 1,
+  createdAt: -1
+});
+
+// ==========================================
+// MODEL EXPORT
+// ==========================================
+
+module.exports = mongoose.model(
+  'Song',
+  songSchema
+);

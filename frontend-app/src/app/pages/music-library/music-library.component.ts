@@ -4,7 +4,6 @@ import {
   OnDestroy,
   ChangeDetectorRef
 } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -21,15 +20,12 @@ import { PlaylistService } from '../../services/playlist.service';
   templateUrl: './music-library.component.html',
   styleUrl: './music-library.component.css'
 })
-export class MusicLibraryComponent
-  implements OnInit, OnDestroy {
-
+export class MusicLibraryComponent implements OnInit, OnDestroy {
   songs: any[] = [];
   playlists: any[] = [];
 
   loading = true;
   errorMessage = '';
-
   playingSongId: string | null = null;
 
   private currentAudio: HTMLAudioElement | null = null;
@@ -49,43 +45,20 @@ export class MusicLibraryComponent
   // ========================================
   // LOAD UPLOADED SONGS
   // ========================================
-
   fetchSongs(): void {
     this.loading = true;
     this.errorMessage = '';
 
     this.songService.getSongs().subscribe({
-
       next: (data: any) => {
-
-        this.songs =
-          Array.isArray(data)
-            ? data
-            : (data.songs || []);
-
+        this.songs = Array.isArray(data) ? data : (data.songs || []);
         this.loading = false;
-
-        console.log(
-          `Music Library loaded ${this.songs.length} song(s)`
-        );
-
-        // Force Angular to immediately update the page
         this.cdr.detectChanges();
       },
-
       error: (err: any) => {
-
-        console.error(
-          'Error fetching songs:',
-          err
-        );
-
-        this.errorMessage =
-          err.error?.message ||
-          'Failed to load music library.';
-
+        console.error('Error fetching songs:', err);
+        this.errorMessage = err.error?.message || 'Failed to load music library.';
         this.loading = false;
-
         this.cdr.detectChanges();
       }
     });
@@ -94,254 +67,129 @@ export class MusicLibraryComponent
   // ========================================
   // LOAD PLAYLISTS
   // ========================================
-
   loadPlaylists(): void {
-
-    this.playlistService
-      .getPlaylists()
-      .subscribe({
-
-        next: (data: any) => {
-
-          this.playlists =
-            data.playlists ||
-            data ||
-            [];
-
-          this.cdr.detectChanges();
-        },
-
-        error: (err: any) => {
-
-          console.error(
-            'Playlist load error:',
-            err
-          );
-
-          this.cdr.detectChanges();
-        }
-      });
+    this.playlistService.getPlaylists().subscribe({
+      next: (data: any) => {
+        this.playlists = Array.isArray(data) ? data : (data.playlists || []);
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Playlist load error:', err);
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   // ========================================
   // PLAY UPLOADED MP3
   // ========================================
-
   playSong(song: any): void {
+    const songId = song?._id || song?.id;
 
-    if (!song?._id) {
-
-      this.errorMessage =
-        'Unable to play this song.';
-
+    if (!songId) {
+      this.errorMessage = 'Unable to play this song.';
       this.cdr.detectChanges();
-
       return;
     }
 
     this.errorMessage = '';
 
     // Clicking the currently playing song stops it
-    if (
-      this.playingSongId === song._id &&
-      this.currentAudio
-    ) {
-
+    if (this.playingSongId === songId && this.currentAudio) {
       this.stopCurrentSong();
-
       return;
     }
 
     // Stop previous song before starting another
     this.stopCurrentSong();
 
-    this.songService
-      .streamSong(song._id)
-      .subscribe({
+    this.songService.streamSong(songId).subscribe({
+      next: (audioBlob: Blob) => {
+        const objectUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(objectUrl);
 
-        next: (audioBlob: Blob) => {
+        this.currentObjectUrl = objectUrl;
+        this.currentAudio = audio;
+        this.playingSongId = songId;
 
-          const objectUrl =
-            URL.createObjectURL(audioBlob);
+        this.cdr.detectChanges();
 
-          const audio =
-            new Audio(objectUrl);
-
-          this.currentObjectUrl =
-            objectUrl;
-
-          this.currentAudio =
-            audio;
-
-          this.playingSongId =
-            song._id;
-
+        audio.play().catch(err => {
+          console.error('Audio playback error:', err);
+          this.errorMessage = 'Unable to play this MP3.';
+          this.stopCurrentSong();
           this.cdr.detectChanges();
+        });
 
-          audio.play().catch(err => {
-
-            console.error(
-              'Audio playback error:',
-              err
-            );
-
-            this.errorMessage =
-              'Unable to play this MP3.';
-
-            this.stopCurrentSong();
-
-            this.cdr.detectChanges();
-          });
-
-          audio.onended = () => {
-
-            this.stopCurrentSong();
-
-            this.cdr.detectChanges();
-          };
-        },
-
-        error: (err: any) => {
-
-          console.error(
-            'Stream error:',
-            err
-          );
-
-          this.errorMessage =
-            err.error?.message ||
-            'Unable to stream this song.';
-
+        audio.onended = () => {
+          this.stopCurrentSong();
           this.cdr.detectChanges();
-        }
-      });
+        };
+      },
+      error: (err: any) => {
+        console.error('Stream error:', err);
+        this.errorMessage = err.error?.message || 'Unable to stream this song.';
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   // ========================================
   // STOP CURRENT SONG
   // ========================================
-
   stopCurrentSong(): void {
-
     if (this.currentAudio) {
-
       this.currentAudio.pause();
-
       this.currentAudio.currentTime = 0;
-
       this.currentAudio = null;
     }
 
     if (this.currentObjectUrl) {
-
-      URL.revokeObjectURL(
-        this.currentObjectUrl
-      );
-
+      URL.revokeObjectURL(this.currentObjectUrl);
       this.currentObjectUrl = null;
     }
 
     this.playingSongId = null;
-
     this.cdr.detectChanges();
   }
 
   // ========================================
   // ADD SONG TO PLAYLIST
   // ========================================
-
-  addToPlaylist(
-    song: any,
-    playlistId: string
-  ): void {
-
+  addToPlaylist(song: any, playlistId: string): void {
     if (!playlistId) {
-
-      alert(
-        'Please select a playlist first.'
-      );
-
+      alert('Please select a playlist first.');
       return;
     }
 
     const playlistSong = {
-
       ...song,
-
+      songId: song._id || song.id,
       source: 'upload',
-
-      title:
-        song.title ||
-        'Untitled Song',
-
-      artist:
-        song.artist ||
-        'Unknown Artist',
-
-      artworkUrl:
-        song.albumArtworkPath ||
-        '',
-
-      filePath:
-        song.filePath ||
-        ''
+      title: song.title || song.track || 'Untitled Song',
+      artist: song.artist || 'Unknown Artist',
+      artworkUrl: song.albumArtwork || song.albumArtworkPath || song.coverUrl || '',
+      filePath: song.filePath || ''
     };
 
-    this.playlistService
-      .addSongToPlaylist(
-        playlistId,
-        playlistSong
-      )
-      .subscribe({
-
-        next: () => {
-
-          alert(
-            'Song added to playlist!'
-          );
-
-          this.loadPlaylists();
-
-          this.cdr.detectChanges();
-        },
-
-        error: (err: any) => {
-
-          console.error(
-            'Add to playlist error:',
-            err
-          );
-
-          alert(
-            err.error?.message ||
-            'Failed to add song to playlist.'
-          );
-
-          this.cdr.detectChanges();
-        }
-      });
+    this.playlistService.addSongToPlaylist(playlistId, playlistSong).subscribe({
+      next: () => {
+        alert(`"${playlistSong.title}" added to playlist!`);
+        this.loadPlaylists();
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Add to playlist error:', err);
+        alert(err.error?.message || 'Failed to add song to playlist.');
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   // ========================================
   // CLEANUP
   // ========================================
-
   ngOnDestroy(): void {
-
-    if (this.currentAudio) {
-
-      this.currentAudio.pause();
-
-      this.currentAudio = null;
-    }
-
-    if (this.currentObjectUrl) {
-
-      URL.revokeObjectURL(
-        this.currentObjectUrl
-      );
-
-      this.currentObjectUrl = null;
-    }
+    this.stopCurrentSong();
   }
 }

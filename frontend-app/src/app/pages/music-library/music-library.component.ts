@@ -1,7 +1,8 @@
 import {
   Component,
   OnInit,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -36,7 +37,8 @@ export class MusicLibraryComponent
 
   constructor(
     private songService: SongService,
-    private playlistService: PlaylistService
+    private playlistService: PlaylistService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +47,7 @@ export class MusicLibraryComponent
   }
 
   // ========================================
-  // LOAD MUSIC LIBRARY
+  // LOAD UPLOADED SONGS
   // ========================================
 
   fetchSongs(): void {
@@ -53,6 +55,7 @@ export class MusicLibraryComponent
     this.errorMessage = '';
 
     this.songService.getSongs().subscribe({
+
       next: (data: any) => {
 
         this.songs =
@@ -61,9 +64,17 @@ export class MusicLibraryComponent
             : (data.songs || []);
 
         this.loading = false;
+
+        console.log(
+          `Music Library loaded ${this.songs.length} song(s)`
+        );
+
+        // Force Angular to immediately update the page
+        this.cdr.detectChanges();
       },
 
       error: (err: any) => {
+
         console.error(
           'Error fetching songs:',
           err
@@ -74,15 +85,18 @@ export class MusicLibraryComponent
           'Failed to load music library.';
 
         this.loading = false;
+
+        this.cdr.detectChanges();
       }
     });
   }
 
   // ========================================
-  // LOAD USER PLAYLISTS
+  // LOAD PLAYLISTS
   // ========================================
 
   loadPlaylists(): void {
+
     this.playlistService
       .getPlaylists()
       .subscribe({
@@ -94,13 +108,17 @@ export class MusicLibraryComponent
             data ||
             [];
 
+          this.cdr.detectChanges();
         },
 
         error: (err: any) => {
+
           console.error(
             'Playlist load error:',
             err
           );
+
+          this.cdr.detectChanges();
         }
       });
   }
@@ -112,24 +130,29 @@ export class MusicLibraryComponent
   playSong(song: any): void {
 
     if (!song?._id) {
+
       this.errorMessage =
         'Unable to play this song.';
+
+      this.cdr.detectChanges();
+
       return;
     }
 
     this.errorMessage = '';
 
-    // If this song is already playing,
-    // stop it.
+    // Clicking the currently playing song stops it
     if (
       this.playingSongId === song._id &&
       this.currentAudio
     ) {
+
       this.stopCurrentSong();
+
       return;
     }
 
-    // Stop anything currently playing
+    // Stop previous song before starting another
     this.stopCurrentSong();
 
     this.songService
@@ -153,6 +176,8 @@ export class MusicLibraryComponent
           this.playingSongId =
             song._id;
 
+          this.cdr.detectChanges();
+
           audio.play().catch(err => {
 
             console.error(
@@ -164,10 +189,15 @@ export class MusicLibraryComponent
               'Unable to play this MP3.';
 
             this.stopCurrentSong();
+
+            this.cdr.detectChanges();
           });
 
           audio.onended = () => {
+
             this.stopCurrentSong();
+
+            this.cdr.detectChanges();
           };
         },
 
@@ -181,12 +211,14 @@ export class MusicLibraryComponent
           this.errorMessage =
             err.error?.message ||
             'Unable to stream this song.';
+
+          this.cdr.detectChanges();
         }
       });
   }
 
   // ========================================
-  // STOP PLAYBACK
+  // STOP CURRENT SONG
   // ========================================
 
   stopCurrentSong(): void {
@@ -210,10 +242,12 @@ export class MusicLibraryComponent
     }
 
     this.playingSongId = null;
+
+    this.cdr.detectChanges();
   }
 
   // ========================================
-  // ADD UPLOADED SONG TO PLAYLIST
+  // ADD SONG TO PLAYLIST
   // ========================================
 
   addToPlaylist(
@@ -222,6 +256,7 @@ export class MusicLibraryComponent
   ): void {
 
     if (!playlistId) {
+
       alert(
         'Please select a playlist first.'
       );
@@ -230,6 +265,7 @@ export class MusicLibraryComponent
     }
 
     const playlistSong = {
+
       ...song,
 
       source: 'upload',
@@ -265,6 +301,8 @@ export class MusicLibraryComponent
           );
 
           this.loadPlaylists();
+
+          this.cdr.detectChanges();
         },
 
         error: (err: any) => {
@@ -278,6 +316,8 @@ export class MusicLibraryComponent
             err.error?.message ||
             'Failed to add song to playlist.'
           );
+
+          this.cdr.detectChanges();
         }
       });
   }
@@ -287,6 +327,21 @@ export class MusicLibraryComponent
   // ========================================
 
   ngOnDestroy(): void {
-    this.stopCurrentSong();
+
+    if (this.currentAudio) {
+
+      this.currentAudio.pause();
+
+      this.currentAudio = null;
+    }
+
+    if (this.currentObjectUrl) {
+
+      URL.revokeObjectURL(
+        this.currentObjectUrl
+      );
+
+      this.currentObjectUrl = null;
+    }
   }
 }

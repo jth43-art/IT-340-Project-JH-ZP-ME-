@@ -6,15 +6,35 @@ const streamController = require('../controllers/streamController');
 const auth = require('../middleware/auth');
 
 // ==========================================
-// GET ALL UPLOADED SONGS
+// GET CURRENT USER'S UPLOADED SONGS
 // GET /api/songs
 // ==========================================
 
 router.get('/songs', auth, async (req, res) => {
   try {
-    const songs = await Song.find({})
-      .sort({ createdAt: -1 })
-      .lean();
+
+    const startTime = Date.now();
+
+    console.log(
+      `SONGS fetch started for user ${req.user._id}`
+    );
+
+    const songs = await Song.find({
+      owner: req.user._id
+    })
+      .sort({
+        createdAt: -1
+      })
+      .limit(100)
+      .lean()
+      .maxTimeMS(5000);
+
+    const elapsed =
+      Date.now() - startTime;
+
+    console.log(
+      `SONGS fetch completed: ${songs.length} song(s) in ${elapsed}ms`
+    );
 
     return res.status(200).json({
       count: songs.length,
@@ -22,6 +42,7 @@ router.get('/songs', auth, async (req, res) => {
     });
 
   } catch (err) {
+
     console.error(
       'Error retrieving songs:',
       err

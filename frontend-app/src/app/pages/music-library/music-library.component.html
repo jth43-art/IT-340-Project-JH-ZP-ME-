@@ -31,6 +31,25 @@
       <button class="play-btn" (click)="playSong(song)">
         Play Song
       </button>
+
+      <!-- ADD TO PLAYLIST SECTION -->
+      <div class="playlist-add-container">
+        <select class="playlist-select" #playlistSelect>
+          <option value="" disabled selected>Select Playlist</option>
+          <option *ngFor="let playlist of playlists" [value]="playlist._id || playlist.id">
+            {{ playlist.title || playlist.name || 'Untitled Playlist' }}
+          </option>
+        </select>
+
+        <button 
+          class="add-playlist-btn" 
+          type="button" 
+          (click)="addToPlaylist(song, playlistSelect.value)"
+        >
+          + Add to Playlist
+        </button>
+      </div>
+
     </div>
   </div>
 

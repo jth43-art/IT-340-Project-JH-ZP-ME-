@@ -1,151 +1,40 @@
-<div class="music-library-page">
 
+<div class="library-container">
   <div class="library-header">
-
     <h1>Music Library</h1>
-
-    <p>
-      Browse all uploaded music tracks
-    </p>
-
+    <p>Browse all uploaded music tracks</p>
   </div>
 
-  <div
-    class="error-message"
-    *ngIf="errorMessage"
-  >
-    {{ errorMessage }}
-  </div>
+  <div *ngIf="loading" class="status-msg">Loading songs...</div>
+  <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
 
-  <div
-    class="loading-message"
-    *ngIf="loading"
-  >
-    Loading songs...
-  </div>
-
-  <div
-    class="empty-library"
-    *ngIf="
-      !loading &&
-      songs.length === 0 &&
-      !errorMessage
-    "
-  >
-    No uploaded songs found.
-  </div>
-
-  <div
-    class="song-grid"
-    *ngIf="
-      !loading &&
-      songs.length > 0
-    "
-  >
-
-    <div
-      class="song-card"
-      *ngFor="let song of songs"
-    >
-
-      <div class="album-cover">
-
-        <img
-          *ngIf="song.albumArtworkPath"
-          [src]="song.albumArtworkPath"
+  <div class="song-grid" *ngIf="!loading && songs.length > 0">
+    <div class="song-card" *ngFor="let song of songs">
+      <div class="artwork-container">
+        <img 
+          [src]="song.albumArtwork || song.coverUrl || 'https://via.placeholder.com/200x200?text=No+Cover'" 
           alt="Album Cover"
+          class="artwork"
         >
-
-        <div
-          class="album-placeholder"
-          *ngIf="!song.albumArtworkPath"
-        >
-          🎵
-        </div>
-
+        <button class="play-overlay-btn" (click)="playSong(song)">▶</button>
       </div>
 
-      <div class="song-info">
-
-        <h3>
-          {{ song.title || 'Untitled Song' }}
-        </h3>
-
-        <p>
-          <strong>Artist:</strong>
-          {{ song.artist || 'Unknown Artist' }}
+      <div class="song-details">
+        <h3 class="song-title">{{ song.title || song.track || 'Untitled' }}</h3>
+        <p class="song-artist"><strong>Artist:</strong> {{ song.artist || 'Unknown Artist' }}</p>
+        <p class="song-album"><strong>Album:</strong> {{ song.album || 'Single' }}</p>
+        <p class="song-date" *ngIf="song.uploadDate || song.createdAt">
+          <strong>Uploaded:</strong> {{ (song.uploadDate || song.createdAt) | date:'mediumDate' }}
         </p>
-
-        <p *ngIf="song.album">
-          <strong>Album:</strong>
-          {{ song.album }}
-        </p>
-
-        <p *ngIf="song.genre">
-          <strong>Genre:</strong>
-          {{ song.genre }}
-        </p>
-
-        <p *ngIf="song.createdAt">
-          <strong>Uploaded:</strong>
-          {{ song.createdAt | date:'mediumDate' }}
-        </p>
-
       </div>
 
-      <div class="song-actions">
-
-        <button
-          class="play-button"
-          type="button"
-          (click)="playSong(song)"
-        >
-          {{
-            playingSongId === song._id
-              ? '■ Stop Song'
-              : '▶ Play Song'
-          }}
-        </button>
-
-        <select
-          class="playlist-select"
-          #playlistSelect
-        >
-
-          <option value="">
-            Select Playlist
-          </option>
-
-          <option
-            *ngFor="let playlist of playlists"
-            [value]="playlist._id"
-          >
-            {{
-              playlist.title ||
-              playlist.name ||
-              'Untitled Playlist'
-            }}
-          </option>
-
-        </select>
-
-        <button
-          class="add-playlist-button"
-          type="button"
-          (click)="
-            addToPlaylist(
-              song,
-              playlistSelect.value
-            )
-          "
-        >
-          + Add to Playlist
-        </button>
-
-      </div>
-
+      <button class="play-btn" (click)="playSong(song)">
+        Play Song
+      </button>
     </div>
-
   </div>
 
+  <div class="empty-state" *ngIf="!loading && songs.length === 0 && !errorMessage">
+    <p>No songs found in the library.</p>
+  </div>
 </div>

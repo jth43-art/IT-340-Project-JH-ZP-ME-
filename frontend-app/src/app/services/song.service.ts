@@ -15,10 +15,7 @@ export class SongService {
     private authService: AuthService
   ) {}
 
-  // ========================================
-  // GET UPLOADED SONGS
-  // ========================================
-
+  // Get all uploaded songs from MongoDB
   getSongs(): Observable<any> {
     const headers =
       this.authService.getAuthHeaders();
@@ -29,10 +26,7 @@ export class SongService {
     );
   }
 
-  // ========================================
-  // SEARCH MUSIC
-  // ========================================
-
+  // Search music
   searchSongs(query: string): Observable<any> {
     const headers =
       this.authService.getAuthHeaders();
@@ -43,11 +37,17 @@ export class SongService {
     );
   }
 
-  // ========================================
-  // STREAM UPLOADED SONG
-  // ========================================
+  // Stream an uploaded MP3
+  streamSong(songId: string): Observable<Blob> {
+    const headers =
+      this.authService.getAuthHeaders();
 
-  getStreamUrl(songId: string): string {
-    return `${this.baseUrl}/api/songs/${songId}/stream`;
+    return this.http.get(
+      `${this.baseUrl}/api/songs/${songId}/stream`,
+      {
+        headers,
+        responseType: 'blob'
+      }
+    );
   }
 }
